@@ -85,9 +85,9 @@ w.hkCreateClasses = function () {
   var HkLogger = window.HkLogger;
 
   window.Hk = new Class({
-	$debug: 1,
+	$debug: 0,
 	idScript: "HkToolkit",
-	version: "0.01",
+	version: "$Id$",
 	Coords: {
 	  lastRegion: {
 		x: 0,
@@ -184,7 +184,7 @@ w.hkCreateClasses = function () {
    *	clearStorage
    */
   Hk.HkStorage = new Class({
-	'$debug': 1,
+	'$debug': 0,
 	'storageKey': "HkStorage" + window.hk.PlayerId + "" + window.hk.WorldId,
 	options: {
 	  'storageKey': "HkStorage" + window.hk.PlayerId + "" + window.hk.WorldId,
@@ -273,7 +273,7 @@ w.hkCreateClasses = function () {
   };
 
   Hk.HkReducer = new Class({
-	$debug: 1,
+	$debug: 0,
 	options: {
 	  'onTargetVisible': Class.empty,
 	  'onTargetReduced': Class.empty,
@@ -316,7 +316,7 @@ w.hkCreateClasses = function () {
   Hk.HkReducer.implement(new Events, new Options, new HkLogger);
 
   Hk.HkWindows = new Class({
-	$debug: 1,
+	$debug: 0,
 	storage: window.hk.Storage.Common,
 	windows: [],
 	options: {
@@ -482,7 +482,7 @@ w.hkCreateClasses = function () {
    * Datenstruktur für Shortcuts @todo Auslagern
    */
   Hk.Shortcut = new Class({
-	'$debug': 1,
+	'$debug': 0,
 	options: {
 	  x: -1,
 	  y: -1,
@@ -525,7 +525,7 @@ w.hkCreateClasses = function () {
    * Shortcuts @todo Auslagern
    */
   Hk.HkShortcutsWindow = new Class({
-	'$debug': 1,
+	'$debug': 0,
 	'$hkWin': false,
 	'inputStyles': {
 	  'valid': {
