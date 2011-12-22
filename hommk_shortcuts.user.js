@@ -600,7 +600,7 @@ w.hkCreateClasses = function () {
 	},
 	gotoCurrentPosition: function gotoCurrentPosition() {
 	  var shortcut = window.hk.Shortcuts.getCurrentData();
-	  window.hk.gotoPosition(shortcut.x(), shhortcut.y());
+	  window.hk.gotoPosition(shortcut.x(), shortcut.y());
 	},
 	updateShortcutList: function updateShortcutList() {
 	  window.hk.log('[HkShortcutsWindow][DEBUG]Aktualisiere Shortcut-Liste');
