@@ -761,6 +761,7 @@ w.hkCreateClasses = function () {
 		'reduce': $("HkWindowContentHkShortcuts"),
 		'title': "HkShortcuts"
 	  });
+	  window.hk.Shortcuts.updateDimensions();
 	} catch(ex) {
 	  alert('[HkPublic][UICREATE ERROR] '+ex);
 	}
@@ -799,12 +800,8 @@ w.hkCreateClasses = function () {
 		  'verticalAlign': 'middle',
 		  'cursor': 'pointer'
 		},
-		'error': {
-
-		},
-		'valid': {
-
-	  }
+		'error': {},
+		'valid': {}
 	  },
 	  'Entry': {
 		'deleteButton': {
@@ -845,7 +842,8 @@ w.hkCreateClasses = function () {
 	'content': {
 	  'height': 'auto',
 	  'maxHeight': '400px',
-	  'margin': '0px'
+	  'margin': '0px',
+	  'paddingTop': '0px'
 	},
 	'header': {
 	  'zIndex': 96000,
@@ -874,9 +872,7 @@ w.hkCreateClasses = function () {
 	  'zIndex': 97000,
 	  'border': ' none'
 	},
-	'closeButton': {
-
-  }
+	'closeButton': {}
   };
 
 
