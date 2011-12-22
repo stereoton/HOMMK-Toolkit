@@ -1,1 +1,1 @@
-Usage: gt_collapse_version string
+/home/carsten/bin/gt_collapse_version
