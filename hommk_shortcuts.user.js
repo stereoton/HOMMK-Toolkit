@@ -118,8 +118,17 @@ w.hkCreateClasses = function () {
 		y = xy.y;
 	  }
 	  var region = window.HOMMK.getRegionFromXY(x, y);
+	  var str = "";
+	  if(region.content.hasOwnProperty("cN")) {
+		str += region.content.cN;
+		if(region.content.hasOwnProperty("pN")) str += ", " + region.content.pN;
+		if(region.content.hasOwnProperty("iAN")) str += " (" + region.content.iAN + ")";
+	  }	else {
+		str += "Region #" + this.HOMMK.getRegionNumberFromXY(x, y);
+	  }
 	  window.hk.log(region);
-	  window.hk.log(window.HOMMK);
+	  window.hk.log(this.HOMMK.worldMap);
+	  return str;
 	},
 	fixPosition: function fixPosition(p) {
 	  if(p > this.WorldSize) return p - this.WorldSize;
@@ -534,7 +543,8 @@ w.hkCreateClasses = function () {
 	  window.hk.Shortcuts.validateData("ShortcutInputX");
 	  $("ShortcutInputY").value = window.hk.getCurrentY();
 	  window.hk.Shortcuts.validateData("ShortcutInputY");
-	  window.hk.getRegionName(window.hk.getCurrentX(), window.hk.getCurrentY());
+	  var name = window.hk.getRegionName(window.hk.getCurrentX(), window.hk.getCurrentY());
+	  $("ShortcutInputName").value = name;
 	},
 	resetData: function resetData(wasInvalid) {
 	  var useStyle;
@@ -587,6 +597,10 @@ w.hkCreateClasses = function () {
 	  var y = shortcut.y;
 	  window.hk.log('[HkShortcutsWindow][DEBUG]Gehe zu Shortcut: ' + x + ", " + y);
 	  window.hk.gotoPosition(x, y);
+	},
+	gotoCurrentPosition: function gotoCurrentPosition() {
+	  var shortcut = window.hk.Shortcuts.getCurrentData();
+	  window.hk.gotoPosition(shortcut.x(), shhortcut.y());
 	},
 	updateShortcutList: function updateShortcutList() {
 	  window.hk.log('[HkShortcutsWindow][DEBUG]Aktualisiere Shortcut-Liste');
@@ -698,6 +712,14 @@ w.hkCreateClasses = function () {
 		'styles': window.hk.Styles.Shortcuts.Form.inputName
 	  });
 	  inputName.addEventListener('focus', this.nameInputHasFocus);
+	  var gotoPosition = new Element("img", {
+		'id': 'GotoPosition',
+		'name': 'gotoPosition',
+		'src': "http://icons.iconarchive.com/icons/itzikgur/my-seven/16/Favorities-icon.png",
+		'styles': window.hk.Styles.Shortcuts.Form.gotoPosition
+	  });
+	  gotoPosition.preventTextSelection();
+	  gotoPosition.addEventListener('click', this.gotoCurrentPosition);
 	  var loadPosition = new Element("img", {
 		'id': 'LoadPosition',
 		'name': 'loadPosition',
@@ -714,7 +736,7 @@ w.hkCreateClasses = function () {
 	  });
 	  submitInput.preventTextSelection();
 	  submitInput.addEventListener('click', this.createShortcut);
-	  inputForm.adopt(inputX, inputY, loadPosition, submitInput, inputName);
+	  inputForm.adopt(inputX, inputY, gotoPosition, loadPosition, submitInput, inputName);
 	  contentNode.adopt(inputForm, shortcutList);
 	}
   });
@@ -768,6 +790,11 @@ w.hkCreateClasses = function () {
 		  'cursor': 'pointer'
 		},
 		'load': {
+		  'margin': '0px',
+		  'verticalAlign': 'middle',
+		  'cursor': 'pointer'
+		},
+		'gotoPosition': {
 		  'margin': '0px',
 		  'verticalAlign': 'middle',
 		  'cursor': 'pointer'
