@@ -80,7 +80,7 @@ w.hkCreateClasses = function () {
   window.Hk = new Class({
 	$debug: 0,
 	idScript: "HkToolkit",
-	version: "$Id$",
+	version: "$Version2$",
 	Coords: {
 	  lastRegion: {
 		x: 0,
@@ -297,7 +297,7 @@ w.hkCreateClasses = function () {
 	},
 	updateDimensions: function updateDimensions(target) {
 	  var divs = target.getElementsByTagName("div");
-	  $ = $(divs, function(aDiv) {
+	  $each(divs, function(aDiv) {
 		var divHeight = $(aDiv).getStyle('height');
 		if($chk(divHeight) && divHeight.intVal() <= 0) {
 		  aDiv.setStyle('height', 'auto');
