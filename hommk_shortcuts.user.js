@@ -3,8 +3,7 @@
 // @namespace     http://mightandmagicheroeskingdoms.ubi.com/play
 // @description   Werkzeugkasten für HOMMK
 // @version		  1.01
-// @match         http://mightandmagicheroeskingdoms.ubi.com/play
-// @match         http://mightandmagicheroeskingdoms.ubi.com/play#
+// @match         http://mightandmagicheroeskingdoms.ubi.com/play*
 //
 // Content Scope Runner:
 // @require http://userscripts.org/scripts/source/68059.user.js
