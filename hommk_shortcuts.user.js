@@ -106,7 +106,17 @@ w.hkCreateClasses = function () {
 	  this.AllianceName = this.Player.get('allianceName');
 	  this.Map = this.HOMMK.worldMap;
 	  this.WorldSize = this.Map.get('_size');
-	  this.WorldId = this.elementId;
+	  this.WorldId = this.Player.get('worldId');
+	},
+	getRegionName: function getRegionName(x, y) {
+	  if(arguments.length == 1) {
+		var xy = this.HOMMK.getXYFromRegionNumber();
+		x = xy.x;
+		y = xy.y;
+	  }
+	  var region = this.HOMMK.getRegionFromXY(x, y);
+	  window.hk.log(region);
+
 	},
 	fixPosition: function fixPosition(p) {
 	  if(p > this.WorldSize) return p - this.WorldSize;
@@ -500,6 +510,7 @@ w.hkCreateClasses = function () {
 	  window.hk.Shortcuts.validateData("ShortcutInputX");
 	  $("ShortcutInputY").value = window.hk.getCurrentY();
 	  window.hk.Shortcuts.validateData("ShortcutInputY");
+	  window.hk.getRegionName();
 	},
 	resetData: function resetData(wasInvalid) {
 	  var useStyle;
@@ -563,6 +574,17 @@ w.hkCreateClasses = function () {
 		  window.hk.Shortcuts.addShortcutToList(shortcut);
 		});
 	  }
+	  window.hk.Shortcuts.updateDimensions();
+	},
+	updateDimensions: function updateDimensions() {
+	  var divs = $("ShortcutList").getElementsByTagName("div");
+	  divs.push($("ShortcutList"));
+	  $each(divs, function(aDiv) {
+		var divHeight = $(aDiv).getStyle('height');
+		if($chk(divHeight) && divHeight.intVal() <= 0) {
+		  aDiv.setStyle('height', 'auto');
+		}
+	  });
 	},
 	addShortcutToList: function addShortcutToList(shortcut) {
 	  hk.log('[HkShortcutsWindow][DEBUG]Shortcut: ' + Json.toString(shortcut.options));
@@ -574,6 +596,7 @@ w.hkCreateClasses = function () {
 	  });
 	  text.setText(str);
 	  text.preventTextSelection();
+	  text.addEvent('click', this.shortcutClicked);
 	  var deleteButton = new Element('img', {
 		'class': 'EntryButton DeleteButton',
 		'name': 'delete' + shortcut.name(),
@@ -586,14 +609,24 @@ w.hkCreateClasses = function () {
 		'name': shortcut.name(),
 		'styles': window.hk.Styles.Shortcuts.Entry.entry
 	  });
-	  entry.addEvent('click', this.shortcutClicked);
 	  entry.adopt(deleteButton);
 	  entry.adopt(text);
 	  text.addEventListener('click', this.shortcutClicked);
 	  $("ShortcutList").adopt(entry);
 	},
 	onDeleteShortcut: function onDeleteShortcut(evt) {
-
+	  window.hk.log('[HkShortcutsWindow][DEBUG]Rufe Shortcut auf');
+	  var entry = evt.target;
+	  window.hk.log('[HkShortcutsWindow][DEBUG]Shortcut-Eintrag: ' + entry);
+	  while(entry.getTag() != "div") {
+		entry = entry.getParent();
+		window.hk.log('[HkShortcutsWindow][DEBUG]Shortcut-Eintrag: ' + entry);
+	  }
+	  var shortcutName =  entry.getProperty("name");
+	  window.hk.log('[HkShortcutsWindow][DEBUG]Entferne Eintrag ' + shortcutName + '…');
+	  var shortcut = window.hk.Storage.Shortcuts.drop(shortcutName);
+	  window.hk.log('[HkShortcutsWindow][DEBUG]Entfernter Eintrag: ' + Json.toString(shortcut));
+	  window.hk.Shortcuts.updateDimensions();
 	},
 	nameInputHasFocus: function nameInputHasFocus(evt) {
 	  if(!($chk($("ShortcutInputX").value) || $chk($("ShortcutInputY").value))) {
@@ -731,7 +764,7 @@ w.hkCreateClasses = function () {
 		'text': {
 		  'cursor': 'pointer',
 		  'width': 'auto',
-		  'marginRight': 'auto',
+		  'marginRight': '20px',
 		  'paddingTop': '3px',
 		  'paddingBottom': '3px'
 		},
