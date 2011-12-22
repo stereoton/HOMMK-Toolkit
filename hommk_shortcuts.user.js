@@ -8,6 +8,8 @@
 // "Jail break""
 // @ require		  http://pastebin.com/raw.php?i=6TeU4De3
 // @require		  http://pastebin.com/raw.php?i=AuW3JP1z
+// Mootoolsl 1.12
+// @require		  http://mootools.net/download/get/mootools-1.1.2-yc.js
 // Local Storage-Kompatibilität · http://developer.mozilla.org
 // @require		  http://pastebin.com/raw.php?i=zrfAFeBc
 // Element.js 1.12 · http://mootools.net
