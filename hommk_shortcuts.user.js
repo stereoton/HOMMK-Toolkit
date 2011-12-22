@@ -4,7 +4,7 @@
 // @author		  Gelgamek <gelgamek@arcor.de>
 // @copyright	  © Gelgamek et al. · Artistic License 2.0 · http://www.opensource.org/licenses/Artistic-2.0
 // @description   Werkzeugkasten für HOMMK
-// @version		  1.3.2
+// @version		  1.3.3
 // @icon		  http://icons.iconarchive.com/icons/webiconset/mobile/32/maps-icon.png
 // @match         http://mightandmagicheroeskingdoms.ubi.com/play*
 //
@@ -865,8 +865,10 @@ w.hkCreateClasses = function () {
 	  'backgroundImage': 'url("http://cgit.compiz.org/fusion/decorators/emerald/plain/defaults/theme/buttons.min.png")'
 	},
 	'updateLink': {
+	  'zIndex': 97000,
 	  'verticalAlign': 'middle',
-	  'float': 'right'
+	  'float': 'right',
+	  'paddingTop': '3px'
 	},
 	'updateButton': {
 	  'zIndex': 97000,
