@@ -2,6 +2,7 @@
 // @name          HkToolkit
 // @namespace     http://mightandmagicheroeskingdoms.ubi.com/play
 // @description   Werkzeugkasten für HOMMK
+// @version		  1.01
 // @include       http://mightandmagicheroeskingdoms.ubi.com/play
 // @include       http://mightandmagicheroeskingdoms.ubi.com/play*
 // "Jail break""
