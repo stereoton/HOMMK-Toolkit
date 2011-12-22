@@ -2,7 +2,7 @@
 // @name          HkToolkit
 // @namespace     http://mightandmagicheroeskingdoms.ubi.com/play
 // @description   Werkzeugkasten für HOMMK
-// @version		  1.01
+// @version		  1.1
 // @match         http://mightandmagicheroeskingdoms.ubi.com/play*
 //
 // Content Scope Runner:
