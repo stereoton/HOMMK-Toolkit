@@ -2,11 +2,12 @@
 // @name          HkToolkit
 // @namespace     http://mightandmagicheroeskingdoms.ubi.com/play
 // @match         http://mightandmagicheroeskingdoms.ubi.com/play*
-
+//
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  © Gelgamek et al. · Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
 // @icon          http://icons.iconarchive.com/icons/webiconset/mobile/32/maps-icon.png
 // @description   Werkzeugkasten für HOMMK
+//
 // $Version$
 //
 // Content Scope Runner:
@@ -296,7 +297,7 @@ w.hkCreateClasses = function () {
 	},
 	updateDimensions: function updateDimensions(target) {
 	  var divs = target.getElementsByTagName("div");
-	  $each(divs, function(aDiv) {
+	  $ = $(divs, function(aDiv) {
 		var divHeight = $(aDiv).getStyle('height');
 		if($chk(divHeight) && divHeight.intVal() <= 0) {
 		  aDiv.setStyle('height', 'auto');
