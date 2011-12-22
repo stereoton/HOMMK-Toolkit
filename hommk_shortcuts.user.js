@@ -119,10 +119,15 @@ w.hkCreateClasses = function () {
 	  }
 	  var region = window.HOMMK.getRegionFromXY(x, y);
 	  var str = "";
-	  if(region.content.hasOwnProperty("cN")) {
-		str += region.content.cN;
-		if(region.content.hasOwnProperty("pN")) str += ", " + region.content.pN;
-		if(region.content.hasOwnProperty("iAN")) str += " (" + region.content.iAN + ")";
+	  if(region.content.hasOwnProperty("cN")) { // Stadt
+		str += region.content.cN; // Name
+		if(region.content.hasOwnProperty("pN") && !!region.content.pN) str += ", " + region.content.pN; // Besitzer
+		if(region.content.hasOwnProperty("iAN") && !!region.content.iAN) str += " (" + region.content.iAN + ")";  // Allianz
+	  }	else if(region.content.hasOwnProperty("rB")) { // Gebietsgebäude
+		str += region.content.rB.n; // Name
+		if(region.content.rB.hasOwnProperty("owner") && !!region.content.rB.owner) {
+		  str += "(" + region.content.rB.owner.name + ")"; // Name
+		}
 	  }	else {
 		str += "Region #" + this.HOMMK.getRegionNumberFromXY(x, y);
 	  }
