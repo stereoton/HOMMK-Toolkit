@@ -3,41 +3,83 @@
 // @namespace     http://mightandmagicheroeskingdoms.ubi.com/play
 // @description   Werkzeugkasten für HOMMK
 // @version		  1.01
-// @include       http://mightandmagicheroeskingdoms.ubi.com/play
-// @include       http://mightandmagicheroeskingdoms.ubi.com/play*
-// "Jail break""
-// @ require		  http://pastebin.com/raw.php?i=6TeU4De3
-// @require		  http://pastebin.com/raw.php?i=AuW3JP1z
-// Mootoolsl 1.12
-// @require		  http://mootools.net/download/get/mootools-1.1.2-yc.js
+// @match         http://mightandmagicheroeskingdoms.ubi.com/play
+// @match         http://mightandmagicheroeskingdoms.ubi.com/play#
+//
+// Content Scope Runner:
+// @require http://userscripts.org/scripts/source/68059.user.js
+// TODO Alternative zum Content Scope Runner: contentEval, ohne setTimeout()
+// @-require http://userscripts.org/scripts/source/100842.user.js
+//
+// Mootools 1.12
+// @-require http://mootools.net/download/get/mootools-1.1.2-yc.js
+//
 // Local Storage-Kompatibilität · http://developer.mozilla.org
-// @require		  http://pastebin.com/raw.php?i=zrfAFeBc
+// @require http://pastebin.com/raw.php?i=zrfAFeBc
+//
 // Element.js 1.12 · http://mootools.net
-// @ require	  http://pastebin.com/raw.php?i=5Rvtvt2s
+// @-require http://pastebin.com/raw.php?i=5Rvtvt2s
+//
 // Element.Selectors.js 1.12 · http://mootools.net
-// @require		  http://pastebin.com/raw.php?i=2G8yXznG
+// @require http://pastebin.com/raw.php?i=2G8yXznG
+//
 // Element.Filters.js 1.12 · http://mootools.net
-// @ require		  http://pastebin.com/raw.php?i=i1BkpHsg
-// Accordion.js 1.12 · http://mootools.net
-// @require		  http://pastebin.com/raw.php?i=CePFJAgz
-// Prototypes
-// @require		  http://pastebin.com/raw.php?i=NBX5T7pp
+// @-require http://pastebin.com/raw.php?i=i1BkpHsg
+//
+// Prototype-Ergänzungen
+// @require http://pastebin.com/raw.php?i=NBX5T7pp
 // ==/UserScript==
 
-window.HkLogger = new Class({
-  log: function log(msg) {
-	var $debug = this.hasOwnProperty('$debug') ? 1 : this.$debug;
-	if($debug > 1) {
-	  alert(msg);
-	} else if($debug < 1 || undefined == typeof console || "undefined" == typeof console) {
-	  return;
-	} else {
-	  console.log(msg);
-	}
+var w = window || safeWindow;
+if(!w.hasOwnProperty("isGoogleChromeUA")) {
+  w.isGoogleChromeUA = function() {
+	return navigator.vendor.toLowerCase().indexOf('google') > -1;
   }
-});
+}
 
-window.hkCreateClasses = function () {
+/**
+ * Page Scrope Runner für Google Chrome wegen fehlendem @require-Support, siehe
+ * http://www.chromium.org/developers/design-documents/user-scripts
+ */
+if(w.isGoogleChromeUA() && 'undefined' == typeof __HKU_PAGE_SCOPE_RUN__) {
+  (function page_scope_runner() {
+	// If we're _not_ already running in the page, grab the full source
+	// of this script.
+	var my_src = "(" + page_scope_runner.caller.toString() + ")();";
+
+	// Create a script node holding this script, plus a marker that lets us
+	// know we are running in the page scope (not the Greasemonkey sandbox).
+	// Note that we are intentionally *not* scope-wrapping here.
+	var script = document.createElement('script');
+	script.setAttribute("type", "text/javascript");
+	script.textContent = "var __HKU_PAGE_SCOPE_RUN__ = true;\n" + my_src;
+
+	// Insert the script node into the page, so it will run, and immediately
+	// remove it to clean up.  Use setTimeout to force execution "outside" of
+	// the user script scope completely.
+	setTimeout(function() {
+	  document.body.appendChild(script);
+	  document.body.removeChild(script);
+	}, 0);
+  })();
+  // Stop running, because we know Greasemonkey actually runs us in an anonymous wrapper.
+  return;
+}
+
+w.hkCreateClasses = function () {
+
+  window.HkLogger = new Class({
+	log: function log(msg) {
+	  var $debug = this.hasOwnProperty('$debug') ? 0 : this.$debug;
+	  if($debug > 1) {
+		alert(msg);
+	  } else if($debug < 1 || undefined == typeof console || "undefined" == typeof console) {
+		return;
+	  } else {
+		console.log(msg);
+	  }
+	}
+  });
   var HkLogger = window.HkLogger;
 
   window.Hk = new Class({
@@ -98,12 +140,10 @@ window.hkCreateClasses = function () {
   window.hkToolkit = new Hk();
   window.hk = window.hkToolkit;
   var hk = window.hk;
-  var hkToolkit = hk;
 
   window.HOMMK_HkToolkit = window.HOMMK_HkToolkit || {
 	'version': hk.version
   };
-  var w = window;
   var HOMMK = hk.HOMMK;
   var idScript = hk.idScript;
   var version = hk.version;
@@ -239,7 +279,8 @@ window.hkCreateClasses = function () {
 	updateDimensions: function updateDimensions(target) {
 	  var divs = target.getElementsByTagName("div");
 	  $each(divs, function(aDiv) {
-		if($(aDiv).getStyle('height').intVal() <= 0) {
+		var divHeight = $(aDiv).getStyle('height');
+		if($chk(divHeight) && divHeight.intVal() <= 0) {
 		  aDiv.setStyle('height', 'auto');
 		}
 	  });
@@ -370,29 +411,19 @@ window.hkCreateClasses = function () {
 	  this.setOptions(options);
 	  if(!this.options.reduce) return;
 	  var reduce = $(this.options.reduce);
-	  window.hk.log(reduce);
 	  var headerDivs = $(this.getId("HkWindow", id)).getElementsByTagName("div");
-	  window.hk.log(headerDivs);
 	  var reduceButton = false;
 	  $each(headerDivs, function(hd) {
 		hd = $(hd);
-		window.hk.log(hd);
 		if(hd.hasClass('HkReduce')) {
-		  window.hk.log(hd);
 		  reduceButton = hd;
 		}
 	  });
 	  if(reduceButton && reduce) {
-		window.hk.log("Implementiere Reducer");
-		window.hk.log(reduceButton);
-		window.hk.log(reduce);
 		new Hk.HkReducer(reduceButton, reduce, {
 		  onTargetVisible: window.hk.log,
 		  onTargetHidden: window.hk.log
 		});
-	  }	else {
-		window.hk.log(reduceButton);
-		window.hk.log(reduce);
 	  }
 	}
   });
@@ -400,9 +431,9 @@ window.hkCreateClasses = function () {
 
   hk.Windows = new Hk.HkWindows();
 
-/**
- * Datenstruktur für Shortcuts @todo Auslagern
- */
+  /**
+   * Datenstruktur für Shortcuts @todo Auslagern
+   */
   Hk.Shortcut = new Class({
 	'$debug': 1,
 	options: {
@@ -441,11 +472,11 @@ window.hkCreateClasses = function () {
   });
   Hk.Shortcut.implement(new Options, new HkLogger);
 
-  hk.Storage.Shortcuts = new Hk.HkStorage(hk.idScript + "HkShortcuts" + hk.WorldId);
+  hk.Storage.Shortcuts = new Hk.HkStorage(window.hk.idScript + "HkShortcuts" + window.hk.WorldId);
 
-/**
- * Shortcuts @todo Auslagern
- */
+  /**
+   * Shortcuts @todo Auslagern
+   */
   Hk.HkShortcutsWindow = new Class({
 	'$debug': 1,
 	'$hkWin': false,
@@ -634,8 +665,8 @@ window.hkCreateClasses = function () {
   Hk.HkShortcutsWindow.implement(new Events, new Options, new HkLogger);
 
   /**
-  * Erzeugt Shortcuts-Fenster @todo Umbenennen und auslagern
-  */
+   * Erzeugt Shortcuts-Fenster @todo Umbenennen und auslagern
+   */
   window.initHkToolkit = function initHkToolkit() {
 	try {
 	  window.hk.Shortcuts = new window.Hk.HkShortcutsWindow();
@@ -690,7 +721,7 @@ window.hkCreateClasses = function () {
 		},
 		'valid': {
 
-		}
+	  }
 	  },
 	  'Entry': {
 		'deleteButton': {
@@ -762,12 +793,404 @@ window.hkCreateClasses = function () {
  * Prüft die Verfügbarkeit der HOMMK-Objekte... @todo Braucht's das überhaupt?
  */
 function wait(){
-  if(!!window.HOMMK && window.HOMMK.worldMap && window.HOMMK.worldMap.content && window.HOMMK.worldMap.content._size){
+  if(!!w.HOMMK && w.HOMMK.worldMap && w.HOMMK.worldMap.content && w.HOMMK.worldMap.content._size){
 	clearInterval(loader);
-	window.hkCreateClasses();
-	window.initHkToolkit();
-  }else {
+	w.hkCreateClasses();
+	w.initHkToolkit();
+  }	else {
   }
+}
+
+/**
+ * Browser-Hack: Skripte aus Metabereich für Google Chrome, siehe
+ * http://www.chromium.org/developers/design-documents/user-scripts
+ */
+if(w.isGoogleChromeUA() && 'undefined' != typeof __HKU_PAGE_SCOPE_RUN__) {
+  /**
+   * Local Storage-Kompatibilität · http://developer.mozilla.org · http://pastebin.com/raw.php?i=zrfAFeBc
+   */
+  if (!window.localStorage) {
+	Object.defineProperty(window, "localStorage", new (function () {
+	  var aKeys = [], oStorage = {};
+	  Object.defineProperty(oStorage, "getItem", {
+		value: function (sKey) { return sKey ? this[sKey] : null; },
+		writable: false,
+		configurable: false,
+		enumerable: false
+	  });
+	  Object.defineProperty(oStorage, "key", {
+		value: function (nKeyId) { return aKeys[nKeyId]; },
+		writable: false,
+		configurable: false,
+		enumerable: false
+	  });
+	  Object.defineProperty(oStorage, "setItem", {
+		value: function (sKey, sValue) {
+		  if(!sKey) { return; }
+		  document.cookie = escape(sKey) + "=" + escape(sValue) + "; path=/";
+		},
+		writable: false,
+		configurable: false,
+		enumerable: false
+	  });
+	  Object.defineProperty(oStorage, "length", {
+		get: function () { return aKeys.length; },
+		configurable: false,
+		enumerable: false
+	  });
+	  Object.defineProperty(oStorage, "removeItem", {
+		value: function (sKey) {
+		  if(!sKey) { return; }
+		  var sExpDate = new Date();
+		  sExpDate.setDate(sExpDate.getDate() - 1);
+		  document.cookie = escape(sKey) + "=; expires=" + sExpDate.toGMTString() + "; path=/";
+		},
+		writable: false,
+		configurable: false,
+		enumerable: false
+	  });
+	  this.get = function () {
+		var iThisIndx;
+		for (var sKey in oStorage) {
+		  iThisIndx = aKeys.indexOf(sKey);
+		  if (iThisIndx === -1) { oStorage.setItem(sKey, oStorage[sKey]); }
+		  else { aKeys.splice(iThisIndx, 1); }
+		  delete oStorage[sKey];
+		}
+		for (aKeys; aKeys.length > 0; aKeys.splice(0, 1)) { oStorage.removeItem(aKeys[0]); }
+		for (var iCouple, iKey, iCouplId = 0, aCouples = document.cookie.split(/\s*;\s*/); iCouplId < aCouples.length; iCouplId++) {
+		  iCouple = aCouples[iCouplId].split(/\s*=\s*/);
+		  if (iCouple.length > 1) {
+			oStorage[iKey = unescape(iCouple[0])] = unescape(iCouple[1]);
+			aKeys.push(iKey);
+		  }
+		}
+		return oStorage;
+	  };
+	  this.configurable = false;
+	  this.enumerable = true;
+	})());
+  }
+  /*
+  Script: Element.Selectors.js
+	  Css Query related functions and <Element> extensions
+
+  License:
+	  MIT-style license.
+  */
+
+  /* Section: Utility Functions */
+
+  /*
+  Function: $E
+	  Selects a single (i.e. the first found) Element based on the selector passed in and an optional filter element.
+	  Returns as <Element>.
+
+  Arguments:
+	  selector - string; the css selector to match
+	  filter - optional; a DOM element to limit the scope of the selector match; defaults to document.
+
+  Example:
+	  >$E('a', 'myElement') //find the first anchor tag inside the DOM element with id 'myElement'
+
+  Returns:
+	  a DOM element - the first element that matches the selector
+  */
+
+  function $E(selector, filter){
+	  return ($(filter) || document).getElement(selector);
+  };
+
+  /*
+  Function: $ES
+	  Returns a collection of Elements that match the selector passed in limited to the scope of the optional filter.
+	  See Also: <Element.getElements> for an alternate syntax.
+	  Returns as <Elements>.
+
+  Returns:
+	  an array of dom elements that match the selector within the filter
+
+  Arguments:
+	  selector - string; css selector to match
+	  filter - optional; a DOM element to limit the scope of the selector match; defaults to document.
+
+  Examples:
+	  >$ES("a") //gets all the anchor tags; synonymous with $$("a")
+	  >$ES('a','myElement') //get all the anchor tags within $('myElement')
+  */
+
+  function $ES(selector, filter){
+	  return ($(filter) || document).getElementsBySelector(selector);
+  };
+
+  $$.shared = {
+
+	  'regexp': /^(\w*|\*)(?:#([\w-]+)|\.([\w-]+))?(?:\[(\w+)(?:([!*^$]?=)["']?([^"'\]]*)["']?)?])?$/,
+
+	  'xpath': {
+
+		  getParam: function(items, context, param, i){
+			  var temp = [context.namespaceURI ? 'xhtml:' : '', param[1]];
+			  if (param[2]) temp.push('[@id="', param[2], '"]');
+			  if (param[3]) temp.push('[contains(concat(" ", @class, " "), " ', param[3], ' ")]');
+			  if (param[4]){
+				  if (param[5] && param[6]){
+					  switch(param[5]){
+						  case '*=': temp.push('[contains(@', param[4], ', "', param[6], '")]'); break;
+						  case '^=': temp.push('[starts-with(@', param[4], ', "', param[6], '")]'); break;
+						  case '$=': temp.push('[substring(@', param[4], ', string-length(@', param[4], ') - ', param[6].length, ' + 1) = "', param[6], '"]'); break;
+						  case '=': temp.push('[@', param[4], '="', param[6], '"]'); break;
+						  case '!=': temp.push('[@', param[4], '!="', param[6], '"]');
+					  }
+				  } else {
+					  temp.push('[@', param[4], ']');
+				  }
+			  }
+			  items.push(temp.join(''));
+			  return items;
+		  },
+
+		  getItems: function(items, context, nocash){
+			  var elements = [];
+			  var xpath = document.evaluate('.//' + items.join('//'), context, $$.shared.resolver, XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE, null);
+			  for (var i = 0, j = xpath.snapshotLength; i < j; i++) elements.push(xpath.snapshotItem(i));
+			  return (nocash) ? elements : new Elements(elements.map($));
+		  }
+
+	  },
+
+	  'normal': {
+
+		  getParam: function(items, context, param, i){
+			  if (i == 0){
+				  if (param[2]){
+					  var el = context.getElementById(param[2]);
+					  if (!el || ((param[1] != '*') && (Element.getTag(el) != param[1]))) return false;
+					  items = [el];
+				  } else {
+					  items = $A(context.getElementsByTagName(param[1]));
+				  }
+			  } else {
+				  items = $$.shared.getElementsByTagName(items, param[1]);
+				  if (param[2]) items = Elements.filterById(items, param[2], true);
+			  }
+			  if (param[3]) items = Elements.filterByClass(items, param[3], true);
+			  if (param[4]) items = Elements.filterByAttribute(items, param[4], param[5], param[6], true);
+			  return items;
+		  },
+
+		  getItems: function(items, context, nocash){
+			  return (nocash) ? items : $$.unique(items);
+		  }
+
+	  },
+
+	  resolver: function(prefix){
+		  return (prefix == 'xhtml') ? 'http://www.w3.org/1999/xhtml' : false;
+	  },
+
+	  getElementsByTagName: function(context, tagName){
+		  var found = [];
+		  for (var i = 0, j = context.length; i < j; i++) found.extend(context[i].getElementsByTagName(tagName));
+		  return found;
+	  }
+
+  };
+
+  $$.shared.method = (window.xpath) ? 'xpath' : 'normal';
+
+  /*
+  Class: Element
+	  Custom class to allow all of its methods to be used with any DOM element via the dollar function <$>.
+  */
+
+  Element.Methods.Dom = {
+
+	  /*
+	  Property: getElements
+		  Gets all the elements within an element that match the given (single) selector.
+		  Returns as <Elements>.
+
+	  Arguments:
+		  selector - string; the css selector to match
+
+	  Examples:
+		  >$('myElement').getElements('a'); // get all anchors within myElement
+		  >$('myElement').getElements('input[name=dialog]') //get all input tags with name 'dialog'
+		  >$('myElement').getElements('input[name$=log]') //get all input tags with names ending with 'log'
+
+	  Notes:
+		  Supports these operators in attribute selectors:
+
+		  - = : is equal to
+		  - ^= : starts-with
+		  - $= : ends-with
+		  - != : is not equal to
+
+		  Xpath is used automatically for compliant browsers.
+	  */
+
+	  getElements: function(selector, nocash){
+		  var items = [];
+		  selector = selector.trim().split(' ');
+		  for (var i = 0, j = selector.length; i < j; i++){
+			  var sel = selector[i];
+			  var param = sel.match($$.shared.regexp);
+			  if (!param) break;
+			  param[1] = param[1] || '*';
+			  var temp = $$.shared[$$.shared.method].getParam(items, this, param, i);
+			  if (!temp) break;
+			  items = temp;
+		  }
+		  return $$.shared[$$.shared.method].getItems(items, this, nocash);
+	  },
+
+	  /*
+	  Property: getElement
+		  Same as <Element.getElements>, but returns only the first. Alternate syntax for <$E>, where filter is the Element.
+		  Returns as <Element>.
+
+	  Arguments:
+		  selector - string; css selector
+	  */
+
+	  getElement: function(selector){
+		  return $(this.getElements(selector, true)[0] || false);
+	  },
+
+	  /*
+	  Property: getElementsBySelector
+		  Same as <Element.getElements>, but allows for comma separated selectors, as in css. Alternate syntax for <$$>, where filter is the Element.
+		  Returns as <Elements>.
+
+	  Arguments:
+		  selector - string; css selector
+	  */
+
+	  getElementsBySelector: function(selector, nocash){
+		  var elements = [];
+		  selector = selector.split(',');
+		  for (var i = 0, j = selector.length; i < j; i++) elements = elements.concat(this.getElements(selector[i], true));
+		  return (nocash) ? elements : $$.unique(elements);
+	  }
+
+  };
+
+  Element.extend({
+
+	  /*
+	  Property: getElementById
+		  Targets an element with the specified id found inside the Element. Does not overwrite document.getElementById.
+
+	  Arguments:
+		  id - string; the id of the element to find.
+	  */
+
+	  getElementById: function(id){
+		  var el = document.getElementById(id);
+		  if (!el) return false;
+		  for (var parent = el.parentNode; parent != this; parent = parent.parentNode){
+			  if (!parent) return false;
+		  }
+		  return el;
+	  }/*compatibility*/,
+
+	  getElementsByClassName: function(className){
+		  return this.getElements('.' + className);
+	  }
+
+	  /*end compatibility*/
+
+  });
+
+  document.extend(Element.Methods.Dom);
+  Element.extend(Element.Methods.Dom);
+
+  /**
+   * Prototype Ergänzungen · http://pastebin.com/raw.php?i=NBX5T7pp
+   */
+  if (String.prototype.toCurrency == null) {
+	String.prototype.toCurrency = function toCurrency() {
+	  var n = this.toString();
+	  var regex = /^(.*\s)?([\-+\u00A3\u20AC]?\d+)(\d{3}\b)/;
+	  return n == (n = n.replace(regex, "$1$2,$3")) ? n : this.toCurrency(n); //english
+	};
+  }
+
+  if (String.prototype.padLeft == null) {
+	String.prototype.padLeft = function padLeft(size, chr) {
+	  var input = this.toString();
+	  while ( input.length < size ) {
+		input = chr + input;
+	  }
+	  return input;
+	};
+  }
+
+  if (Number.prototype.toK == null) {
+	Number.prototype.toK = function toK() {
+	  var n = Number(this.toString());
+	  var i = Number(Math.abs(n));
+	  if((i.toInt() / 1000000) >= 1) return n.toFixedString(1000000, 1, true) + "M";
+	  if((i.toInt() / 1000) >= 1) return n.toFixedString(1000) + "K";
+	  return n;
+	};
+  }
+
+  if (Number.prototype.toFixedString == null) {
+	Number.prototype.toFixedString = function toFixedString() {
+	  var n = this.toString();
+	  var div, digits, currency;
+	  var a = Array.prototype.slice.call(arguments);
+	  if(a.length > 2) div = a.shift();
+	  else div = 1;
+	  digits = a.shift();
+	  currency = a.shift();
+	  n = n / div;
+	  var num = parseFloat((n || '0').toString().replace(',', '.').replace(/[^0-9e\.\-+]/g, '')) || 0;
+	  var unsigned = Number(Math.abs(n)).toUnsignedString(digits);
+	  if ( isNaN(unsigned) ) unsigned = 0;
+	  unsigned = (num < 0 ? "-" : "") + unsigned;
+	  if (currency == true ) return unsigned.toCurrency();
+	  return Number(unsigned);
+	};
+  }
+
+  if (Number.prototype.toFixedString == null) {
+	Number.prototype.toUnsignedString = function toUnsignedString(digits) {
+	  var n = this.toString();
+	  var start, end, t;
+	  var str = "" + Math.round(n * Math.pow(10, digits));
+	  if (/\D/.test(str)) return "" + n;
+	  str = str.padLeft(1 + digits, "0");
+	  start = str.substring(0, t = (str.length - digits));
+	  end = str.substring(t);
+	  if (end) end = "." + end;
+	  return start + end; // avoid "0."
+	};
+  }
+
+  if (Node.prototype.preventTextSelection == null) {
+	var applyToTags = ["p", "h1", "h2", "h3", "h4", "h5", "h6", "li", "a", "img"];
+	/**
+	  * Verhindert die Textauswahl auf dem Element.
+	  * @return das geänderte Element selbst
+	  */
+	Node.prototype.preventTextSelection = function(node) {
+	  if($type(this) != "element") return this;
+	  if(!applyToTags.contains(this.getTag())) return this;
+	  var styles = {
+		"-webkit-user-select": "none",
+		"-khtml-user-select": "none",
+		"-moz-user-select": "none",
+		"-o-user-select": "none",
+		"user-select": "none"
+	  };
+	  this.setStyles(styles);
+	  return this;
+	}
+  }
+
 }
 
 /**
