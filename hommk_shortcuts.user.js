@@ -1,8 +1,10 @@
 // ==UserScript==
 // @name          HkToolkit
 // @namespace     http://mightandmagicheroeskingdoms.ubi.com/play
+// @author		  Gelgamek <gelgamek@arcor.de>
+// @copyright	  © Gelgamek et al. · Artistic License 2.0 · http://www.opensource.org/licenses/Artistic-2.0
 // @description   Werkzeugkasten für HOMMK
-// @version		  1.3
+// @version		  1.3.1
 // @icon		  http://icons.iconarchive.com/icons/webiconset/mobile/32/maps-icon.png
 // @match         http://mightandmagicheroeskingdoms.ubi.com/play*
 //
@@ -314,8 +316,8 @@ w.hkCreateClasses = function () {
 	  'preventTextSelection': true,
 	  'addToDOM': true,
 	  'reduce': false,
-	  'updateable': false,
-	  'updateUrl': false
+	  'updateable': true,
+	  'updateUrl': "https://github.com/gelgamek/HOMMK-Toolkit/raw/master/hommk_shortcuts.user.js"
 	},
 	initialize: function(options) {
 	  this.setOptions(options);
