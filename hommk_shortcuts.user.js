@@ -4,7 +4,7 @@
 // @author		  Gelgamek <gelgamek@arcor.de>
 // @copyright	  © Gelgamek et al. · Artistic License 2.0 · http://www.opensource.org/licenses/Artistic-2.0
 // @description   Werkzeugkasten für HOMMK
-// @version		  1.3.3
+// @version		  1.4-$Date$-$Id$
 // @icon		  http://icons.iconarchive.com/icons/webiconset/mobile/32/maps-icon.png
 // @match         http://mightandmagicheroeskingdoms.ubi.com/play*
 //

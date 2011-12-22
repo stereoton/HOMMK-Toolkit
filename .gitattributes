@@ -1,0 +1,4 @@
+*.js filter=dater
+*.js ident
+nbproject/ export-ignore
+LAST_COMMIT export-subst
