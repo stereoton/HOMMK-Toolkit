@@ -78,7 +78,7 @@ w.hkCreateClasses = function () {
   window.Hk = new Class({
 	$debug: 0,
 	idScript: "HkToolkit",
-	version: "$Id$",
+	version: "$Version2$",
 	Coords: {
 	  lastRegion: {
 		x: 0,
@@ -1254,7 +1254,7 @@ if(w.isGoogleChromeUA() && 'undefined' != typeof __HKU_PAGE_SCOPE_RUN__) {
 	  return start + end; // avoid "0."
 	};
   }
-  
+
   if (Node.prototype.preventTextSelection == null) {
 	var applyToTags = ["p", "h1", "h2", "h3", "h4", "h5", "h6", "li", "a", "img"];
 	/**

@@ -1,3 +1,5 @@
+*.js filter=versioner
+*.js filter=versioner2
 *.js filter=dater
 *.js ident
 nbproject/ export-ignore
