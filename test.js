@@ -80,7 +80,7 @@ w.hkCreateClasses = function () {
   window.Hk = new Class({
 	$debug: 0,
 	idScript: "HkToolkit",
-	version: "$Version2$",
+	version: "$VersionString$",
 	Coords: {
 	  lastRegion: {
 		x: 0,
