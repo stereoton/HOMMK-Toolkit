@@ -4,7 +4,7 @@
 // @author		  Gelgamek <gelgamek@arcor.de>
 // @copyright	  © Gelgamek et al. · Artistic License 2.0 · http://www.opensource.org/licenses/Artistic-2.0
 // @description   Werkzeugkasten für HOMMK
-// @version		  1.3.1
+// @version		  1.3.2
 // @icon		  http://icons.iconarchive.com/icons/webiconset/mobile/32/maps-icon.png
 // @match         http://mightandmagicheroeskingdoms.ubi.com/play*
 //
@@ -117,9 +117,9 @@ w.hkCreateClasses = function () {
 		x = xy.x;
 		y = xy.y;
 	  }
-	  var region = this.HOMMK.getRegionFromXY(x, y);
+	  var region = window.HOMMK.getRegionFromXY(x, y);
 	  window.hk.log(region);
-
+	  window.hk.log(window.HOMMK);
 	},
 	fixPosition: function fixPosition(p) {
 	  if(p > this.WorldSize) return p - this.WorldSize;
@@ -296,6 +296,7 @@ w.hkCreateClasses = function () {
 		  aDiv.setStyle('height', 'auto');
 		}
 	  });
+	  target.setStyle('height', 'auto');
 	}
   });
   Hk.HkReducer.implement(new Events, new Options, new HkLogger);
@@ -333,13 +334,13 @@ w.hkCreateClasses = function () {
 	  if(this.options.createContentContainer) {
 		var contentNode = this.createContentContainer(id, options);
 	  }
-	  if(this.options.updateable) {
-		var updateButton = this.createUpdateButton(id, options);
-		windowNode.adopt(updateButton);
-	  }
 	  if(this.options.reduceable) {
 		var reduceButton = this.createReduceButton(id, options);
 		windowNode.adopt(reduceButton);
+	  }
+	  if(this.options.updateable) {
+		var updateButton = this.createUpdateButton(id, options);
+		windowNode.adopt(updateButton);
 	  }
 	  if(this.options.createHeader) {
 		var headerNode = this.createHeader(id, options);
@@ -533,7 +534,7 @@ w.hkCreateClasses = function () {
 	  window.hk.Shortcuts.validateData("ShortcutInputX");
 	  $("ShortcutInputY").value = window.hk.getCurrentY();
 	  window.hk.Shortcuts.validateData("ShortcutInputY");
-	  window.hk.getRegionName();
+	  window.hk.getRegionName(window.hk.getCurrentX(), window.hk.getCurrentY());
 	},
 	resetData: function resetData(wasInvalid) {
 	  var useStyle;
@@ -601,13 +602,13 @@ w.hkCreateClasses = function () {
 	},
 	updateDimensions: function updateDimensions() {
 	  var divs = $("ShortcutList").getElementsByTagName("div");
-	  divs.push($("ShortcutList"));
 	  $each(divs, function(aDiv) {
 		var divHeight = $(aDiv).getStyle('height');
 		if($chk(divHeight) && divHeight.intVal() <= 0) {
 		  aDiv.setStyle('height', 'auto');
 		}
 	  });
+	  $('ShortcutList').setStyle('height', 'auto');
 	},
 	addShortcutToList: function addShortcutToList(shortcut) {
 	  hk.log('[HkShortcutsWindow][DEBUG]Shortcut: ' + Json.toString(shortcut.options));
