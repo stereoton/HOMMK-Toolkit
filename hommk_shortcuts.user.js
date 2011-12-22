@@ -2,7 +2,8 @@
 // @name          HkToolkit
 // @namespace     http://mightandmagicheroeskingdoms.ubi.com/play
 // @description   Werkzeugkasten für HOMMK
-// @version		  1.1
+// @version		  1.3
+// @icon		  http://icons.iconarchive.com/icons/webiconset/mobile/32/maps-icon.png
 // @match         http://mightandmagicheroeskingdoms.ubi.com/play*
 //
 // Content Scope Runner:
@@ -312,7 +313,9 @@ w.hkCreateClasses = function () {
 	  'createContentContainer': true,
 	  'preventTextSelection': true,
 	  'addToDOM': true,
-	  'reduce': false
+	  'reduce': false,
+	  'updateable': false,
+	  'updateUrl': false
 	},
 	initialize: function(options) {
 	  this.setOptions(options);
@@ -327,6 +330,10 @@ w.hkCreateClasses = function () {
 	  });
 	  if(this.options.createContentContainer) {
 		var contentNode = this.createContentContainer(id, options);
+	  }
+	  if(this.options.updateable) {
+		var updateButton = this.createUpdateButton(id, options);
+		windowNode.adopt(updateButton);
 	  }
 	  if(this.options.reduceable) {
 		var reduceButton = this.createReduceButton(id, options);
@@ -398,6 +405,20 @@ w.hkCreateClasses = function () {
 		'styles': window.hk.Styles.reduceButton
 	  });
 	  return reduceButton;
+	},
+	createUpdateButton: function createUpdateButton(id, options) {
+	  this.setOptions(options);
+	  var updateLink = new Element("a", {
+		'href': this.options.updateUrl,
+		'target': '_blank',
+		'styles': window.hk.Styles.updateLink
+	  });
+	  var updateButton = new Element('img', {
+		'src': 'http://icons.iconarchive.com/icons/saki/snowish/16/Apps-system-software-update-icon.png',
+		'styles': window.hk.Styles.updateButton
+	  });
+	  updateLink.adopt(updateButton);
+	  return updateLink;
 	},
 	createCloseButton: function createCloseButton(id, options) {
 	  this.setOptions(options);
@@ -600,7 +621,7 @@ w.hkCreateClasses = function () {
 	  var deleteButton = new Element('img', {
 		'class': 'EntryButton DeleteButton',
 		'name': 'delete' + shortcut.name(),
-		'src': "http://icongal.com/gallery/download/160532/actions_edit_delete_shred/png",
+		'src': "http://icons.iconarchive.com/icons/oxygen-icons.org/oxygen/16/Actions-dialog-close-icon.png",
 		'styles': window.hk.Styles.Shortcuts.Entry.deleteButton
 	  });
 	  deleteButton.addEventListener('click', this.onDeleteShortcut);
@@ -677,7 +698,7 @@ w.hkCreateClasses = function () {
 	  var loadPosition = new Element("img", {
 		'id': 'LoadPosition',
 		'name': 'loadPosition',
-		'src': "http://icongal.com/gallery/download/268172/office_word_microsoft_docx_pdf_submit/png",
+		'src': "http://icons.iconarchive.com/icons/fatcow/farm-fresh/16/update-icon.png",
 		'styles': window.hk.Styles.Shortcuts.Form.load
 	  });
 	  loadPosition.preventTextSelection();
@@ -685,7 +706,7 @@ w.hkCreateClasses = function () {
 	  var submitInput = new Element("img", {
 		'id': "ShortcutSubmit",
 		'name': "shortcutSubmit",
-		'src': "http://icongal.com/gallery/download/160325/actions_games_config_theme_video/png",
+		'src': "http://icons.iconarchive.com/icons/fatcow/farm-fresh/16/accept-icon.png",
 		'styles': window.hk.Styles.Shortcuts.Form.submit
 	  });
 	  submitInput.preventTextSelection();
@@ -812,6 +833,14 @@ w.hkCreateClasses = function () {
 	  'backgroundPosition': '-110px',
 	  'backgroundRepeat': 'no-repeat',
 	  'backgroundImage': 'url("http://cgit.compiz.org/fusion/decorators/emerald/plain/defaults/theme/buttons.min.png")'
+	},
+	'updateLink': {
+	  'verticalAlign': 'middle',
+	  'float': 'right'
+	},
+	'updateButton': {
+	  'zIndex': 97000,
+	  'border': ' none'
 	},
 	'closeButton': {
 
