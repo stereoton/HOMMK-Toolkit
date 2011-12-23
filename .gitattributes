@@ -1,6 +1,4 @@
-*.js filter=versioner
-*.js filter=versionstrings
-*.js filter=dater
 *.js ident
+*.js filter=keywords
 nbproject/ export-ignore
 LAST_COMMIT export-subst
