@@ -2,9 +2,9 @@
 // @name          HkToolkit
 // @namespace     http://mightandmagicheroeskingdoms.ubi.com/play
 // @match         http://mightandmagicheroeskingdoms.ubi.com/play*
-// @author		  Gelgamek <gelgamek@arcor.de>
+// @author	  Gelgamek <gelgamek@arcor.de>
 // @copyright	  © Gelgamek et al. · Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
-// @icon		  http://icons.iconarchive.com/icons/webiconset/mobile/32/maps-icon.png
+// @icon	  http://icons.iconarchive.com/icons/webiconset/mobile/32/maps-icon.png
 // @description   Werkzeugkasten für HOMMK
 // $Version$
 //
@@ -78,7 +78,7 @@ w.hkCreateClasses = function () {
   window.Hk = new Class({
 	$debug: 0,
 	idScript: "HkToolkit",
-	version: "$Version2$",
+	version: "$VersionString$",
 	Coords: {
 	  lastRegion: {
 		x: 0,
