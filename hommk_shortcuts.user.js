@@ -745,12 +745,12 @@ w.hkCreateClasses = function () {
 	try {
 	  window.hk.Shortcuts = new window.Hk.HkShortcutsWindow();
 	} catch(ex) {
-	  alert('[HkPublic][UNKNOWN ERROR] '+ex);
+	  window.hk.log('[HkPublic][ERROR]Fehler beim Erzeugen des Shortcuts-Fensters: '+ex);
 	}
 	try {
 	  window.hk.Shortcuts.updateShortcutList();
 	} catch(ex) {
-	  alert('[HkPublic][UPDATE ERROR] '+ex);
+	  window.hk.log('[HkPublic][ERROR]Fehler beim Aktualisieren des Shortcuts-Fensters: '+ex);
 	}
 	try {
 	  window.hk.Windows.makeReduceable("HkShortcuts", {
@@ -759,7 +759,7 @@ w.hkCreateClasses = function () {
 	  });
 	  window.hk.Shortcuts.updateDimensions();
 	} catch(ex) {
-	  alert('[HkPublic][UICREATE ERROR] '+ex);
+	  window.hk.log('[HkPublic][ERROR]Fehler bei der Finalisierung des Shortcuts-Fensters: '+ex);
 	}
   };
 
