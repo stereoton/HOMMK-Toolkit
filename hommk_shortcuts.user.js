@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkToolkit
-// @version       2011.12.29.15.02.490000
+// @version       2011.12.29.16.18.040000
 // @description   Werkzeugkasten für HOMMK
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -78,7 +78,7 @@ w.hkCreateClasses = function () {
   window.Hk = new Class({
 	$debug: 1,
 	idScript: "HkToolkit",
-	version: "2011.12.29.15.02.490000",
+	version: "2011.12.29.16.18.040000",
 	Coords: {
 	  lastRegion: {
 		x: 0,
@@ -406,7 +406,8 @@ w.hkCreateClasses = function () {
 		'styles': window.hk.Styles.scrollButton
 	  });
 	  scrollNode.dir = direction;
-	  scrollNode.btnId = id;
+	  scrollNode.srcId = id;
+	  scrollNode.btnId = btnId;
 	  scrollNode.btnOpts = options;
 	  scrollNode.btnWindow = this;
 	  scrollNode.addEvent('click', handler);
@@ -416,8 +417,10 @@ w.hkCreateClasses = function () {
 	  window.hk.log('[HkWindow][DEBUG]scrollUp:');
 	  window.hk.log(evt);
 	  window.hk.log(evt.target);
-	  window.hk.log(evt.target.getPosition());
-	  window.hk.log(evt.target.getCoordinates());
+	  var evtRt = $(evt.target.srcId);
+	  window.hk.log(evtRt);
+	  window.hk.log(evtRt.getPosition());
+	  window.hk.log(evtRt.getCoordinates());
 	},
 	scrollDown: function scrollDown(evt) {
 	  window.hk.log('[HkWindow][DEBUG]scrollDown:');
