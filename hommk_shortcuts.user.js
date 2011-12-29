@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkToolkit
-// @version       2011.12.29.16.18.040000
+// @version       2011.12.29.16.23.380000
 // @description   Werkzeugkasten für HOMMK
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -78,7 +78,7 @@ w.hkCreateClasses = function () {
   window.Hk = new Class({
 	$debug: 1,
 	idScript: "HkToolkit",
-	version: "2011.12.29.16.18.040000",
+	version: "2011.12.29.16.23.380000",
 	Coords: {
 	  lastRegion: {
 		x: 0,
@@ -410,14 +410,14 @@ w.hkCreateClasses = function () {
 	  scrollNode.btnId = btnId;
 	  scrollNode.btnOpts = options;
 	  scrollNode.btnWindow = this;
-	  scrollNode.addEvent('click', handler);
+	  scrollNode.addEvent('click', handler.bind(this));
 	  return scrollNode;
 	},
 	scrollUp: function scrollUp(evt) {
 	  window.hk.log('[HkWindow][DEBUG]scrollUp:');
 	  window.hk.log(evt);
 	  window.hk.log(evt.target);
-	  var evtRt = $(evt.target.srcId);
+	  var evtRt = this.getElement(".HkContent");
 	  window.hk.log(evtRt);
 	  window.hk.log(evtRt.getPosition());
 	  window.hk.log(evtRt.getCoordinates());
@@ -732,13 +732,13 @@ w.hkCreateClasses = function () {
 	},
 	createContent: function createContent(windowNode, hkWindows, hkStorage) {
 	  var contentNode = windowNode.getElement(".HkContent");
-	  contentNode.setStyle('paddingTop', '10px');
+	  contentNode.setStyle('paddingTop', '0px');
 	  var inputForm = new Element("form", {
 		id: "ShortcutForm",
 		name: "inputForm"
 	  });
 	  inputForm.setStyles({
-		paddingTop: '10px',
+		paddingTop: '0px',
 		verticalAlign: 'middle'
 	  });
 	  inputForm.addEventListener('submit', this.createShortcut);
