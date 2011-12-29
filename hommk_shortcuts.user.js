@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkToolkit
-// @version       2011.12.29.13.52.380000
+// @version       2011.12.29.13.53.560000
 // @description   Werkzeugkasten für HOMMK
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -78,7 +78,7 @@ w.hkCreateClasses = function () {
   window.Hk = new Class({
 	$debug: 1,
 	idScript: "HkToolkit",
-	version: "2011.12.29.13.52.380000",
+	version: "2011.12.29.13.53.560000",
 	Coords: {
 	  lastRegion: {
 		x: 0,
@@ -339,7 +339,7 @@ w.hkCreateClasses = function () {
 	  });
 	  if(this.options.scrollable) {
 		var scrollUp = this.createScrollUpButton(id, options);
-		var scrollDown = this.createScrollDown(id, options);
+		var scrollDown = this.createScrollDownButton(id, options);
 	  }
 	  if(this.options.createContentContainer) {
 		var contentNode = this.createContentContainer(id, options);
@@ -392,11 +392,12 @@ w.hkCreateClasses = function () {
 	  });
 	  scrollNode.btnId = id;
 	  scrollNode.btnOpts = options;
+	  scrollNode.btnWindow = this;
 	  scrollNode.addEvent('click', function(evt) {
 		var ref = evt.target;
 		var btnId = ref.btnId;
 		var btnOpts = ref.btnOpts;
-		window.hk.Windows.scrollUp(btnId, btnOpts);
+		ref.btnWindow.scrollUp(btnId, btnOpts);
 	  });
 	  return scrollNode;
 	},
@@ -409,11 +410,12 @@ w.hkCreateClasses = function () {
 	  });
 	  scrollNode.btnId = id;
 	  scrollNode.btnOpts = options;
+	  scrollNode.btnWindow = this;
 	  scrollNode.addEvent('click', function(evt) {
 		var ref = evt.target;
 		var btnId = ref.btnId;
 		var btnOpts = ref.btnOpts;
-		window.hk.Windows.scrollDown(btnId, btnOpts);
+		ref.btnWindow.scrollDown(btnId, btnOpts);
 	  });
 	  return scrollNode;
 	},
