@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkToolkit
-// @version       2011.12.29.17.03.040000
+// @version       2011.12.29.17.13.240000
 // @description   Werkzeugkasten für HOMMK
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -78,7 +78,7 @@ w.hkCreateClasses = function () {
   window.Hk = new Class({
 	$debug: 1,
 	idScript: "HkToolkit",
-	version: "2011.12.29.17.03.040000",
+	version: "2011.12.29.17.13.240000",
 	Coords: {
 	  lastRegion: {
 		x: 0,
@@ -420,21 +420,25 @@ w.hkCreateClasses = function () {
 	  var winId = evt.target.btnWindow.getWindowId(evt.target.srcId, evt.target.btnOpts);
 	  window.hk.log('[HkWindow][DEBUG]Fenster-ID: ' + winId);
 	  var evtRt = $(winId).getElement(".HkContent");
-	  window.hk.log(evtRt);
+//	  window.hk.log(evtRt);
 	  window.hk.log(evtRt.getSize());
 	  var size = evtRt.getSize().size;
 	  var scroll = evtRt.getSize().scroll;
 	  var scrollSize = evtRt.getSize().scrollSize;
-	  var scrollToY = size.y - 20 < scroll.y ? scoll.y : size.y - 20;
+	  var scrollToY = scrollSize.y - 20 < size.y ? size.y : scrollSize.y - 20;
 	  evtRt.scrollTo(scroll.x, scrollToY);
-	  window.hk.log(evtRt.getPosition());
-	  window.hk.log(evtRt.getCoordinates());
-	  window.hk.log(evtRt.getPosition({
-		'overflown': [$(winId)]
-	  }));
-	  window.hk.log(evtRt.getCoordinates({
-		'overflown': [$(winId)]
-	  }));
+	  window.hk.log(evtRt.getSize());
+	  var scrollToY2 = scroll.y - 20 < 0 ? 0 : scroll.y - 20;
+	  evtRt.scrollTo(scroll.x, scrollToY2);
+	  window.hk.log(evtRt.getSize());
+//	  window.hk.log(evtRt.getPosition());
+//	  window.hk.log(evtRt.getCoordinates());
+//	  window.hk.log(evtRt.getPosition({
+//		'overflown': [$(winId)]
+//	  }));
+//	  window.hk.log(evtRt.getCoordinates({
+//		'overflown': [$(winId)]
+//	  }));
 	},
 	scrollDown: function scrollDown(evt) {
 	  window.hk.log('[HkWindow][DEBUG]scrollDown:');
