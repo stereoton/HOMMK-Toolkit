@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkToolkit
-// @version       2011.12.29.18.20.210000
+// @version       2011.12.29.18.25.250000
 // @description   Werkzeugkasten für HOMMK
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -78,7 +78,7 @@ w.hkCreateClasses = function () {
   window.Hk = new Class({
 	$debug: 1,
 	idScript: "HkToolkit",
-	version: "2011.12.29.18.20.210000",
+	version: "2011.12.29.18.25.250000",
 	Coords: {
 	  lastRegion: {
 		x: 0,
@@ -373,7 +373,7 @@ w.hkCreateClasses = function () {
 	  if(this.options.addToDOM) {
 		$('MainContainer').adopt(windowNode);
 		if(this.options.reduceable) this.makeReduceable();
-		if(this.options.scrollable) this.makeScrollable();
+//		if(this.options.scrollable) this.makeScrollable();
 		this.windows.push(windowNode);
 	  }
 	  return windowNode;
@@ -416,8 +416,8 @@ w.hkCreateClasses = function () {
 	},
 	scrollUp: function scrollUp(evt) {
 	  window.hk.log('[HkWindow][DEBUG]scrollUp:');
-	  window.hk.log(evt);
-	  window.hk.log(evt.target);
+//	  window.hk.log(evt);
+//	  window.hk.log(evt.target);
 	  var winId = evt.target.btnWindow.getWindowId(evt.target.srcId, evt.target.btnOpts);
 	  window.hk.log('[HkWindow][DEBUG]Fenster-ID: ' + winId);
 	  var evtRt = $(winId).getElement(".HkContent");
@@ -433,18 +433,19 @@ w.hkCreateClasses = function () {
 	},
 	scrollDown: function scrollDown(evt) {
 	  window.hk.log('[HkWindow][DEBUG]scrollDown:');
-	  window.hk.log(evt);
-	  window.hk.log(evt.target);
+//	  window.hk.log(evt);
+//	  window.hk.log(evt.target);
 	  var winId = evt.target.btnWindow.getWindowId(evt.target.srcId, evt.target.btnOpts);
 	  window.hk.log('[HkWindow][DEBUG]Fenster-ID: ' + winId);
 	  var evtRt = $(winId).getElement(".HkContent");
-	  window.hk.log(evtRt);
+//	  window.hk.log(evtRt);
 	  window.hk.log(evtRt.getSize());
 	  var size = evtRt.getSize().size;
 	  var scrollSize = evtRt.getSize().scrollSize;
 //	  var scrollToY = size.y + 20 > scrollSize.y ? scrollSize.y : size.y + 20;
 	  var scrollToY = scroll.y + size.y + 20 > scrollSize.y ? scrollSize.y - size.y : scroll.y + 20;
 	  evtRt.scrollTo(scroll.x, scrollToY);
+	  window.hk.log(evtRt.getSize());
 	},
 	getId: function getId(base, id, options) {
 	  return base + $pick($pick(id, this.options.id), this.id);
