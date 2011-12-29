@@ -1,4 +1,3 @@
-*.js ident
-*.js filter=keywords
+*.js ident filter=keywords
 nbproject/ export-ignore
 LAST_COMMIT export-subst
