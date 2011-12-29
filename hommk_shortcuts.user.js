@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkToolkit
-// @version       2011.12.29.18.43.400000
+// @version       2011.12.29.18.45.570000
 // @description   Werkzeugkasten für HOMMK
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -78,7 +78,7 @@ w.hkCreateClasses = function () {
   window.Hk = new Class({
 	$debug: 1,
 	idScript: "HkToolkit",
-	version: "2011.12.29.18.43.400000",
+	version: "2011.12.29.18.45.570000",
 	Coords: {
 	  lastRegion: {
 		x: 0,
@@ -538,9 +538,14 @@ w.hkCreateClasses = function () {
 	},
 	makeScrollable: function makeScrollable(id, options) {
 	  this.setOptions(options);
-	  if(!this.options.scroll) return;
+	  if(!this.options.scroll) {
+		window.hk.log('[HkWindow][DEBUG]makeScrollable wird nicht verarbeitet, kein scroll-Objekt');
+		return;
+	  }
+	  window.hk.log('[HkShortcutsWindow][DEBUG]makeScrollable wird verarbeitet mit Scroll-Objekt:');
 	  var scroll = $(this.options.scroll);
-	  this.scroller = new Scroller(scroll);
+	  window.hk.log(scroll);
+	  this.options.scroller = new Scroller(scroll);
 	},
 	makeReduceable: function makeReduceable(id, options) {
 	  this.setOptions(options);
@@ -570,7 +575,7 @@ w.hkCreateClasses = function () {
    * Datenstruktur für Shortcuts @todo Auslagern
    */
   Hk.Shortcut = new Class({
-	'$debug': 0,
+	$debug: 0,
 	options: {
 	  x: -1,
 	  y: -1,
@@ -613,8 +618,8 @@ w.hkCreateClasses = function () {
    * Shortcuts @todo Auslagern
    */
   Hk.HkShortcutsWindow = new Class({
-	'$debug': 0,
-	'$hkWin': false,
+	$debug: 0,
+	$hkWin: false,
 	'inputStyles': {
 	  'valid': {
 		'border': '1px solid #030303'
