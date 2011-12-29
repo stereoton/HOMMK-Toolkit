@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkToolkit
-// @version       2011.12.29.18.02.380000
+// @version       2011.12.29.18.05.120000
 // @description   Werkzeugkasten für HOMMK
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -78,7 +78,7 @@ w.hkCreateClasses = function () {
   window.Hk = new Class({
 	$debug: 1,
 	idScript: "HkToolkit",
-	version: "2011.12.29.18.02.380000",
+	version: "2011.12.29.18.05.120000",
 	Coords: {
 	  lastRegion: {
 		x: 0,
@@ -390,10 +390,8 @@ w.hkCreateClasses = function () {
 		'id': scrId,
 		'styles': window.hk.Styles.scrollArea
 	  });
-	  var scrollFx = new Scroller(scrollNode);
 	  $each(this.options.scrollers, function(handler, dir) {
 		var btn = this.createScrollButton(id, options, dir, handler);
-		btn.scrollFx = scrollFx;
 		scrollNode.adopt(btn);
 	  }.bind(this));
 	  return scrollNode;
@@ -429,7 +427,7 @@ w.hkCreateClasses = function () {
 	  var scrollSize = evtRt.getSize().scrollSize;
 //	  var scrollToY = scrollSize.y - 20 < size.y ? size.y : scrollSize.y - 20;
 	  var scrollToY = scroll.y - 20 < 0 ? 0 : scroll.y - 20;
-	  evt.target.scrollFx.scrollTo(scroll.x, scrollToY);
+	  new Scroller(evtRt).scrollTo(scroll.x, scrollToY);
 //	  evtRt.scrollTo(scroll.x, scrollToY);
 	  window.hk.log(evtRt.getSize());
 	},
@@ -446,16 +444,8 @@ w.hkCreateClasses = function () {
 	  var scrollSize = evtRt.getSize().scrollSize;
 //	  var scrollToY = size.y + 20 > scrollSize.y ? scrollSize.y : size.y + 20;
 	  var scrollToY = scroll.y + size.y + 20 > scrollSize.y ? scrollSize.y - size.y : scroll.y + 20;
-	  evt.target.scrollFx.scrollTo(scroll.x, scrollToY);
+	  new Scroller(evtRt).scrollTo(scroll.x, scrollToY);
 //	  evtRt.scrollTo(scroll.x, scrollToY);
-	  window.hk.log(evtRt.getPosition());
-	  window.hk.log(evtRt.getCoordinates());
-	  window.hk.log(evtRt.getPosition({
-		'overflown': [$(winId)]
-	  }));
-	  window.hk.log(evtRt.getCoordinates({
-		'overflown': [$(winId)]
-	  }));
 	},
 	getId: function getId(base, id, options) {
 	  return base + $pick($pick(id, this.options.id), this.id);
