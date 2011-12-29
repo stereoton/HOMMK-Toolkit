@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkToolkit
-// @version       2011.12.29.17.13.240000
+// @version       2011.12.29.17.50.150000
 // @description   Werkzeugkasten für HOMMK
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -78,7 +78,7 @@ w.hkCreateClasses = function () {
   window.Hk = new Class({
 	$debug: 1,
 	idScript: "HkToolkit",
-	version: "2011.12.29.17.13.240000",
+	version: "2011.12.29.17.50.150000",
 	Coords: {
 	  lastRegion: {
 		x: 0,
@@ -431,14 +431,6 @@ w.hkCreateClasses = function () {
 	  var scrollToY2 = scroll.y - 20 < 0 ? 0 : scroll.y - 20;
 	  evtRt.scrollTo(scroll.x, scrollToY2);
 	  window.hk.log(evtRt.getSize());
-//	  window.hk.log(evtRt.getPosition());
-//	  window.hk.log(evtRt.getCoordinates());
-//	  window.hk.log(evtRt.getPosition({
-//		'overflown': [$(winId)]
-//	  }));
-//	  window.hk.log(evtRt.getCoordinates({
-//		'overflown': [$(winId)]
-//	  }));
 	},
 	scrollDown: function scrollDown(evt) {
 	  window.hk.log('[HkWindow][DEBUG]scrollDown:');
@@ -451,7 +443,7 @@ w.hkCreateClasses = function () {
 	  window.hk.log(evtRt.getSize());
 	  var size = evtRt.getSize().size;
 	  var scrollSize = evtRt.getSize().scrollSize;
-	  var scrollToY = size.y + 20 > scrollSize.y ? scollSize.y : size.y + 20;
+	  var scrollToY = size.y + 20 > scrollSize.y ? scrollSize.y : size.y + 20;
 	  evtRt.scrollTo(scroll.x, scrollToY);
 	  window.hk.log(evtRt.getPosition());
 	  window.hk.log(evtRt.getCoordinates());
