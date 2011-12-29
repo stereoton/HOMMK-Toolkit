@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkToolkit
-// @version       2011.12.29.18.45.570000
+// @version       2011.12.29.18.52.210000
 // @description   Werkzeugkasten für HOMMK
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -18,6 +18,9 @@
 //
 // Element.Selectors.js 1.12 · http://mootools.net
 // @require http://pastebin.com/raw.php?i=2G8yXznG
+//
+// Scroller 1.12 · http://mootools.net
+// @require http://pastebin.com/raw.php?i=W0gZUcpe
 //
 // Prototype-Ergänzungen
 // @require http://pastebin.com/raw.php?i=NBX5T7pp
@@ -78,7 +81,7 @@ w.hkCreateClasses = function () {
   window.Hk = new Class({
 	$debug: 1,
 	idScript: "HkToolkit",
-	version: "2011.12.29.18.45.570000",
+	version: "2011.12.29.18.52.210000",
 	Coords: {
 	  lastRegion: {
 		x: 0,
@@ -430,7 +433,7 @@ w.hkCreateClasses = function () {
 //	  var scrollToY = scrollSize.y - 20 < size.y ? size.y : scrollSize.y - 20;
 	  var scrollToY = scroll.y - 20 < 0 ? 0 : scroll.y - 20;
 	  window.hk.log('[HkWindow][DEBUG]Scrolle zu Y=' + scrollToY);
-	  if(evt.target.btnWindow.options.scroller) {
+	  if(evt.target.btnWindow.options.scroller && evt.target.btnWindow.options.scroller.scrollTo) {
 		window.hk.log('[HkWindow][DEBUG]Benutze Scroller…');
 		evt.target.btnWindow.options.scroller.scrollTo(scroll.x, scrollToY);
 	  }	else  evtRt.scrollTo(scroll.x, scrollToY);
@@ -451,7 +454,7 @@ w.hkCreateClasses = function () {
 //	  var scrollToY = size.y + 20 > scrollSize.y ? scrollSize.y : size.y + 20;
 	  var scrollToY = scroll.y + size.y + 20 > scrollSize.y ? scrollSize.y - size.y : scroll.y + 20;
 	  window.hk.log('[HkWindow][DEBUG]Scrolle zu Y=' + scrollToY);
-	  if(evt.target.btnWindow.options.scroller) {
+	  if(evt.target.btnWindow.options.scroller && evt.target.btnWindow.options.scroller.scrollTo) {
 		window.hk.log('[HkWindow][DEBUG]Benutze Scroller…');
 		evt.target.btnWindow.options.scroller.scrollTo(scroll.x, scrollToY);
 	  }	else  evtRt.scrollTo(scroll.x, scrollToY);
@@ -546,6 +549,7 @@ w.hkCreateClasses = function () {
 	  var scroll = $(this.options.scroll);
 	  window.hk.log(scroll);
 	  this.options.scroller = new Scroller(scroll);
+	  this.options.scroller.start();
 	},
 	makeReduceable: function makeReduceable(id, options) {
 	  this.setOptions(options);
@@ -1307,6 +1311,94 @@ if(w.isGoogleChromeUA() && 'undefined' != typeof __HKU_PAGE_SCOPE_RUN__) {
 
   document.extend(Element.Methods.Dom);
   Element.extend(Element.Methods.Dom);
+
+  /*
+  Script: Scroller.js
+	  Contains the <Scroller>.
+
+  License:
+	  MIT-style license.
+  */
+
+  /*
+  Class: Scroller
+	  The Scroller is a class to scroll any element with an overflow (including the window) when the mouse cursor reaches certain buondaries of that element.
+	  You must call its start method to start listening to mouse movements.
+
+  Note:
+	  The Scroller requires an XHTML doctype.
+
+  Arguments:
+	  element - required, the element to scroll.
+	  options - optional, see options below, and <Fx.Base> options.
+
+  Options:
+	  area - integer, the necessary boundaries to make the element scroll.
+	  velocity - integer, velocity ratio, the modifier for the window scrolling speed.
+
+  Events:
+	  onChange - optionally, when the mouse reaches some boundaries, you can choose to alter some other values, instead of the scrolling offsets.
+		  Automatically passes as parameters x and y values.
+  */
+
+  var Scroller = new Class({
+
+	  options: {
+		  area: 20,
+		  velocity: 1,
+		  onChange: function(x, y){
+			  this.element.scrollTo(x, y);
+		  }
+	  },
+
+	  initialize: function(element, options){
+		  this.setOptions(options);
+		  this.element = $(element);
+		  this.mousemover = ([window, document].contains(element)) ? $(document.body) : this.element;
+	  },
+
+	  /*
+	  Property: start
+		  The scroller starts listening to mouse movements.
+	  */
+
+	  start: function(){
+		  this.coord = this.getCoords.bindWithEvent(this);
+		  this.mousemover.addListener('mousemove', this.coord);
+	  },
+
+	  /*
+	  Property: stop
+		  The scroller stops listening to mouse movements.
+	  */
+
+	  stop: function(){
+		  this.mousemover.removeListener('mousemove', this.coord);
+		  this.timer = $clear(this.timer);
+	  },
+
+	  getCoords: function(event){
+		  this.page = (this.element == window) ? event.client : event.page;
+		  if (!this.timer) this.timer = this.scroll.periodical(50, this);
+	  },
+
+	  scroll: function(){
+		  var el = this.element.getSize();
+		  var pos = this.element.getPosition();
+
+		  var change = {'x': 0, 'y': 0};
+		  for (var z in this.page){
+			  if (this.page[z] < (this.options.area + pos[z]) && el.scroll[z] != 0)
+				  change[z] = (this.page[z] - this.options.area - pos[z]) * this.options.velocity;
+			  else if (this.page[z] + this.options.area > (el.size[z] + pos[z]) && el.scroll[z] + el.size[z] != el.scrollSize[z])
+				  change[z] = (this.page[z] - el.size[z] + this.options.area - pos[z]) * this.options.velocity;
+		  }
+		  if (change.y || change.x) this.fireEvent('onChange', [el.scroll.x + change.x, el.scroll.y + change.y]);
+	  }
+
+  });
+
+  Scroller.implement(new Events, new Options);
 
   /**
    * Prototype Ergänzungen · http://pastebin.com/raw.php?i=NBX5T7pp
