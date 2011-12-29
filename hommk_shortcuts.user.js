@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkToolkit
-// @version       2011.12.29.18.05.120000
+// @version       2011.12.29.18.12.140000
 // @description   Werkzeugkasten für HOMMK
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -78,7 +78,7 @@ w.hkCreateClasses = function () {
   window.Hk = new Class({
 	$debug: 1,
 	idScript: "HkToolkit",
-	version: "2011.12.29.18.05.120000",
+	version: "2011.12.29.18.12.140000",
 	Coords: {
 	  lastRegion: {
 		x: 0,
@@ -405,6 +405,9 @@ w.hkCreateClasses = function () {
 		'src': 'http://icons.iconarchive.com/icons/saki/nuoveXT/16/Small-arrow-' + direction + '-icon.png',
 		'styles': window.hk.Styles.scrollButton
 	  });
+	  var winId = this.getWindowId(id, options);
+	  var evtRt = $(winId).getElement(".HkContent");
+	  new Scroller(evtRt);
 	  scrollNode.dir = direction;
 	  scrollNode.srcId = id;
 	  scrollNode.btnId = btnId;
@@ -427,8 +430,7 @@ w.hkCreateClasses = function () {
 	  var scrollSize = evtRt.getSize().scrollSize;
 //	  var scrollToY = scrollSize.y - 20 < size.y ? size.y : scrollSize.y - 20;
 	  var scrollToY = scroll.y - 20 < 0 ? 0 : scroll.y - 20;
-	  new Scroller(evtRt).scrollTo(scroll.x, scrollToY);
-//	  evtRt.scrollTo(scroll.x, scrollToY);
+	  evtRt.scrollTo(scroll.x, scrollToY);
 	  window.hk.log(evtRt.getSize());
 	},
 	scrollDown: function scrollDown(evt) {
@@ -444,8 +446,7 @@ w.hkCreateClasses = function () {
 	  var scrollSize = evtRt.getSize().scrollSize;
 //	  var scrollToY = size.y + 20 > scrollSize.y ? scrollSize.y : size.y + 20;
 	  var scrollToY = scroll.y + size.y + 20 > scrollSize.y ? scrollSize.y - size.y : scroll.y + 20;
-	  new Scroller(evtRt).scrollTo(scroll.x, scrollToY);
-//	  evtRt.scrollTo(scroll.x, scrollToY);
+	  evtRt.scrollTo(scroll.x, scrollToY);
 	},
 	getId: function getId(base, id, options) {
 	  return base + $pick($pick(id, this.options.id), this.id);
