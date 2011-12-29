@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkToolkit
-// @version       2011.12.29.19.53.180000
+// @version       2011.12.29.19.56.220000
 // @description   Werkzeugkasten für HOMMK
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -81,7 +81,7 @@ w.hkCreateClasses = function () {
   window.Hk = new Class({
 	$debug: 0,
 	idScript: "HkToolkit",
-	version: "2011.12.29.19.53.180000",
+	version: "2011.12.29.19.56.220000",
 	Coords: {
 	  lastRegion: {
 		x: 0,
@@ -963,7 +963,7 @@ w.hkCreateClasses = function () {
 	  'marginRight': '0px',
 	  'height': '16px',
 	  'width': '100%',
-	  'backgroundColor': '#303030'
+	  'backgroundColor': '#1a1a1a'
 	},
 	'donate': {
 	  'display': 'block',
@@ -989,7 +989,8 @@ w.hkCreateClasses = function () {
 	},
 	'header': {
 	  'zIndex': 96000,
-	  'paddingBottom': '0px'
+	  'paddingBottom': '0px',
+	  'backgroundColor': '#1a1a1a'
 	},
 	'title': {
 	  'fontSize': "0.8em",
