@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkToolkit
-// @version       2011.12.29.17.52.330000
+// @version       2011.12.29.18.02.380000
 // @description   Werkzeugkasten für HOMMK
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -78,7 +78,7 @@ w.hkCreateClasses = function () {
   window.Hk = new Class({
 	$debug: 1,
 	idScript: "HkToolkit",
-	version: "2011.12.29.17.52.330000",
+	version: "2011.12.29.18.02.380000",
 	Coords: {
 	  lastRegion: {
 		x: 0,
@@ -390,7 +390,7 @@ w.hkCreateClasses = function () {
 		'id': scrId,
 		'styles': window.hk.Styles.scrollArea
 	  });
-	  var scrollFx = new Fx.Scroller(scrollNode);
+	  var scrollFx = new Scroller(scrollNode);
 	  $each(this.options.scrollers, function(handler, dir) {
 		var btn = this.createScrollButton(id, options, dir, handler);
 		btn.scrollFx = scrollFx;
