@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkToolkit
-// @version       2011.12.29.18.33.220000
+// @version       2011.12.29.18.35.360000
 // @description   Werkzeugkasten für HOMMK
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -78,7 +78,7 @@ w.hkCreateClasses = function () {
   window.Hk = new Class({
 	$debug: 1,
 	idScript: "HkToolkit",
-	version: "2011.12.29.18.33.220000",
+	version: "2011.12.29.18.35.360000",
 	Coords: {
 	  lastRegion: {
 		x: 0,
@@ -325,6 +325,7 @@ w.hkCreateClasses = function () {
 	  'reduce': false,
 	  'updateable': true,
 	  'updateUrl': "https://github.com/gelgamek/HOMMK-Toolkit/raw/master/hommk_shortcuts.user.js",
+	  'scroller': false,
 	  'scrollers': {
 		'up': Class.empty,
 		'down': Class.empty
@@ -429,7 +430,9 @@ w.hkCreateClasses = function () {
 //	  var scrollToY = scrollSize.y - 20 < size.y ? size.y : scrollSize.y - 20;
 	  var scrollToY = scroll.y - 20 < 0 ? 0 : scroll.y - 20;
 	  window.hk.log('[HkWindow][DEBUG]Scrolle zu Y=' + scrollToY);
-	  evtRt.scrollTo(scroll.x, scrollToY);
+	  if(evt.target.btnWindow.options.scroller) {
+		evt.target.btnWindow.options.scroller.scrollTo(scroll.x, scrollToY);
+	  }	else  evtRt.scrollTo(scroll.x, scrollToY);
 	  window.hk.log(evtRt.getSize());
 	},
 	scrollDown: function scrollDown(evt) {
@@ -447,7 +450,9 @@ w.hkCreateClasses = function () {
 //	  var scrollToY = size.y + 20 > scrollSize.y ? scrollSize.y : size.y + 20;
 	  var scrollToY = scroll.y + size.y + 20 > scrollSize.y ? scrollSize.y - size.y : scroll.y + 20;
 	  window.hk.log('[HkWindow][DEBUG]Scrolle zu Y=' + scrollToY);
-	  evtRt.scrollTo(scroll.x, scrollToY);
+	  if(evt.target.btnWindow.options.scroller) {
+		evt.target.btnWindow.options.scroller.scrollTo(scroll.x, scrollToY);
+	  }	else  evtRt.scrollTo(scroll.x, scrollToY);
 	  window.hk.log(evtRt.getSize());
 	},
 	getId: function getId(base, id, options) {
