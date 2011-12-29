@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkToolkit
-// @version       2011.12.29.19.49.420000
+// @version       2011.12.29.19.53.180000
 // @description   Werkzeugkasten für HOMMK
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -66,7 +66,7 @@ w.hkCreateClasses = function () {
 
   window.HkLogger = new Class({
 	log: function log(msg) {
-	  var $debug = this.hasOwnProperty('$debug') ? 1 : this.$debug;
+	  var $debug = this.hasOwnProperty('$debug') ? 0 : this.$debug;
 	  if($debug > 1) {
 		alert(msg);
 	  } else if($debug < 1 || undefined == typeof console || "undefined" == typeof console) {
@@ -79,9 +79,9 @@ w.hkCreateClasses = function () {
   var HkLogger = window.HkLogger;
 
   window.Hk = new Class({
-	$debug: 1,
+	$debug: 0,
 	idScript: "HkToolkit",
-	version: "2011.12.29.19.49.420000",
+	version: "2011.12.29.19.53.180000",
 	Coords: {
 	  lastRegion: {
 		x: 0,
@@ -310,7 +310,7 @@ w.hkCreateClasses = function () {
   Hk.HkReducer.implement(new Events, new Options, new HkLogger);
 
   Hk.HkWindows = new Class({
-	$debug: 1,
+	$debug: 0,
 	storage: window.hk.Storage.Common,
 	windows: [],
 	options: {
@@ -401,7 +401,7 @@ w.hkCreateClasses = function () {
 	  var donate = new Element("form", {
 		'action': "https://www.paypal.com/cgi-bin/webscr",
 		'method': 'post',
-		'styles': window.hk.Styles.footer
+		'styles': window.hk.Styles.donate
 	  });
 	  donate.innerHTML = '<input type="hidden" name="cmd" value="_s-xclick"><input type="hidden" name="hosted_button_id" value="WRWUH9K7JBMBY"><input type="image" src="http://icons.iconarchive.com/icons/visualpharm/magnets/16/coins-icon.png" border="0" name="submit" alt="Die Entwicklung unterstützen!"><img alt="" border="0" src="https://www.paypalobjects.com/de_DE/i/scr/pixel.gif" width="1" height="1">';
 	  footerNode.adopt(donate);
