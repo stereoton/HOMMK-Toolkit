@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkToolkit
-// @version       2011.12.29.13.53.560000
+// @version       2011.12.29.13.59.070000
 // @description   Werkzeugkasten für HOMMK
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -78,7 +78,7 @@ w.hkCreateClasses = function () {
   window.Hk = new Class({
 	$debug: 1,
 	idScript: "HkToolkit",
-	version: "2011.12.29.13.53.560000",
+	version: "2011.12.29.13.59.070000",
 	Coords: {
 	  lastRegion: {
 		x: 0,
@@ -324,10 +324,16 @@ w.hkCreateClasses = function () {
 	  'addToDOM': true,
 	  'reduce': false,
 	  'updateable': true,
-	  'updateUrl': "https://github.com/gelgamek/HOMMK-Toolkit/raw/master/hommk_shortcuts.user.js"
+	  'updateUrl': "https://github.com/gelgamek/HOMMK-Toolkit/raw/master/hommk_shortcuts.user.js",
+	  'scrollers': {
+		'up': Class.empty,
+		'down': Class.empty
+	  }
 	},
 	initialize: function(options) {
 	  this.setOptions(options);
+	  this.options.scrollers.up = this.scrollUp;
+	  this.options.scrollers.down = this.scrollDown;
 	},
 	createWindow: function createWindow(id, options) {
 	  this.setOptions(options);
@@ -337,10 +343,6 @@ w.hkCreateClasses = function () {
 		'class': "HkWindow",
 		'styles': window.hk.Styles.window
 	  });
-	  if(this.options.scrollable) {
-		var scrollUp = this.createScrollUpButton(id, options);
-		var scrollDown = this.createScrollDownButton(id, options);
-	  }
 	  if(this.options.createContentContainer) {
 		var contentNode = this.createContentContainer(id, options);
 	  }
@@ -361,14 +363,12 @@ w.hkCreateClasses = function () {
 		  });
 		}
 	  }
-	  if(this.options.scrollable) {
-		windowNode.adopt(scrollUp);
-	  }
 	  if(this.options.createContentContainer) {
 		windowNode.adopt(contentNode);
 	  }
 	  if(this.options.scrollable) {
-		windowNode.adopt(scrollDown);
+		var scrollArea = this.createScrollArea(id, options);
+		windowNode.adopt(scrollArea);
 	  }
 	  if(this.options.addToDOM) {
 		$('MainContainer').adopt(windowNode);
@@ -383,47 +383,40 @@ w.hkCreateClasses = function () {
 	hideScrollButtons: function hideScrollButton(id, options) {
 
 	},
-	createScrollUpButton: function createScrollUpButton(id, options) {
+	createScrollArea: function createScrollArea(id, options) {
 	  this.setOptions(options);
-	  var btnId = this.getId('HkWindowScrollUp', id, options);
+	  var scrId = this.getId('HkWindowScrollers', id, options);
 	  var scrollNode = new Element('div', {
 		'id': btnId,
-		'styles': window.hk.Styles.scrollUp
+		'styles': window.hk.Styles.scrollArea
 	  });
+	  $each(this.options.scrollers, function(handler, dir) {
+		var btn = this.createScrollButton(id, options, dir, handler);
+		scrollNode.adopt(btn);
+	  }.bind(this));
+	  return scrollNode;
+	},
+	createScrollButton: function createScrollButton(id, options, direction, handler) {
+	  this.setOptions(options);
+	  if(direction != "up" && direction != "down") direction = "down";
+	  var btnId = this.getId('HkWindowScroll' + direction, id, options);
+	  var scrollNode = new Element('img', {
+		'id': btnId,
+		'src': 'http://icons.iconarchive.com/icons/saki/nuoveXT/16/Small-arrow-' + direction + '-icon.png',
+		'styles': window.hk.Styles.scrollButton
+	  });
+	  scrollNode.dir = direction;
 	  scrollNode.btnId = id;
 	  scrollNode.btnOpts = options;
 	  scrollNode.btnWindow = this;
-	  scrollNode.addEvent('click', function(evt) {
-		var ref = evt.target;
-		var btnId = ref.btnId;
-		var btnOpts = ref.btnOpts;
-		ref.btnWindow.scrollUp(btnId, btnOpts);
-	  });
+	  scrollNode.addEvent('click', handler);
 	  return scrollNode;
 	},
-	createScrollDownButton: function createScrollDownButton(id, options) {
-	  this.setOptions(options);
-	  var btnId = this.getId('HkWindowScrollDown', id, options);
-	  var scrollNode = new Element('div', {
-		'id': btnId,
-		'styles': window.hk.Styles.scrollDown
-	  });
-	  scrollNode.btnId = id;
-	  scrollNode.btnOpts = options;
-	  scrollNode.btnWindow = this;
-	  scrollNode.addEvent('click', function(evt) {
-		var ref = evt.target;
-		var btnId = ref.btnId;
-		var btnOpts = ref.btnOpts;
-		ref.btnWindow.scrollDown(btnId, btnOpts);
-	  });
-	  return scrollNode;
+	scrollUp: function scrollUp(evt) {
+	  window.hk.log('[HkWindow][DEBUG]scrollUp: ' + evt);
 	},
-	scrollUp: function scrollUp() {
-
-	},
-	scrollDown: function scrollDown() {
-
+	scrollDown: function scrollDown(evt) {
+	  window.hk.log('[HkWindow][DEBUG]scrollDown: ' + evt);
 	},
 	getId: function getId(base, id, options) {
 	  return base + $pick($pick(id, this.options.id), this.id);
@@ -895,22 +888,17 @@ w.hkCreateClasses = function () {
 	  'color': '#f2f2f2',
 	  'overflow': 'auto'
 	},
-	'scrollUp': {
+	'scrollArea': {
 	  'clear': 'both',
 	  'marginLeft': '0px',
-	  'marginRight': '0px',
-	  'height': '48px',
+	  'height': '16px',
 	  'width': 'auto',
+	},
+	'scrollUp': {
 	  'backgroundImage': 'url("http://icons.iconarchive.com/icons/saki/nuoveXT/48/Small-arrow-down-icon.png")',
 	  'backgroundRepeat': 'no-repeat',
 	  'backgroundPosition': '50% 50%'
 	},
-	'scrollDown': {
-	  'clear': 'both',
-	  'marginLeft': '0px',
-	  'marginRight': '0px',
-	  'height': '48px',
-	  'width': 'auto',
 	  'backgroundImage': 'url("http://icons.iconarchive.com/icons/saki/nuoveXT/48/Small-arrow-up-icon.png")',
 	  'backgroundRepeat': 'no-repeat',
 	  'backgroundPosition': '50% 50%'
