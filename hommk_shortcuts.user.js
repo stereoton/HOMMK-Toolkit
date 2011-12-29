@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkToolkit
-// @version       2011.12.29.09.59.410000
+// @version       2011.12.29.13.31.290000
 // @description   Werkzeugkasten für HOMMK
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -78,7 +78,7 @@ w.hkCreateClasses = function () {
   window.Hk = new Class({
 	$debug: 0,
 	idScript: "HkToolkit",
-	version: "2011.12.29.09.59.410000",
+	version: "2011.12.29.13.31.290000",
 	Coords: {
 	  lastRegion: {
 		x: 0,
@@ -307,7 +307,7 @@ w.hkCreateClasses = function () {
   Hk.HkReducer.implement(new Events, new Options, new HkLogger);
 
   Hk.HkWindows = new Class({
-	$debug: 0,
+	$debug: 1,
 	storage: window.hk.Storage.Common,
 	windows: [],
 	options: {
@@ -384,6 +384,7 @@ w.hkCreateClasses = function () {
 
 	},
 	createScrollUpButton: function createScrollUpButton(id, options) {
+	  this.setOptions(options);
 	  var btnId = this.getId('HkWindowScrollUp', id, options);
 	  var scrollNode = new Element('div', {
 		'id': btnId,
@@ -395,11 +396,12 @@ w.hkCreateClasses = function () {
 		var ref = evt.target;
 		var btnId = ref.btnId;
 		var btnOpts = ref.btnOpts;
-		this.scrollUp(btnId, btnOpts);
-	  }.bind(this));
+		window.hk.Windows.scrollUp(btnId, btnOpts);
+	  });
 	  return scrollNode;
 	},
 	createScrollDownButton: function createScrollDownButton(id, options) {
+	  this.setOptions(options);
 	  var btnId = this.getId('HkWindowScrollDown', id, options);
 	  var scrollNode = new Element('div', {
 		'id': btnId,
@@ -411,8 +413,8 @@ w.hkCreateClasses = function () {
 		var ref = evt.target;
 		var btnId = ref.btnId;
 		var btnOpts = ref.btnOpts;
-		this.scrollDown(btnId, btnOpts);
-	  }.bind(this));
+		window.hk.Windows.scrollDown(btnId, btnOpts);
+	  });
 	  return scrollNode;
 	},
 	scrollUp: function scrollUp() {
@@ -1061,7 +1063,7 @@ if(w.isGoogleChromeUA() && 'undefined' != typeof __HKU_PAGE_SCOPE_RUN__) {
 
   function $E(selector, filter){
 	  return ($(filter) || document).getElement(selector);
-  };
+  }
 
   /*
   Function: $ES
@@ -1083,7 +1085,7 @@ if(w.isGoogleChromeUA() && 'undefined' != typeof __HKU_PAGE_SCOPE_RUN__) {
 
   function $ES(selector, filter){
 	  return ($(filter) || document).getElementsBySelector(selector);
-  };
+  }
 
   $$.shared = {
 
