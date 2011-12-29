@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkToolkit
-// @version       2011.12.23.0000
+// $Version$
 // @description   Werkzeugkasten für HOMMK
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -78,7 +78,7 @@ w.hkCreateClasses = function () {
   window.Hk = new Class({
 	$debug: 0,
 	idScript: "HkToolkit",
-	version: "2011.12.23.0000",
+	version: "$VersionString$",
 	Coords: {
 	  lastRegion: {
 		x: 0,
@@ -285,7 +285,7 @@ w.hkCreateClasses = function () {
 	  var target = toggle.target;
 	  var slider = toggle.slider;
 	  var parent = target.getParent();
-	  if(("" + parent.getStyle('height')).toInt() == 0) {
+	  if(parent.getStyle('height').toString().toInt() == 0) {
 		slider.slideIn().chain(this.updateDimensions(target)).chain(this.fireEvent("onTargetVisible", [toggle, target]));
 	  } else {
 		slider.slideOut().chain(this.updateDimensions(target)).chain(function() {
@@ -297,7 +297,7 @@ w.hkCreateClasses = function () {
 	  var divs = target.getElementsByTagName("div");
 	  $each(divs, function(aDiv) {
 		var divHeight = $(aDiv).getStyle('height');
-		if($chk(divHeight) && divHeight.intVal() <= 0) {
+		if($chk(divHeight) && divHeight.toInt() <= 0) {
 		  aDiv.setStyle('height', 'auto');
 		}
 	  });
@@ -614,7 +614,7 @@ w.hkCreateClasses = function () {
 	  var divs = $("ShortcutList").getElementsByTagName("div");
 	  $each(divs, function(aDiv) {
 		var divHeight = $(aDiv).getStyle('height');
-		if($chk(divHeight) && divHeight.intVal() <= 0) {
+		if($chk(divHeight) && divHeight.toInt() <= 0) {
 		  aDiv.setStyle('height', 'auto');
 		}
 	  });
