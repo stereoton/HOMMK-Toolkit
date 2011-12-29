@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkToolkit
-// @version       2011.12.29.18.17.230000
+// @version       2011.12.29.18.20.210000
 // @description   Werkzeugkasten für HOMMK
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -78,7 +78,7 @@ w.hkCreateClasses = function () {
   window.Hk = new Class({
 	$debug: 1,
 	idScript: "HkToolkit",
-	version: "2011.12.29.18.17.230000",
+	version: "2011.12.29.18.20.210000",
 	Coords: {
 	  lastRegion: {
 		x: 0,
@@ -526,9 +526,10 @@ w.hkCreateClasses = function () {
 	  });
 	},
 	makeScrollable: function makeScrollable(id, options) {
-	  var winId = this.getWindowId(id, options);
-	  var evtRt = $(winId).getElement(".HkContent");
-	  new Scroller(evtRt);
+	  this.setOptions(options);
+	  if(!this.options.scroll) return;
+	  var scroll = $(this.options.scroll);
+	  this.scroller = new Scroller(scroll);
 	},
 	makeReduceable: function makeReduceable(id, options) {
 	  this.setOptions(options);
@@ -840,6 +841,10 @@ w.hkCreateClasses = function () {
 	try {
 	  window.hk.Windows.makeReduceable("HkShortcuts", {
 		'reduce': $("HkWindowContentHkShortcuts"),
+		'title': "HkShortcuts"
+	  });
+	  window.hk.Windows.makeScrollable("HkShortcuts", {
+		'scroll': $("HkWindowContentHkShortcuts"),
 		'title': "HkShortcuts"
 	  });
 	  window.hk.Shortcuts.updateDimensions();
