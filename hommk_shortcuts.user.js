@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkToolkit
-// @version       2011.12.29.09.33.300000
+// @version       2011.12.29.09.59.410000
 // @description   Werkzeugkasten für HOMMK
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -78,7 +78,7 @@ w.hkCreateClasses = function () {
   window.Hk = new Class({
 	$debug: 0,
 	idScript: "HkToolkit",
-	version: "2011.12.29.09.33.300000",
+	version: "2011.12.29.09.59.410000",
 	Coords: {
 	  lastRegion: {
 		x: 0,
@@ -315,6 +315,7 @@ w.hkCreateClasses = function () {
 	  'reduceable': true,
 	  'closeable': false,
 	  'draggable': true,
+	  'scrollable': true,
 	  'title': 'HkWindow',
 	  'createHeader': true,
 	  'createTitle': true,
@@ -336,6 +337,10 @@ w.hkCreateClasses = function () {
 		'class': "HkWindow",
 		'styles': window.hk.Styles.window
 	  });
+	  if(this.options.scrollable) {
+		var scrollUp = this.createScrollUpButton(id, options);
+		var scrollDown = this.createScrollDown(id, options);
+	  }
 	  if(this.options.createContentContainer) {
 		var contentNode = this.createContentContainer(id, options);
 	  }
@@ -356,8 +361,14 @@ w.hkCreateClasses = function () {
 		  });
 		}
 	  }
+	  if(this.options.scrollable) {
+		windowNode.adopt(scrollUp);
+	  }
 	  if(this.options.createContentContainer) {
 		windowNode.adopt(contentNode);
+	  }
+	  if(this.options.scrollable) {
+		windowNode.adopt(scrollDown);
 	  }
 	  if(this.options.addToDOM) {
 		$('MainContainer').adopt(windowNode);
@@ -365,6 +376,50 @@ w.hkCreateClasses = function () {
 		this.windows.push(windowNode);
 	  }
 	  return windowNode;
+	},
+	showScrollButtons: function showScrollButton(id, options) {
+
+	},
+	hideScrollButtons: function hideScrollButton(id, options) {
+
+	},
+	createScrollUpButton: function createScrollUpButton(id, options) {
+	  var btnId = this.getId('HkWindowScrollUp', id, options);
+	  var scrollNode = new Element('div', {
+		'id': btnId,
+		'styles': window.hk.Styles.scrollUp
+	  });
+	  scrollNode.btnId = id;
+	  scrollNode.btnOpts = options;
+	  scrollNode.addEvent('click', function(evt) {
+		var ref = evt.target;
+		var btnId = ref.btnId;
+		var btnOpts = ref.btnOpts;
+		this.scrollUp(btnId, btnOpts);
+	  }.bind(this));
+	  return scrollNode;
+	},
+	createScrollDownButton: function createScrollDownButton(id, options) {
+	  var btnId = this.getId('HkWindowScrollDown', id, options);
+	  var scrollNode = new Element('div', {
+		'id': btnId,
+		'styles': window.hk.Styles.scrollDown
+	  });
+	  scrollNode.btnId = id;
+	  scrollNode.btnOpts = options;
+	  scrollNode.addEvent('click', function(evt) {
+		var ref = evt.target;
+		var btnId = ref.btnId;
+		var btnOpts = ref.btnOpts;
+		this.scrollDown(btnId, btnOpts);
+	  }.bind(this));
+	  return scrollNode;
+	},
+	scrollUp: function scrollUp() {
+
+	},
+	scrollDown: function scrollDown() {
+
 	},
 	getId: function getId(base, id, options) {
 	  return base + $pick($pick(id, this.options.id), this.id);
@@ -836,15 +891,35 @@ w.hkCreateClasses = function () {
 	  'color': '#f2f2f2',
 	  'overflow': 'auto'
 	},
+	'scrollUp': {
+	  'clear': 'both',
+	  'marginLeft': '0px',
+	  'marginRight': '0px',
+	  'height': '48px',
+	  'width': 'auto',
+	  'backgroundImage': 'url("http://icons.iconarchive.com/icons/saki/nuoveXT/48/Small-arrow-down-icon.png")',
+	  'backgroundRepeat': 'no-repeat',
+	  'backgroundPosition': '50% 50%'
+	},
+	'scrollDown': {
+	  'clear': 'both',
+	  'marginLeft': '0px',
+	  'marginRight': '0px',
+	  'height': '48px',
+	  'width': 'auto',
+	  'backgroundImage': 'url("http://icons.iconarchive.com/icons/saki/nuoveXT/48/Small-arrow-up-icon.png")',
+	  'backgroundRepeat': 'no-repeat',
+	  'backgroundPosition': '50% 50%'
+	},
 	'content': {
 	  'height': 'auto',
-	  'maxHeight': '400px',
 	  'margin': '0px',
 	  'paddingTop': '0px',
 	  'overflow': 'auto'
 	},
 	'header': {
 	  'zIndex': 96000,
+	  'paddingBottom': '0px'
 	},
 	'title': {
 	  'fontSize': "0.8em",
