@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkToolkit
-// @version       2011.12.29.17.50.150000
+// @version       2011.12.29.17.52.330000
 // @description   Werkzeugkasten für HOMMK
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -78,7 +78,7 @@ w.hkCreateClasses = function () {
   window.Hk = new Class({
 	$debug: 1,
 	idScript: "HkToolkit",
-	version: "2011.12.29.17.50.150000",
+	version: "2011.12.29.17.52.330000",
 	Coords: {
 	  lastRegion: {
 		x: 0,
@@ -390,8 +390,10 @@ w.hkCreateClasses = function () {
 		'id': scrId,
 		'styles': window.hk.Styles.scrollArea
 	  });
+	  var scrollFx = new Fx.Scroller(scrollNode);
 	  $each(this.options.scrollers, function(handler, dir) {
 		var btn = this.createScrollButton(id, options, dir, handler);
+		btn.scrollFx = scrollFx;
 		scrollNode.adopt(btn);
 	  }.bind(this));
 	  return scrollNode;
@@ -425,11 +427,10 @@ w.hkCreateClasses = function () {
 	  var size = evtRt.getSize().size;
 	  var scroll = evtRt.getSize().scroll;
 	  var scrollSize = evtRt.getSize().scrollSize;
-	  var scrollToY = scrollSize.y - 20 < size.y ? size.y : scrollSize.y - 20;
-	  evtRt.scrollTo(scroll.x, scrollToY);
-	  window.hk.log(evtRt.getSize());
-	  var scrollToY2 = scroll.y - 20 < 0 ? 0 : scroll.y - 20;
-	  evtRt.scrollTo(scroll.x, scrollToY2);
+//	  var scrollToY = scrollSize.y - 20 < size.y ? size.y : scrollSize.y - 20;
+	  var scrollToY = scroll.y - 20 < 0 ? 0 : scroll.y - 20;
+	  evt.target.scrollFx.scrollTo(scroll.x, scrollToY);
+//	  evtRt.scrollTo(scroll.x, scrollToY);
 	  window.hk.log(evtRt.getSize());
 	},
 	scrollDown: function scrollDown(evt) {
@@ -443,8 +444,10 @@ w.hkCreateClasses = function () {
 	  window.hk.log(evtRt.getSize());
 	  var size = evtRt.getSize().size;
 	  var scrollSize = evtRt.getSize().scrollSize;
-	  var scrollToY = size.y + 20 > scrollSize.y ? scrollSize.y : size.y + 20;
-	  evtRt.scrollTo(scroll.x, scrollToY);
+//	  var scrollToY = size.y + 20 > scrollSize.y ? scrollSize.y : size.y + 20;
+	  var scrollToY = scroll.y + size.y + 20 > scrollSize.y ? scrollSize.y - size.y : scroll.y + 20;
+	  evt.target.scrollFx.scrollTo(scroll.x, scrollToY);
+//	  evtRt.scrollTo(scroll.x, scrollToY);
 	  window.hk.log(evtRt.getPosition());
 	  window.hk.log(evtRt.getCoordinates());
 	  window.hk.log(evtRt.getPosition({
