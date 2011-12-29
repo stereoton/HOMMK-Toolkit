@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkToolkit
-// @version       2011.12.29.18.52.210000
+// @version       2011.12.29.19.03.120000
 // @description   Werkzeugkasten für HOMMK
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -81,7 +81,7 @@ w.hkCreateClasses = function () {
   window.Hk = new Class({
 	$debug: 1,
 	idScript: "HkToolkit",
-	version: "2011.12.29.18.52.210000",
+	version: "2011.12.29.19.03.120000",
 	Coords: {
 	  lastRegion: {
 		x: 0,
@@ -319,6 +319,7 @@ w.hkCreateClasses = function () {
 	  'closeable': false,
 	  'draggable': true,
 	  'scrollable': true,
+	  'autoScroll': true,
 	  'title': 'HkWindow',
 	  'createHeader': true,
 	  'createTitle': true,
@@ -370,10 +371,12 @@ w.hkCreateClasses = function () {
 	  if(this.options.createContentContainer) {
 		windowNode.adopt(contentNode);
 	  }
-	  if(this.options.scrollable) {
+	  var footer = this.createFooter(id, options);
+	  if(this.options.scrollable && !this.options.autoScroll) {
 		var scrollArea = this.createScrollArea(id, options);
-		windowNode.adopt(scrollArea);
+		footer.adopt(scrollArea);
 	  }
+	  windowNode.adopt(footer);
 	  if(this.options.addToDOM) {
 		$('MainContainer').adopt(windowNode);
 		if(this.options.reduceable) this.makeReduceable();
@@ -387,6 +390,15 @@ w.hkCreateClasses = function () {
 	},
 	hideScrollButtons: function hideScrollButton(id, options) {
 
+	},
+	createFooter: function createFooter(id, options) {
+	  this.setOptions(options);
+	  var scrId = this.getId('HkWindowFooter', id, options);
+	  var footerNode = new Element('div', {
+		'id': scrId,
+		'styles': window.hk.Styles.footer
+	  });
+	  return footer;
 	},
 	createScrollArea: function createScrollArea(id, options) {
 	  this.setOptions(options);
@@ -433,10 +445,7 @@ w.hkCreateClasses = function () {
 //	  var scrollToY = scrollSize.y - 20 < size.y ? size.y : scrollSize.y - 20;
 	  var scrollToY = scroll.y - 20 < 0 ? 0 : scroll.y - 20;
 	  window.hk.log('[HkWindow][DEBUG]Scrolle zu Y=' + scrollToY);
-	  if(evt.target.btnWindow.options.scroller && evt.target.btnWindow.options.scroller.scrollTo) {
-		window.hk.log('[HkWindow][DEBUG]Benutze Scroller…');
-		evt.target.btnWindow.options.scroller.scrollTo(scroll.x, scrollToY);
-	  }	else  evtRt.scrollTo(scroll.x, scrollToY);
+	  evtRt.scrollTo(scroll.x, scrollToY);
 	  window.hk.log(evtRt.getSize());
 	},
 	scrollDown: function scrollDown(evt) {
@@ -454,10 +463,7 @@ w.hkCreateClasses = function () {
 //	  var scrollToY = size.y + 20 > scrollSize.y ? scrollSize.y : size.y + 20;
 	  var scrollToY = scroll.y + size.y + 20 > scrollSize.y ? scrollSize.y - size.y : scroll.y + 20;
 	  window.hk.log('[HkWindow][DEBUG]Scrolle zu Y=' + scrollToY);
-	  if(evt.target.btnWindow.options.scroller && evt.target.btnWindow.options.scroller.scrollTo) {
-		window.hk.log('[HkWindow][DEBUG]Benutze Scroller…');
-		evt.target.btnWindow.options.scroller.scrollTo(scroll.x, scrollToY);
-	  }	else  evtRt.scrollTo(scroll.x, scrollToY);
+	  evtRt.scrollTo(scroll.x, scrollToY);
 	  window.hk.log(evtRt.getSize());
 	},
 	getId: function getId(base, id, options) {
@@ -541,8 +547,7 @@ w.hkCreateClasses = function () {
 	},
 	makeScrollable: function makeScrollable(id, options) {
 	  this.setOptions(options);
-	  if(!this.options.scroll) {
-		window.hk.log('[HkWindow][DEBUG]makeScrollable wird nicht verarbeitet, kein scroll-Objekt');
+	  if(!this.options.scroll || !this.options.autoScroll) {
 		return;
 	  }
 	  window.hk.log('[HkShortcutsWindow][DEBUG]makeScrollable wird verarbeitet mit Scroll-Objekt:');
@@ -945,8 +950,14 @@ w.hkCreateClasses = function () {
 	  'color': '#f2f2f2',
 	  'overflow': 'none'
 	},
-	'scrollArea': {
+	'footer': {
 	  'clear': 'both',
+	  'marginLeft': '0px',
+	  'height': '16px',
+	  'width': 'auto',
+	},
+	'scrollArea': {
+	  'float': 'left',
 	  'marginLeft': '0px',
 	  'height': '16px',
 	  'width': 'auto',
