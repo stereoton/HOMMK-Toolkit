@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkToolkit
-// @version       2011.12.30.16.24.480000
+// @version       2011.12.30.23.03.140000
 // @description   Werkzeugkasten für HOMMK
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -81,7 +81,7 @@ w.hkCreateClasses = function () {
   window.Hk = new Class({
 	$debug: 1,
 	idScript: "HkToolkit",
-	version: "2011.12.30.16.24.480000",
+	version: "2011.12.30.23.03.140000",
 	Coords: {
 	  lastRegion: {
 		x: 0,
@@ -168,6 +168,149 @@ w.hkCreateClasses = function () {
   var idScript = hk.idScript;
   var version = hk.version;
   hk.log('[PUBLIC][DEBUG]Starte HkToolkit\u2026');
+
+  /**
+   * CSS @todo Core und Shortcuts trennen - Ergänzungen warten auf Core und "docken" sich an...
+   */
+  window.hk.Styles = {
+	'Shortcuts': {
+	  'list': {
+		'paddingBottom': '10px'
+	  },
+	  'Form': {
+		'inputX': {
+		  'verticalAlign': 'middle'
+		},
+		'inputY': {
+		  'verticalAlign': 'middle'
+		},
+		'inputName': {
+		  'verticalAlign': 'middle',
+		  'width': '90%'
+		},
+		'submit': {
+		  'margin': '0px',
+		  'verticalAlign': 'middle',
+		  'cursor': 'pointer'
+		},
+		'load': {
+		  'margin': '0px',
+		  'verticalAlign': 'middle',
+		  'cursor': 'pointer'
+		},
+		'gotoPosition': {
+		  'margin': '0px',
+		  'verticalAlign': 'middle',
+		  'cursor': 'pointer'
+		},
+		'error': {},
+		'valid': {}
+	  },
+	  'Entry': {
+		'deleteButton': {
+		  'cursor': 'pointer',
+		  'float': 'right',
+		  'paddingTop': '3px'
+		},
+		'text': {
+		  'cursor': 'pointer',
+		  'width': 'auto',
+		  'marginLeft': '2px',
+		  'marginRight': '20px',
+		  'paddingTop': '3px',
+		  'paddingBottom': '3px'
+		},
+		'entry': {
+		  'padding': '2px 0px',
+		  'borderTop': '1px solid #303030',
+		  'clear': 'both'
+		}
+	  },
+	},
+	'window': {
+	  'zIndex': 95000,
+	  'margin': 'auto',
+	  'display': 'block',
+	  'position': 'absolute',
+	  'top': '50px',
+	  'left': 'auto',
+	  'bottom': 'auto',
+	  'right': 'auto',
+	  'width': '160px',
+	  'maxWidth': '320px',
+	  'height': 'auto',
+	  'backgroundColor': '#0e0e0e',
+	  'color': '#f2f2f2',
+	  'overflow': 'none',
+	  'paddingBottom': '0px'
+	},
+	'footer': {
+	  'clear': 'both',
+	  'marginTop': '2px',
+	  'paddingTop': '3px',
+	  'paddingBottom': '0px',
+	  'marginBottom': '0px',
+	  'marginLeft': '0px',
+	  'marginRight': '0px',
+	  'height': '19px',
+	  'width': '100%',
+	  'backgroundColor': '#1a1a1a'
+	},
+	'donate': {
+	  'display': 'block',
+	  'float': 'right',
+	  'width': 'auto',
+	  'marginLeft': 'auto'
+	},
+	'scrollArea': {
+	  'float': 'left',
+	  'marginLeft': '0px',
+	  'height': '16px',
+	  'width': 'auto',
+	},
+	'scrollButton': {
+	  'cursor': 'pointer'
+	},
+	'content': {
+	  'height': 'auto',
+	  'margin': '0px',
+	  'paddingTop': '0px',
+	  'overflow': 'hidden',
+	  'maxHeight': '450px'
+	},
+	'header': {
+	  'zIndex': 96000,
+	  'paddingBottom': '0px',
+	  'backgroundColor': '#1a1a1a'
+	},
+	'title': {
+	  'fontSize': "0.8em",
+	  'paddingLeft': '3px',
+	  'backgroundColor': '#1a1a1a'
+	},
+	'reduceButton': {
+	  'zIndex': 97000,
+	  'cursor': 'pointer',
+	  'float': 'right',
+	  'width': '22px',
+	  'height': '18px',
+	  'backgroundPosition': '-110px',
+	  'backgroundRepeat': 'no-repeat',
+	  'backgroundImage': 'url("http://cgit.compiz.org/fusion/decorators/emerald/plain/defaults/theme/buttons.min.png")'
+	},
+	'updateLink': {
+	  'zIndex': 97000,
+	  'verticalAlign': 'middle',
+	  'float': 'right',
+	  'paddingTop': '3px'
+	},
+	'updateButton': {
+	  'zIndex': 97000,
+	  'border': ' none'
+	},
+	'closeButton': {}
+  };
+
 
   /**
    * Events:
@@ -890,149 +1033,6 @@ w.hkCreateClasses = function () {
 	  window.hk.log('[HkPublic][ERROR]Fehler bei der Finalisierung des Shortcuts-Fensters: '+ex);
 	}
   };
-
-  /**
-   * CSS @todo Core und Shortcuts trennen - Ergänzungen warten auf Core und "docken" sich an...
-   */
-  window.hk.Styles = {
-	'Shortcuts': {
-	  'list': {
-		'paddingBottom': '10px'
-	  },
-	  'Form': {
-		'inputX': {
-		  'verticalAlign': 'middle'
-		},
-		'inputY': {
-		  'verticalAlign': 'middle'
-		},
-		'inputName': {
-		  'verticalAlign': 'middle',
-		  'width': '90%'
-		},
-		'submit': {
-		  'margin': '0px',
-		  'verticalAlign': 'middle',
-		  'cursor': 'pointer'
-		},
-		'load': {
-		  'margin': '0px',
-		  'verticalAlign': 'middle',
-		  'cursor': 'pointer'
-		},
-		'gotoPosition': {
-		  'margin': '0px',
-		  'verticalAlign': 'middle',
-		  'cursor': 'pointer'
-		},
-		'error': {},
-		'valid': {}
-	  },
-	  'Entry': {
-		'deleteButton': {
-		  'cursor': 'pointer',
-		  'float': 'right',
-		  'paddingTop': '3px'
-		},
-		'text': {
-		  'cursor': 'pointer',
-		  'width': 'auto',
-		  'marginLeft': '2px',
-		  'marginRight': '20px',
-		  'paddingTop': '3px',
-		  'paddingBottom': '3px'
-		},
-		'entry': {
-		  'padding': '2px 0px',
-		  'borderTop': '1px solid #303030',
-		  'clear': 'both'
-		}
-	  },
-	},
-	'window': {
-	  'zIndex': 95000,
-	  'margin': 'auto',
-	  'display': 'block',
-	  'position': 'absolute',
-	  'top': '50px',
-	  'left': 'auto',
-	  'bottom': 'auto',
-	  'right': 'auto',
-	  'width': '160px',
-	  'maxWidth': '320px',
-	  'height': 'auto',
-	  'backgroundColor': '#0e0e0e',
-	  'color': '#f2f2f2',
-	  'overflow': 'none',
-	  'paddingBottom': '0px'
-	},
-	'footer': {
-	  'clear': 'both',
-	  'marginTop': '2px',
-	  'paddingTop': '3px',
-	  'paddingBottom': '0px',
-	  'marginBottom': '0px',
-	  'marginLeft': '0px',
-	  'marginRight': '0px',
-	  'height': '19px',
-	  'width': '100%',
-	  'backgroundColor': '#1a1a1a'
-	},
-	'donate': {
-	  'display': 'block',
-	  'float': 'right',
-	  'width': 'auto',
-	  'marginLeft': 'auto'
-	},
-	'scrollArea': {
-	  'float': 'left',
-	  'marginLeft': '0px',
-	  'height': '16px',
-	  'width': 'auto',
-	},
-	'scrollButton': {
-	  'cursor': 'pointer'
-	},
-	'content': {
-	  'height': 'auto',
-	  'margin': '0px',
-	  'paddingTop': '0px',
-	  'overflow': 'hidden',
-	  'maxHeight': '450px'
-	},
-	'header': {
-	  'zIndex': 96000,
-	  'paddingBottom': '0px',
-	  'backgroundColor': '#1a1a1a'
-	},
-	'title': {
-	  'fontSize': "0.8em",
-	  'paddingLeft': '3px',
-	  'backgroundColor': '#1a1a1a'
-	},
-	'reduceButton': {
-	  'zIndex': 97000,
-	  'cursor': 'pointer',
-	  'float': 'right',
-	  'width': '22px',
-	  'height': '18px',
-	  'backgroundPosition': '-110px',
-	  'backgroundRepeat': 'no-repeat',
-	  'backgroundImage': 'url("http://cgit.compiz.org/fusion/decorators/emerald/plain/defaults/theme/buttons.min.png")'
-	},
-	'updateLink': {
-	  'zIndex': 97000,
-	  'verticalAlign': 'middle',
-	  'float': 'right',
-	  'paddingTop': '3px'
-	},
-	'updateButton': {
-	  'zIndex': 97000,
-	  'border': ' none'
-	},
-	'closeButton': {}
-  };
-
 
 };
 
