@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkExplorer
-// @version       2011.12.30.16.09.340000
+// @version       2011.12.30.16.15.140000
 // @description   Explorer für HkToolkit
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -151,6 +151,14 @@ window.hkCreateExplorer = function hkCreateExplorer() {
   };
 }
 
+if("undefined" == typeof console) {
+  var console = {
+	log: function log(msg) {
+	  // do nothing
+	}
+  };
+}
+
 /**
  * Alle 1000ms die Verfügbarkeit prüfen.
  */
@@ -161,8 +169,19 @@ window.hkExplorerLoader = setInterval(wait,1000);
  */
 function wait(){
   if(!!(w.HOMMK && w.HOMMK.worldMap && w.HOMMK.worldMap.content && w.HOMMK.worldMap.content._size && w.initHkToolkit && window.HOMMK_HkToolkit && w.hk && w.hk.Windows && w.hkCreateExplorer)) {
+	console.log('[HkPublic][DEBUG]Toolkit verfügbar, bereite HkExplorer vor\u2026');
 	clearInterval(window.hkExplorerLoader);
-	window.hkCreateExplorer();
-	window.initHkExplorer();
+	try {
+	  window.hkCreateExplorer();
+	} catch(ex) {
+	  console.log('[HkPublic][ERROR]Fehler beim Erzeugen der Klassen für HkExplorer: ' + ex);
+	}
+	try {
+	  window.initHkExplorer();
+	} catch(ex) {
+	  console.log('[HkPublic][ERROR]Fehler bei der HkExplorer-Initialisierung: ' + ex);
+	}
+  }	else {
+	console.log('[HkPublic][DEBUG]HkExplorer wartet auf die Verfügbarkeit des Toolkits.');
   }
 }
