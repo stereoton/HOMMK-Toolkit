@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkToolkit
-// @version       2011.12.30.23.03.140000
+// @version       2011.12.30.23.30.550000
 // @description   Werkzeugkasten für HOMMK
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -81,7 +81,7 @@ w.hkCreateClasses = function () {
   window.Hk = new Class({
 	$debug: 1,
 	idScript: "HkToolkit",
-	version: "2011.12.30.23.03.140000",
+	version: "2011.12.30.23.30.550000",
 	Coords: {
 	  lastRegion: {
 		x: 0,
@@ -471,7 +471,9 @@ w.hkCreateClasses = function () {
 	  'addToDOM': true,
 	  'reduce': false,
 	  'updateable': true,
-	  'updateUrl': "https://github.com/gelgamek/HOMMK-Toolkit/raw/master/hommk_shortcuts.user.js",
+//	  Trunk:
+//	  'updateUrl': "https://github.com/gelgamek/HOMMK-Toolkit/raw/master/hommk_shortcuts.user.js",
+	  'updateUrl': "http://userscripts.org/scripts/source/121763.user.js",
 	  'scroller': false,
 	  'scrollers': {
 		'up': Class.empty,
@@ -557,7 +559,9 @@ w.hkCreateClasses = function () {
 		'action': "https://www.paypal.com/cgi-bin/webscr",
 		'method': 'post',
 		'target': '_blank',
-		'alt': 'Die Entwicklung unterstützen - Spende an Gelgamek',
+		'alt': 'Unterstütze den Entwickler!',
+		'title': 'Unterstütze den Entwickler!',
+		'name': 'Unterstütze den Entwickler!',
 		'styles': this.options.donateStyles
 	  });
 	  donate.innerHTML = '<input type="hidden" name="cmd" value="_s-xclick"><input type="hidden" name="hosted_button_id" value="WRWUH9K7JBMBY"><input type="image" src="http://icons.iconarchive.com/icons/visualpharm/magnets/16/coins-icon.png" border="0" name="submit" title="Den Entwickler unterstützen!" name="Den Entwickler unterstützen!" alt="Den Entwickler unterstützen!"><img alt="" border="0" src="https://www.paypalobjects.com/de_DE/i/scr/pixel.gif" width="1" height="1">';
@@ -666,6 +670,8 @@ w.hkCreateClasses = function () {
 	  this.setOptions(options);
 	  var reduceButton = new Element("div", {
 		'class': 'HkReduce HkButton',
+		'title': 'Einrollen',
+		'name': 'Einrollen',
 		'styles': this.options.reduceButtonStyles
 	  });
 	  return reduceButton;
@@ -678,6 +684,9 @@ w.hkCreateClasses = function () {
 		'styles': this.options.updateLinkStyles
 	  });
 	  var updateButton = new Element('img', {
+		'alt': 'Erzwinge Aktualisierung',
+		'title': 'Erzwinge Aktualisierung',
+		'name': 'Erzwinge Aktualisierung',
 		'src': 'http://icons.iconarchive.com/icons/saki/snowish/16/Apps-system-software-update-icon.png',
 		'styles': this.options.updateButtonStyles
 	  });
@@ -901,6 +910,8 @@ w.hkCreateClasses = function () {
 	  var deleteButton = new Element('img', {
 		'class': 'EntryButton DeleteButton',
 		'name': 'delete' + shortcut.name(),
+		'title': 'Eintrag löschen',
+		'alt': 'Eintrag löschen',
 		'src': "http://icons.iconarchive.com/icons/oxygen-icons.org/oxygen/16/Actions-dialog-close-icon.png",
 		'styles': window.hk.Styles.Shortcuts.Entry.deleteButton
 	  });
@@ -978,6 +989,8 @@ w.hkCreateClasses = function () {
 	  var gotoPosition = new Element("img", {
 		'id': 'GotoPosition',
 		'name': 'gotoPosition',
+		'alt': 'Springe zu angegebenen Koordinaten',
+		'title': 'Springe zu angegebenen Koordinaten',
 		'src': "http://icons.iconarchive.com/icons/itzikgur/my-seven/16/Favorities-icon.png",
 		'styles': window.hk.Styles.Shortcuts.Form.gotoPosition
 	  });
@@ -986,6 +999,8 @@ w.hkCreateClasses = function () {
 	  var loadPosition = new Element("img", {
 		'id': 'LoadPosition',
 		'name': 'loadPosition',
+		'alt': 'Lade Informationen der aktuellen Kartenposition',
+		'title': 'Lade Informationen der aktuellen Kartenposition',
 		'src': "http://icons.iconarchive.com/icons/fatcow/farm-fresh/16/update-icon.png",
 		'styles': window.hk.Styles.Shortcuts.Form.load
 	  });
@@ -994,6 +1009,8 @@ w.hkCreateClasses = function () {
 	  var submitInput = new Element("img", {
 		'id': "ShortcutSubmit",
 		'name': "shortcutSubmit",
+		'alt': "Speichern",
+		'title': "Speichern",
 		'src': "http://icons.iconarchive.com/icons/fatcow/farm-fresh/16/accept-icon.png",
 		'styles': window.hk.Styles.Shortcuts.Form.submit
 	  });
