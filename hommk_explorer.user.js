@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkExplorer
-// @version       2011.12.30.14.31.070000
+// @version       2011.12.30.14.37.220000
 // @description   Explorer für HkToolkit
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -83,7 +83,7 @@ w.hkCreateExplorer = function () {
   hk.Storage.Explorer = new Hk.HkStorage(window.hk.idScript + "HkExplorer" + window.hk.WorldId);
 
   Hk.HkExplorer = new Class({
-	$debug: 0,
+	$debug: 1,
 	$hkWin: false,
 	'inputStyles': {
 	  'valid': {
