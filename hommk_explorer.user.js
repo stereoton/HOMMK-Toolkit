@@ -1,7 +1,7 @@
 // ==UserScript==
-// @name          HkToolkit
-// @version       2011.12.30.14.23.070000
-// @description   Werkzeugkasten für HOMMK
+// @name          HkExplorer
+// @version       2011.12.30.14.24.080000
+// @description   Explorer für HkToolkit
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
 // @icon          http://icons.iconarchive.com/icons/webiconset/mobile/32/maps-icon.png
@@ -97,7 +97,8 @@ w.hkCreateExplorer = function () {
   //	  Wir brauchen hier keine Updates bei Änderungen im Speicher - sonst würden wir das ergänzen:
   //	  window.hk.Storage.Explorer.addEvent("onStorageUpdate", this.updateExplorer);
 		this.$hkWin = window.hk.Windows.createWindow("HkExplorer", {
-		  'title': "HkExplorer"
+		  'title': "HkExplorer",
+		  "updateable": false
 		});
 		this.createContent(this.$hkWin, window.hk.Windows, window.hk.Storage.Explorer);
 	  }	catch (ex) {
