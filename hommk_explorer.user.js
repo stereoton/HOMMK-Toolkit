@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkExplorer
-// @version       2011.12.30.16.07.270000
+// @version       2011.12.30.16.09.340000
 // @description   Explorer für HkToolkit
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -65,7 +65,7 @@ if(w.isGoogleChromeUA() && 'undefined' == typeof __HKEXP_PAGE_SCOPE_RUN__) {
 }
 
 
-window.hkCreateExplorer = function () {
+window.hkCreateExplorer = function hkCreateExplorer() {
 
   var Hk = window.Hk;
   var hk = window.hk;
@@ -124,9 +124,9 @@ window.hkCreateExplorer = function () {
   /**
    * Erzeugt Explorer-Fenster
    */
-  window.initHkExplorer = function initHkExplorer() {
+  window.initHkExplorer = function () {
 	try {
-	  window.hk.Explorer = new window.Hk.HkExplorer();
+	  window.hk.Explorer = window.hk.hkExplorer || new window.Hk.HkExplorer();
 	} catch(ex) {
 	  window.hk.log('[HkPublic][ERROR]Fehler beim Erzeugen des Explorer-Fensters: '+ex);
 	}
@@ -160,7 +160,7 @@ window.hkExplorerLoader = setInterval(wait,1000);
  * Prüft die Verfügbarkeit der HOMMK-Objekte und des HkToolkits…
  */
 function wait(){
-  if(!!(w.HOMMK && w.HOMMK.worldMap && w.HOMMK.worldMap.content && w.HOMMK.worldMap.content._size && w.initHkToolkit && window.HOMMK_HkToolkit && w.hk && w.hk.Windows)) {
+  if(!!(w.HOMMK && w.HOMMK.worldMap && w.HOMMK.worldMap.content && w.HOMMK.worldMap.content._size && w.initHkToolkit && window.HOMMK_HkToolkit && w.hk && w.hk.Windows && w.hkCreateExplorer)) {
 	clearInterval(window.hkExplorerLoader);
 	window.hkCreateExplorer();
 	window.initHkExplorer();
