@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkExplorer
-// @version       2011.12.30.14.24.080000
+// @version       2011.12.30.14.31.070000
 // @description   Explorer für HkToolkit
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -66,15 +66,18 @@ if(w.isGoogleChromeUA() && 'undefined' == typeof __HKEXP_PAGE_SCOPE_RUN__) {
 
 
 w.hkCreateExplorer = function () {
+
   var Hk = window.Hk;
   var hk = window.hk;
 
   window.HOMMK_HkExplorer = window.HOMMK_HkExplorer || {
 	'version': hk.version
   };
+
   var HOMMK = hk.HOMMK;
   var idScript = hk.idScript;
   var version = hk.version;
+
   hk.log('[PUBLIC][DEBUG]Starte HkExplorer\u2026');
 
   hk.Storage.Explorer = new Hk.HkStorage(window.hk.idScript + "HkExplorer" + window.hk.WorldId);
@@ -115,8 +118,8 @@ w.hkCreateExplorer = function () {
 
 	}
   });
-  Hk.HkExplorer.implement(new Events, new Options, new HkLogger);
-  hk.hkExplorer = new HkExplorer();
+  Hk.HkExplorer.implement(new Events, new Options, new window.Hk.HkLogger);
+  window.hk.hkExplorer = new window.Hk.HkExplorer();
 
   /**
    * Erzeugt Explorer-Fenster
