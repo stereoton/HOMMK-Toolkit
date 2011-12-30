@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkToolkit
-// @version       2011.12.30.14.37.220000
+// @version       2011.12.30.16.24.480000
 // @description   Werkzeugkasten für HOMMK
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -81,7 +81,7 @@ w.hkCreateClasses = function () {
   window.Hk = new Class({
 	$debug: 1,
 	idScript: "HkToolkit",
-	version: "2011.12.30.14.37.220000",
+	version: "2011.12.30.16.24.480000",
 	Coords: {
 	  lastRegion: {
 		x: 0,
@@ -333,7 +333,19 @@ w.hkCreateClasses = function () {
 	  'scrollers': {
 		'up': Class.empty,
 		'down': Class.empty
-	  }
+	  },
+	  'windowStyles': window.hk.Styles.window,
+	  'footerStyles': window.hk.Styles.footer,
+	  'donateStyles': window.hk.Styles.donate,
+	  'scrollAreaStyles': window.hk.Styles.scrollArea,
+	  'scrollButtonStyles': window.hk.Styles.scrollButton,
+	  'headerStyles': window.hk.Styles.header,
+	  'titleStyles': window.hk.Styles.title,
+	  'reduceButtonStyles': window.hk.Styles.reduceButton,
+	  'closeButtonStyles': window.hk.Styles.closeButton,
+	  'updateButtonStyles': window.hk.Styles.updateButton,
+	  'updateLinkStyles': window.hk.Styles.updateLink,
+	  'contentStyles': window.hk.Styles.content,
 	},
 	initialize: function(options) {
 	  this.setOptions(options);
@@ -346,7 +358,7 @@ w.hkCreateClasses = function () {
 	  var windowNode = new Element("div", {
 		'id': windowId,
 		'class': "HkWindow",
-		'styles': window.hk.Styles.window
+		'styles': this.options.windowStyles
 	  });
 	  if(this.options.createContentContainer) {
 		var contentNode = this.createContentContainer(id, options);
@@ -396,14 +408,14 @@ w.hkCreateClasses = function () {
 	  var scrId = this.getId('HkWindowFooter', id, options);
 	  var footerNode = new Element('div', {
 		'id': scrId,
-		'styles': window.hk.Styles.footer
+		'styles': this.options.footerStyles
 	  });
 	  var donate = new Element("form", {
 		'action': "https://www.paypal.com/cgi-bin/webscr",
 		'method': 'post',
 		'target': '_blank',
 		'alt': 'Die Entwicklung unterstützen - Spende an Gelgamek',
-		'styles': window.hk.Styles.donate
+		'styles': this.options.donateStyles
 	  });
 	  donate.innerHTML = '<input type="hidden" name="cmd" value="_s-xclick"><input type="hidden" name="hosted_button_id" value="WRWUH9K7JBMBY"><input type="image" src="http://icons.iconarchive.com/icons/visualpharm/magnets/16/coins-icon.png" border="0" name="submit" title="Den Entwickler unterstützen!" name="Den Entwickler unterstützen!" alt="Den Entwickler unterstützen!"><img alt="" border="0" src="https://www.paypalobjects.com/de_DE/i/scr/pixel.gif" width="1" height="1">';
 	  footerNode.adopt(donate);
@@ -414,7 +426,7 @@ w.hkCreateClasses = function () {
 	  var scrId = this.getId('HkWindowScrollers', id, options);
 	  var scrollNode = new Element('div', {
 		'id': scrId,
-		'styles': window.hk.Styles.scrollArea
+		'styles': this.options.scrollAreaStyles
 	  });
 	  $each(this.options.scrollers, function(handler, dir) {
 		var btn = this.createScrollButton(id, options, dir, handler);
@@ -429,7 +441,7 @@ w.hkCreateClasses = function () {
 	  var scrollNode = new Element('img', {
 		'id': btnId,
 		'src': 'http://icons.iconarchive.com/icons/saki/nuoveXT/16/Small-arrow-' + direction + '-icon.png',
-		'styles': window.hk.Styles.scrollButton
+		'styles': this.options.scrollButtonStyles
 	  });
 	  scrollNode.dir = direction;
 	  scrollNode.srcId = id;
@@ -441,17 +453,13 @@ w.hkCreateClasses = function () {
 	},
 	scrollUp: function scrollUp(evt) {
 	  window.hk.log('[HkWindow][DEBUG]scrollUp:');
-//	  window.hk.log(evt);
-//	  window.hk.log(evt.target);
 	  var winId = evt.target.btnWindow.getWindowId(evt.target.srcId, evt.target.btnOpts);
 	  window.hk.log('[HkWindow][DEBUG]Fenster-ID: ' + winId);
 	  var evtRt = $(winId).getElement(".HkContent");
-//	  window.hk.log(evtRt);
 	  window.hk.log(evtRt.getSize());
 	  var size = evtRt.getSize().size;
 	  var scroll = evtRt.getSize().scroll;
 	  var scrollSize = evtRt.getSize().scrollSize;
-//	  var scrollToY = scrollSize.y - 20 < size.y ? size.y : scrollSize.y - 20;
 	  var scrollToY = scroll.y - 20 < 0 ? 0 : scroll.y - 20;
 	  window.hk.log('[HkWindow][DEBUG]Scrolle zu Y=' + scrollToY);
 	  evtRt.scrollTo(scroll.x, scrollToY);
@@ -459,17 +467,13 @@ w.hkCreateClasses = function () {
 	},
 	scrollDown: function scrollDown(evt) {
 	  window.hk.log('[HkWindow][DEBUG]scrollDown:');
-//	  window.hk.log(evt);
-//	  window.hk.log(evt.target);
 	  var winId = evt.target.btnWindow.getWindowId(evt.target.srcId, evt.target.btnOpts);
 	  window.hk.log('[HkWindow][DEBUG]Fenster-ID: ' + winId);
 	  var evtRt = $(winId).getElement(".HkContent");
-//	  window.hk.log(evtRt);
 	  window.hk.log(evtRt.getSize());
 	  var size = evtRt.getSize().size;
 	  var scroll = evtRt.getSize().scroll;
 	  var scrollSize = evtRt.getSize().scrollSize;
-//	  var scrollToY = size.y + 20 > scrollSize.y ? scrollSize.y : size.y + 20;
 	  var scrollToY = scroll.y + size.y + 20 > scrollSize.y ? scrollSize.y - size.y : scroll.y + 20;
 	  window.hk.log('[HkWindow][DEBUG]Scrolle zu Y=' + scrollToY);
 	  evtRt.scrollTo(scroll.x, scrollToY);
@@ -487,7 +491,7 @@ w.hkCreateClasses = function () {
 	  var headerNode = new Element("div", {
 		'id': headerId,
 		'class': "HkWindowHeader",
-		'styles': window.hk.Styles.header
+		'styles': this.options.headerStyles
 	  });
 	  if(this.options.createTitle) {
 		var titleNode = this.createTitle(id, options);
@@ -501,7 +505,7 @@ w.hkCreateClasses = function () {
 	  var titleNode = new Element('h1', {
 		'id': titleId,
 		'class': 'HkWindowTitle',
-		'styles': window.hk.Styles.title
+		'styles': this.options.titleStyles
 	  });
 	  titleNode.setText(this.options.title);
 	  if(this.options.preventTextSelection) titleNode.preventTextSelection();
@@ -519,7 +523,7 @@ w.hkCreateClasses = function () {
 	  this.setOptions(options);
 	  var reduceButton = new Element("div", {
 		'class': 'HkReduce HkButton',
-		'styles': window.hk.Styles.reduceButton
+		'styles': this.options.reduceButtonStyles
 	  });
 	  return reduceButton;
 	},
@@ -528,11 +532,11 @@ w.hkCreateClasses = function () {
 	  var updateLink = new Element("a", {
 		'href': this.options.updateUrl,
 		'target': '_blank',
-		'styles': window.hk.Styles.updateLink
+		'styles': this.options.updateLinkStyles
 	  });
 	  var updateButton = new Element('img', {
 		'src': 'http://icons.iconarchive.com/icons/saki/snowish/16/Apps-system-software-update-icon.png',
-		'styles': window.hk.Styles.updateButton
+		'styles': this.options.updateButtonStyles
 	  });
 	  updateLink.adopt(updateButton);
 	  return updateLink;
@@ -541,7 +545,7 @@ w.hkCreateClasses = function () {
 	  this.setOptions(options);
 	  var closeButton = new Element("div", {
 		'class': 'HkClose HkButton',
-		'styles': window.hk.Styles.closeButton
+		'styles': this.options.closeButtonStyles
 	  });
 	  return closeButton;
 	},
@@ -551,7 +555,7 @@ w.hkCreateClasses = function () {
 	  return new Element("div", {
 		'id': contentId,
 		'class': "HkContent",
-		'styles': window.hk.Styles.content
+		'styles': this.options.contentStyles
 	  });
 	},
 	makeScrollable: function makeScrollable(id, options) {

@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkExplorer
-// @version       2011.12.30.16.15.140000
+// @version       2011.12.30.16.24.480000
 // @description   Explorer für HkToolkit
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -109,7 +109,7 @@ window.hkCreateExplorer = function hkCreateExplorer() {
 	  }
 	},
 	createContent: function createContent(hkWin, wins, storage) {
-
+	  
 	},
 	updateExplorer: function updateExplorer() {
 
@@ -140,7 +140,7 @@ window.hkCreateExplorer = function hkCreateExplorer() {
 		'reduce': $("HkWindowContentHkExplorer"),
 		'title': "HkExplorer"
 	  });
-	  window.hk.Windows.makeScrollable("HkShortcuts", {
+	  window.hk.Windows.makeScrollable("HkExplorer", {
 		'scroll': $("HkWindowContentHkExplorer"),
 		'title': "HkExplorer"
 	  });
