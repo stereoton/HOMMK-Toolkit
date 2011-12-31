@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkExplorer
-// @version       2011.12.31.13.01.380000
+// @version       2011.12.31.13.08.500000
 // @description   Explorer für HkToolkit
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -180,24 +180,29 @@ try {
 
 
 /**
- * Alle 1000ms die Verfügbarkeit prüfen.
- */
-var hkExplorerLoader = setInterval(waitHkExplorer,1000);
-
-/**
  * Prüft die Verfügbarkeit der HOMMK-Objekte und des HkToolkits…
  */
-var waitHkExplorer = function () {
-  console.log('[HkPublic][DEBUG]waitHkExplorer\u2026');
-  if(!!(w.HOMMK && w.HOMMK.worldMap && w.HOMMK.worldMap.content && w.HOMMK.worldMap.content._size && w.initHkToolkit && window.HOMMK_HkToolkit && w.hk && w.hk.Windows && w.hkCreateExplorer)) {
-	console.log('[HkPublic][DEBUG]Toolkit verfügbar, bereite HkExplorer vor\u2026');
-	clearInterval(hkExplorerLoader);
-	try {
-	  hkCreateExplorer();
-	} catch(ex) {
-	  console.log('[HkPublic][ERROR]Fehler beim Erzeugen der Klassen für HkExplorer: ' + ex);
+var HkExplorerLoader = {
+  hkToolkitAvailable: false,
+  load: function load() {
+	console.log('[HkPublic][DEBUG]waitHkExplorer\u2026');
+	this.hkToolkitAvailable = !!(w.HOMMK && w.HOMMK.worldMap && w.HOMMK.worldMap.content && w.HOMMK.worldMap.content._size && w.initHkToolkit && window.HOMMK_HkToolkit && w.hk && w.hk.Windows && w.hkCreateExplorer);
+	if(this.hkToolkitAvailable) {
+	  console.log('[HkPublic][DEBUG]Toolkit verfügbar, bereite HkExplorer vor\u2026');
+	  try {
+		$clear(this.load);
+		hkCreateExplorer();
+	  } catch(ex) {
+		console.log('[HkPublic][ERROR]Fehler beim Erzeugen der Klassen für HkExplorer: ' + ex);
+	  }
+	} else {
+	  console.log('[HkPublic][DEBUG]HkExplorer wartet auf die Verfügbarkeit des Toolkits.');
 	}
-  }	else {
-	console.log('[HkPublic][DEBUG]HkExplorer wartet auf die Verfügbarkeit des Toolkits.');
   }
 }
+
+
+/**
+ * Alle 1000ms die Verfügbarkeit prüfen.
+ */
+HkExplorerLoader.load.periodical(1000);
