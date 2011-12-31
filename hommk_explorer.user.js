@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkExplorer
-// @version       2011.12.30.16.24.480000
+// @version       2011.12.30.23.46.370000
 // @description   Explorer für HkToolkit
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -108,8 +108,12 @@ window.hkCreateExplorer = function hkCreateExplorer() {
 
 	  }
 	},
-	createContent: function createContent(hkWin, wins, storage) {
-	  
+	createContent: function createContent(windowNode, hkWindows, hkStorage) {
+	  var contentNode = windowNode.getElement(".HkContent");
+	  contentNode.setStyle('paddingTop', '0px');
+	  window.hk.log(window.HOMMK.worldMap);
+	  window.hk.log(window.HOMMK.player);
+	  window.hk.log(window.HOMMK);
 	},
 	updateExplorer: function updateExplorer() {
 
