@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkExplorer
-// @version       2011.12.31.17.36.350000
+// @version       2011.12.31.17.47.260000
 // @description   Explorer für HkToolkit
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -191,7 +191,7 @@ window.HkExplorerLoader = {
 	  console.log('[HkPublic][DEBUG]Toolkit verfügbar, bereite HkExplorer vor\u2026');
 	  window.hk.log('[HkPublic][DEBUG]Toolkit verfügbar, bereite HkExplorer vor\u2026');
 	  try {
-		$clear(this.load);
+		window.HkExplorerLoader.load = $clear(window.HkExplorerLoader.load);
 		window.hkCreateExplorer();
 	  } catch(ex) {
 		window.hk.log('[HkPublic][ERROR]Fehler beim Erzeugen der Klassen für HkExplorer: ' + ex);
