@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkExplorer
-// @version       2011.12.31.11.27.250000
+// @version       2011.12.31.11.33.440000
 // @description   Explorer für HkToolkit
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -80,7 +80,7 @@ window.hkCreateExplorer = function hkCreateExplorer() {
 
   hk.log('[PUBLIC][DEBUG]Starte HkExplorer\u2026');
 
-  hk.Storage.Explorer = new window.Hk.HkStorage(window.hk.idScript + "HkExplorer" + window.hk.WorldId);
+//  hk.Storage.Explorer = new window.Hk.HkStorage(window.hk.idScript + "HkExplorer" + window.hk.WorldId);
 
   Hk.HkExplorer = new Class({
 	$debug: 1,
@@ -112,7 +112,7 @@ window.hkCreateExplorer = function hkCreateExplorer() {
 		window.hk.log('[HkExplorer][DEBUG]Fehler bei der Initialisierung: ' + ex);
 	  }
 	},
-	createContent: function createContent(windowNode, hkWindows, hkStorage) {
+	createContent: function createContent() {
 	  var contentNode = this.$hkWin.getElement(".HkContent");
 	  contentNode.setStyle('paddingTop', '0px');
 	  this.log(window.HOMMK.worldMap);
@@ -130,13 +130,14 @@ window.hkCreateExplorer = function hkCreateExplorer() {
 	}
   });
   Hk.HkExplorer.implement(new Events, new Options, new window.Hk.HkLogger);
-  window.hk.hkExplorer = new window.Hk.HkExplorer();
+//  window.hk.hkExplorer = new window.Hk.HkExplorer();
 
   /**
    * Erzeugt Explorer-Fenster
    */
   window.initHkExplorer = function () {
 	try {
+	  window.hk.log('[HkPublic][DEBUG]Erzeuge Explorer-Fenster');
 	  window.hk.Explorer = window.hk.hkExplorer || new window.Hk.HkExplorer();
 	} catch(ex) {
 	  window.hk.log('[HkPublic][ERROR]Fehler beim Erzeugen des Explorer-Fensters: '+ex);
