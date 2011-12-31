@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkExplorer
-// @version       2011.12.31.11.22.470000
+// @version       2011.12.31.11.27.250000
 // @description   Explorer für HkToolkit
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -80,7 +80,7 @@ window.hkCreateExplorer = function hkCreateExplorer() {
 
   hk.log('[PUBLIC][DEBUG]Starte HkExplorer\u2026');
 
-  hk.Storage.Explorer = new Hk.HkStorage(window.hk.idScript + "HkExplorer" + window.hk.WorldId);
+  hk.Storage.Explorer = new window.Hk.HkStorage(window.hk.idScript + "HkExplorer" + window.hk.WorldId);
 
   Hk.HkExplorer = new Class({
 	$debug: 1,
@@ -96,6 +96,7 @@ window.hkCreateExplorer = function hkCreateExplorer() {
 	initialize: function(options) {
 	  this.setOptions(options);
 	  this.log('[HkExplorer][DEBUG]Initialisiere\u2026');
+	  window.hk.log('[HkExplorer][DEBUG]Initialisiere\u2026');
 	  try {
   //	  Wir brauchen hier keine Updates bei Änderungen im Speicher - sonst würden wir das ergänzen:
   //	  window.hk.Storage.Explorer.addEvent("onStorageUpdate", this.updateExplorer);
@@ -103,17 +104,23 @@ window.hkCreateExplorer = function hkCreateExplorer() {
 		  'title': "HkExplorer",
 		  "updateable": false
 		});
+		this.log('[HkExplorer][DEBUG]Erzeuge Content\u2026');
+		window.hk.log('[HkExplorer][DEBUG]Erzeuge Content\u2026');
 		this.createContent();
 	  }	catch (ex) {
 		this.log('[HkExplorer][DEBUG]Fehler bei der Initialisierung: ' + ex);
+		window.hk.log('[HkExplorer][DEBUG]Fehler bei der Initialisierung: ' + ex);
 	  }
 	},
 	createContent: function createContent(windowNode, hkWindows, hkStorage) {
 	  var contentNode = this.$hkWin.getElement(".HkContent");
 	  contentNode.setStyle('paddingTop', '0px');
 	  this.log(window.HOMMK.worldMap);
+	  window.hk.log(window.HOMMK.worldMap);
 	  this.log(window.HOMMK.player);
+	  window.hk.log(window.HOMMK.player);
 	  this.log(window.HOMMK);
+	  window.hk.log(window.HOMMK);
 	},
 	updateExplorer: function updateExplorer() {
 
