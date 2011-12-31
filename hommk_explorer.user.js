@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkExplorer
-// @version       2011.12.31.17.27.320000
+// @version       2011.12.31.17.36.350000
 // @description   Explorer für HkToolkit
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -129,7 +129,7 @@ window.hkCreateExplorer = function() {
 
 	}
   });
-  Hk.HkExplorer.implement(new Events, new Options, new window.Hk.HkLogger);
+  Hk.HkExplorer.implement(new Events, new Options, new window.HkLogger);
 //  window.hk.hkExplorer = new window.Hk.HkExplorer();
 
   /**
