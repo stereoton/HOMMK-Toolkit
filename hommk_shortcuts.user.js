@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkToolkit
-// @version       2011.12.31.11.22.470000
+// @version       2011.12.31.17.40.390000
 // @description   Werkzeugkasten für HOMMK
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -81,7 +81,7 @@ w.hkCreateClasses = function () {
   window.Hk = new Class({
 	$debug: 1,
 	idScript: "HkToolkit",
-	version: "2011.12.31.11.22.470000",
+	version: "2011.12.31.17.40.390000",
 	Coords: {
 	  lastRegion: {
 		x: 0,
@@ -536,7 +536,7 @@ w.hkCreateClasses = function () {
 	  windowNode.adopt(footer);
 	  if(this.options.addToDOM) {
 		$('MainContainer').adopt(windowNode);
-		if(this.options.reduceable) this.makeReduceable();
+//		if(this.options.reduceable) this.makeReduceable();
 //		if(this.options.scrollable) this.makeScrollable();
 		this.windows.push(windowNode);
 	  }
@@ -725,7 +725,7 @@ w.hkCreateClasses = function () {
 	  this.setOptions(options);
 	  if(!this.options.reduce) return;
 	  var reduce = $(this.options.reduce);
-	  var headerDivs = $(this.getId("HkWindow", id)).getElementsByTagName("div");
+	  var headerDivs = $(this.getWindowId(id)).getElementsByTagName("div");
 	  var reduceButton = false;
 	  $each(headerDivs, function(hd) {
 		hd = $(hd);
