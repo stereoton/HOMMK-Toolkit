@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkExplorer
-// @version       2011.12.31.11.42.120000
+// @version       2011.12.31.13.01.380000
 // @description   Explorer für HkToolkit
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -37,7 +37,7 @@ if(!w.hasOwnProperty("isGoogleChromeUA")) {
  * Page Scrope Runner für Google Chrome wegen fehlendem @require-Support, siehe
  * http://www.chromium.org/developers/design-documents/user-scripts
  */
-if(w.isGoogleChromeUA() && 'undefined' == typeof __HKEXP_PAGE_SCOPE_RUN__) {
+if(w.isGoogleChromeUA() && !$type(__HKEXP_PAGE_SCOPE_RUN__)) {
   (function page_scope_runner() {
     // If we're _not_ already running in the page, grab the full source
     // of this script.
@@ -65,7 +65,7 @@ if(w.isGoogleChromeUA() && 'undefined' == typeof __HKEXP_PAGE_SCOPE_RUN__) {
 }
 
 
-window.hkCreateExplorer = function() {
+var hkCreateExplorer = function() {
 
   var Hk = window.Hk;
   var hk = window.hk;
@@ -135,7 +135,7 @@ window.hkCreateExplorer = function() {
   /**
    * Erzeugt Explorer-Fenster
    */
-  window.initHkExplorer = function () {
+  var initHkExplorer = function () {
 	try {
 	  window.hk.log('[HkPublic][DEBUG]Erzeuge Explorer-Fenster');
 	  window.hk.Explorer = window.hk.hkExplorer || new window.Hk.HkExplorer();
@@ -161,11 +161,11 @@ window.hkCreateExplorer = function() {
 	  window.hk.Explorer.log('[HkPublic][ERROR]Fehler bei der Finalisierung des Explorer-Fensters: '+ex);
 	}
   };
-	try {
-  window.initHkExplorer();
-	} catch(ex) {
-	  console.log('[HkPublic][ERROR]Fehler bei der HkExplorer-Initialisierung: ' + ex);
-	}
+  try {
+	initHkExplorer();
+  } catch(ex) {
+	console.log('[HkPublic][ERROR]Fehler bei der HkExplorer-Initialisierung: ' + ex);
+  }
 }
 
 try {
@@ -178,6 +178,12 @@ try {
   }
 } catch(ex) {}
 
+
+/**
+ * Alle 1000ms die Verfügbarkeit prüfen.
+ */
+var hkExplorerLoader = setInterval(waitHkExplorer,1000);
+
 /**
  * Prüft die Verfügbarkeit der HOMMK-Objekte und des HkToolkits…
  */
@@ -187,7 +193,7 @@ var waitHkExplorer = function () {
 	console.log('[HkPublic][DEBUG]Toolkit verfügbar, bereite HkExplorer vor\u2026');
 	clearInterval(hkExplorerLoader);
 	try {
-	  window.hkCreateExplorer();
+	  hkCreateExplorer();
 	} catch(ex) {
 	  console.log('[HkPublic][ERROR]Fehler beim Erzeugen der Klassen für HkExplorer: ' + ex);
 	}
@@ -195,9 +201,3 @@ var waitHkExplorer = function () {
 	console.log('[HkPublic][DEBUG]HkExplorer wartet auf die Verfügbarkeit des Toolkits.');
   }
 }
-
-
-/**
- * Alle 1000ms die Verfügbarkeit prüfen.
- */
-var hkExplorerLoader = setInterval(waitHkExplorer,1000);
