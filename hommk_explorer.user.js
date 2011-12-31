@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkExplorer
-// @version       2011.12.31.17.16.440000
+// @version       2011.12.31.17.21.280000
 // @description   Explorer für HkToolkit
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -186,7 +186,7 @@ window.HkExplorerLoader = {
   hkToolkitAvailable: false,
   load: function load() {
 	console.log('[HkPublic][DEBUG]waitHkExplorer\u2026');
-	window.HkExplorerLoader.hkToolkitAvailable = !!(w.HOMMK && w.HOMMK.worldMap && w.HOMMK.worldMap.content && w.HOMMK.worldMap.content._size && w.initHkToolkit && window.HOMMK_HkToolkit && w.hk && w.hk.Windows && w.hkCreateExplorer);
+	window.HkExplorerLoader.hkToolkitAvailable = !!(window.initHkToolkit && window.HOMMK_HkToolkit && w.hk && window.hkCreateExplorer);
 	if(window.HkExplorerLoader.hkToolkitAvailable) {
 	  console.log('[HkPublic][DEBUG]Toolkit verfügbar, bereite HkExplorer vor\u2026');
 	  try {
