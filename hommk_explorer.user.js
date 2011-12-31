@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkExplorer
-// @version       2011.12.31.11.33.440000
+// @version       2011.12.31.11.38.130000
 // @description   Explorer für HkToolkit
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -65,7 +65,7 @@ if(w.isGoogleChromeUA() && 'undefined' == typeof __HKEXP_PAGE_SCOPE_RUN__) {
 }
 
 
-window.hkCreateExplorer = function hkCreateExplorer() {
+window.hkCreateExplorer = function() {
 
   var Hk = window.Hk;
   var hk = window.hk;
@@ -161,6 +161,11 @@ window.hkCreateExplorer = function hkCreateExplorer() {
 	  window.hk.Explorer.log('[HkPublic][ERROR]Fehler bei der Finalisierung des Explorer-Fensters: '+ex);
 	}
   };
+	try {
+  window.initHkExplorer();
+	} catch(ex) {
+	  console.log('[HkPublic][ERROR]Fehler bei der HkExplorer-Initialisierung: ' + ex);
+	}
 }
 
 try {
@@ -185,11 +190,6 @@ window.waitHkExplorer = function(){
 	  window.hkCreateExplorer();
 	} catch(ex) {
 	  console.log('[HkPublic][ERROR]Fehler beim Erzeugen der Klassen für HkExplorer: ' + ex);
-	}
-	try {
-	  window.initHkExplorer();
-	} catch(ex) {
-	  console.log('[HkPublic][ERROR]Fehler bei der HkExplorer-Initialisierung: ' + ex);
 	}
   }	else {
 	console.log('[HkPublic][DEBUG]HkExplorer wartet auf die Verfügbarkeit des Toolkits.');
