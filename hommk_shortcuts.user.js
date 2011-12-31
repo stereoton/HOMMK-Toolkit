@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkToolkit
-// @version       2011.12.30.23.30.550000
+// @version       2011.12.31.11.20.290000
 // @description   Werkzeugkasten für HOMMK
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -66,7 +66,7 @@ w.hkCreateClasses = function () {
 
   window.HkLogger = new Class({
 	log: function log(msg) {
-	  var $debug = this.hasOwnProperty('$debug') ? 0 : this.$debug;
+	  var $debug = this.hasOwnProperty('$debug') ? 1 : this.$debug;
 	  if($debug > 1) {
 		alert(msg);
 	  } else if($debug < 1 || undefined == typeof console || "undefined" == typeof console) {
@@ -81,7 +81,7 @@ w.hkCreateClasses = function () {
   window.Hk = new Class({
 	$debug: 1,
 	idScript: "HkToolkit",
-	version: "2011.12.30.23.30.550000",
+	version: "2011.12.31.11.20.290000",
 	Coords: {
 	  lastRegion: {
 		x: 0,
@@ -321,7 +321,7 @@ w.hkCreateClasses = function () {
    *	clearStorage
    */
   Hk.HkStorage = new Class({
-	'$debug': 0,
+	'$debug': 1,
 	'storageKey': "HkStorage" + window.hk.PlayerId + "" + window.hk.WorldId,
 	options: {
 	  'storageKey': "HkStorage" + window.hk.PlayerId + "" + window.hk.WorldId,
@@ -410,7 +410,7 @@ w.hkCreateClasses = function () {
   };
 
   Hk.HkReducer = new Class({
-	$debug: 0,
+	$debug: 1,
 	options: {
 	  'onTargetVisible': Class.empty,
 	  'onTargetReduced': Class.empty,
