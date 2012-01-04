@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkExplorer
-// @version       2011.12.31.20.03.540000
+// @version       2011.12.31.20.07.410000
 // @description   Explorer für HkToolkit
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -37,7 +37,7 @@ if(!w.hasOwnProperty("isGoogleChromeUA")) {
  * Page Scrope Runner für Google Chrome wegen fehlendem @require-Support, siehe
  * http://www.chromium.org/developers/design-documents/user-scripts
  */
-if(w.isGoogleChromeUA() && !$type(__HKEXP_PAGE_SCOPE_RUN__)) {
+if(w.isGoogleChromeUA() && 'undefined' == typeof __HKU_PAGE_SCOPE_RUN__) {
   (function page_scope_runner() {
     // If we're _not_ already running in the page, grab the full source
     // of this script.
