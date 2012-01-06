@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkToolkit
-// @version       2012.01.06.14.02.270000
+// @version       2012.01.06.14.17.430000
 // @description   Werkzeugkasten für HOMMK
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -81,7 +81,7 @@ w.hkCreateClasses = function () {
   window.Hk = new Class({
 	$debug: 1,
 	idScript: "HkToolkit",
-	version: "2012.01.06.14.02.270000",
+	version: "2012.01.06.14.17.430000",
 	Coords: {
 	  lastRegion: {
 		x: 0,
@@ -530,7 +530,7 @@ w.hkCreateClasses = function () {
 			hkWindowId: id,
 			onComplete: function(evt) {
 			  window.hk.log('[HkWindow][DEBUG]Drag Complete Event an ' + this.options.hkWindowId);
-			  if(this.options.hkWindow.saveWindowPosition.attempt([this.options.hkWindowId, this.options.hkWindow.options], windowNode.hkWindow)) {
+			  if(this.options.hkWindow.saveWindowPosition(this.options.hkWindowId, this.options.hkWindow.options)) {
 				window.hk.log('[HkWindow][DEBUG]Drag Event Handler saveWindowPosition fehlgeschlagen für ' + windowNode.hkWindowId);
 			  }
 			}
@@ -592,7 +592,7 @@ w.hkCreateClasses = function () {
 	  var key = "WindowPosition" + wid;
 	  var win = $(wid);
 	  window.hk.log(win);
-	  if(!$defined(win)) return null;
+	  if(!$defined(win)) return false;
 	  var pos = this.getWindowPosition(id, options);
 	  window.hk.log('[HkWindow][DEBUG]Speichere Fensterposition für  ' + key + ': ' + Json.toString(pos));
 	  this.storage.push(key, pos);
