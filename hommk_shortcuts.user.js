@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkToolkit
-// @version       2012.01.06.10.48.190000
+// @version       2012.01.06.11.01.010000
 // @description   Werkzeugkasten für HOMMK
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -81,7 +81,7 @@ w.hkCreateClasses = function () {
   window.Hk = new Class({
 	$debug: 1,
 	idScript: "HkToolkit",
-	version: "2012.01.06.10.48.190000",
+	version: "2012.01.06.11.01.010000",
 	Coords: {
 	  lastRegion: {
 		x: 0,
@@ -515,6 +515,7 @@ w.hkCreateClasses = function () {
 		'class': "HkWindow",
 		'styles': this.options.windowStyles
 	  });
+	  windowNode.hkWindow = this;
 	  if(this.options.createContentContainer) {
 		var contentNode = this.createContentContainer(id, options);
 	  }
@@ -556,7 +557,6 @@ w.hkCreateClasses = function () {
 //		if(this.options.scrollable) this.makeScrollable();
 		this.windows.push(windowNode);
 	  }
-	  windowNode.hkWindow = this;
 	  this.loadWindowPosition(id, options);
 	  return windowNode;
 	},
@@ -846,6 +846,8 @@ w.hkCreateClasses = function () {
   });
   if(hk.Storage.Shortcuts.isEmpty()) {
 	var oldShortcutsStorage = new Hk.HkStorage(window.hk.idScript + "HkShortcuts" + window.hk.WorldId);
+	oldShortcutsStorage.drop("WindowPositionHkWindowHkShortcuts");
+	oldShortcutsStorage.drop("WindowPositionHkWindowHkExplorer");
 	var oldShortcutsData = oldShortcutsStorage.getStorageData();
 	hk.Storage.Shortcuts.setStorageData(oldShortcutsData);
   }
