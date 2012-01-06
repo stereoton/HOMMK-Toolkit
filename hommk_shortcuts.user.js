@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkToolkit
-// @version       2012.01.06.14.17.430000
+// @version       2012.01.06.14.21.250000
 // @description   Werkzeugkasten für HOMMK
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -81,7 +81,7 @@ w.hkCreateClasses = function () {
   window.Hk = new Class({
 	$debug: 1,
 	idScript: "HkToolkit",
-	version: "2012.01.06.14.17.430000",
+	version: "2012.01.06.14.21.250000",
 	Coords: {
 	  lastRegion: {
 		x: 0,
@@ -500,6 +500,7 @@ w.hkCreateClasses = function () {
 	  this.setOptions(options);
 	  this.options.scrollers.up = this.scrollUp;
 	  this.options.scrollers.down = this.scrollDown;
+	  this.storage = this;
 	},
 	createWindow: function createWindow(id, options) {
 	  this.setOptions(options);
@@ -589,10 +590,10 @@ w.hkCreateClasses = function () {
 	},
 	saveWindowPosition: function saveWindowPosition(id, options) {
 	  var wid = this.getWindowId(id, options);
-	  var key = "WindowPosition" + wid;
 	  var win = $(wid);
 	  window.hk.log(win);
 	  if(!$defined(win)) return false;
+	  var key = "WindowPosition" + wid;
 	  var pos = this.getWindowPosition(id, options);
 	  window.hk.log('[HkWindow][DEBUG]Speichere Fensterposition für  ' + key + ': ' + Json.toString(pos));
 	  this.storage.push(key, pos);
@@ -797,9 +798,9 @@ w.hkCreateClasses = function () {
 	  }
 	}
   });
-  Hk.HkWindows.implement(new Events, new Options, new HkLogger); /*, new Hk.HkStorage({
+  Hk.HkWindows.implement(new Events, new Options, new HkLogger, new Hk.HkStorage({
 	'storageKey': 'HkWindowsInternal'
-  })); */
+  }));
 
   hk.Windows = new Hk.HkWindows();
 
