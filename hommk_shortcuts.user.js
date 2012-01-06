@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkToolkit
-// @version       2012.01.06.13.50.470000
+// @version       2012.01.06.14.02.270000
 // @description   Werkzeugkasten für HOMMK
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -81,7 +81,7 @@ w.hkCreateClasses = function () {
   window.Hk = new Class({
 	$debug: 1,
 	idScript: "HkToolkit",
-	version: "2012.01.06.13.50.470000",
+	version: "2012.01.06.14.02.270000",
 	Coords: {
 	  lastRegion: {
 		x: 0,
@@ -529,8 +529,7 @@ w.hkCreateClasses = function () {
 			hkWindow: this,
 			hkWindowId: id,
 			onComplete: function(evt) {
-			  window.hk.log('[HkWindow][DEBUG]Drag Complete Event an ' + this.options.hkWindowId + ': ');
-			  window.hk.log(evt);
+			  window.hk.log('[HkWindow][DEBUG]Drag Complete Event an ' + this.options.hkWindowId);
 			  if(this.options.hkWindow.saveWindowPosition.attempt([this.options.hkWindowId, this.options.hkWindow.options], windowNode.hkWindow)) {
 				window.hk.log('[HkWindow][DEBUG]Drag Event Handler saveWindowPosition fehlgeschlagen für ' + windowNode.hkWindowId);
 			  }
@@ -549,17 +548,16 @@ w.hkCreateClasses = function () {
 	  windowNode.adopt(footer);
 	  if(this.options.addToDOM) {
 		$('MainContainer').adopt(windowNode);
-		this.loadWindowPosition(id, options);
-//		if(this.options.reduceable) this.makeReduceable();
-//		if(this.options.scrollable) this.makeScrollable();
 		this.windows.push(windowNode);
 	  }
-//	  windowNode.hkWindow = this;
+	  this.loadWindowPosition(id, options);
 	  return windowNode;
 	},
 	getWindowPosition: function getWindowPosition(id, options) {
 	  var wid = this.getWindowId(id, options);
-	  var pos = $(wid).getPosition();
+	  var win = $(wid);
+	  if(!$defined(win)) return null;
+	  var pos = win.getPosition();
 	  window.hk.log('[HkWindow][DEBUG]Abgerufene Fensterposition für  ' + wid + ': ' + Json.toString(pos));
 	  return pos;
 	},
@@ -567,7 +565,9 @@ w.hkCreateClasses = function () {
 	  var wid = this.getWindowId(id, options);
 	  window.hk.log('[HkWindow][DEBUG]Setze Fensterposition für  ' + wid + ': ' + Json.toString(pos));
 	  if("undefined" == typeof pos || !pos || !pos.hasOwnProperty('x') || !pos.hasOwnProperty('y')) return;
-	  $(wid).setStyles({
+	  var win = $(wid);
+	  if(!$defined(win)) return;
+	  win.setStyles({
 		'top': pos.y,
 		'left': pos.x
 	  });
@@ -578,7 +578,7 @@ w.hkCreateClasses = function () {
 	  var win = $(wid);
 	  window.hk.log(win);
 	  window.hk.log(win.attributes);
-	  if(win == null) return;
+	  if(!$defined(win)) return;
 	  var key = "WindowPosition" + wid;
 	  var pos = this.storage.pull(key);
 	  window.hk.log('[HkWindow][DEBUG]Geladene Fensterposition für  ' + key + ': ' + Json.toString(pos));
@@ -592,6 +592,7 @@ w.hkCreateClasses = function () {
 	  var key = "WindowPosition" + wid;
 	  var win = $(wid);
 	  window.hk.log(win);
+	  if(!$defined(win)) return null;
 	  var pos = this.getWindowPosition(id, options);
 	  window.hk.log('[HkWindow][DEBUG]Speichere Fensterposition für  ' + key + ': ' + Json.toString(pos));
 	  this.storage.push(key, pos);
