@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkToolkit
-// @version       2012.01.06.09.34.590000
+// @version       2012.01.06.09.37.000000
 // @description   Werkzeugkasten für HOMMK
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -81,7 +81,7 @@ w.hkCreateClasses = function () {
   window.Hk = new Class({
 	$debug: 1,
 	idScript: "HkToolkit",
-	version: "2012.01.06.09.34.590000",
+	version: "2012.01.06.09.37.000000",
 	Coords: {
 	  lastRegion: {
 		x: 0,
@@ -456,6 +456,7 @@ w.hkCreateClasses = function () {
 	$debug: 1,
 	storage: window.hk.Storage.Common,
 	windows: [],
+	id: 'HkWindow',
 	options: {
 	  'id': 'HkWindow',
 	  'reduceable': true,
@@ -497,8 +498,12 @@ w.hkCreateClasses = function () {
 	  this.options.scrollers.up = this.scrollUp;
 	  this.options.scrollers.down = this.scrollDown;
 	},
-	createWindow: function createWindow(id, options) {
+	setWindowParameters: function setWindowParameters(id, options) {
 	  this.setOptions(options);
+	  this.id = id;
+	},
+	createWindow: function createWindow(id, options) {
+	  this.setWindowParameters(id, options);
 	  var windowId = this.getWindowId(id, options);
 	  var windowNode = new Element("div", {
 		'id': windowId,
@@ -524,9 +529,10 @@ w.hkCreateClasses = function () {
 			handle: headerNode,
 			onComplete: function(evt) {
 			  window.hk.log("DraggingComplete Event:");
-			  window.hk.log(id);
+			  window.hk.log("Dragged Window Id: " + id);
+			  window.hk.log("Dragged Window Target Id: " + evt.hkWindows.id);
 			  window.hk.log(options);
-			  evt.hkWindow.saveWindowPosition(id, options);
+			  evt.hkWindow.saveWindowPosition(evt.hkWindows.id, evt.hkWindow.options);
 			}
 		  });
 		}
