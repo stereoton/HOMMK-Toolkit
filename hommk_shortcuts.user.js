@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkToolkit
-// @version       2012.01.06.08.51.510000
+// @version       2012.01.06.09.26.090000
 // @description   Werkzeugkasten für HOMMK
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -81,7 +81,7 @@ w.hkCreateClasses = function () {
   window.Hk = new Class({
 	$debug: 1,
 	idScript: "HkToolkit",
-	version: "2012.01.06.08.51.510000",
+	version: "2012.01.06.09.26.090000",
 	Coords: {
 	  lastRegion: {
 		x: 0,
@@ -523,6 +523,8 @@ w.hkCreateClasses = function () {
 		  new Drag.Move(windowNode, {
 			handle: headerNode,
 			onComplete: function(evt) {
+			  window.hk.log("DraggingComplete Event:");
+			  window.hk.log(evt);
 			  this.saveWindowPosition(id, options);
 			}
 		  });
@@ -543,6 +545,7 @@ w.hkCreateClasses = function () {
 //		if(this.options.scrollable) this.makeScrollable();
 		this.windows.push(windowNode);
 	  }
+	  windowNode.hkWindow = this;
 	  this.loadWindowPosition(id, options);
 	  return windowNode;
 	},
