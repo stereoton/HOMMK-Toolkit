@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkToolkit
-// @version       2012.01.06.14.28.350000
+// @version       2012.01.06.14.34.360000
 // @description   Werkzeugkasten für HOMMK
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -81,7 +81,7 @@ w.hkCreateClasses = function () {
   window.Hk = new Class({
 	$debug: 1,
 	idScript: "HkToolkit",
-	version: "2012.01.06.14.28.350000",
+	version: "2012.01.06.14.34.360000",
 	Coords: {
 	  lastRegion: {
 		x: 0,
@@ -456,9 +456,11 @@ w.hkCreateClasses = function () {
   });
   Hk.HkReducer.implement(new Events, new Options, new HkLogger);
 
+  hk.Storage.HkWindows = new Hk.HkStorage({'storageKey': 'HkWindowsInternal'});
+
   Hk.HkWindows = new Class({
 	$debug: 1,
-//	storage: window.hk.Storage.Common,
+	storage: window.hk.Storage.HkWindows,
 	windows: [],
 	options: {
 	  'id': 'HkWindow',
@@ -500,7 +502,6 @@ w.hkCreateClasses = function () {
 	  this.setOptions(options);
 	  this.options.scrollers.up = this.scrollUp;
 	  this.options.scrollers.down = this.scrollDown;
-//	  this.storage = this;
 	},
 	createWindow: function createWindow(id, options) {
 	  this.setOptions(options);
@@ -581,8 +582,7 @@ w.hkCreateClasses = function () {
 	  window.hk.log(win.attributes);
 	  if(!$defined(win)) return;
 	  var key = "WindowPosition" + wid;
-//	  var pos = this.storage.pull(key);
-	  var pos = this.pull(key);
+	  var pos = this.storage.pull(key);
 	  window.hk.log('[HkWindow][DEBUG]Geladene Fensterposition für  ' + key + ': ' + Json.toString(pos));
 	  if(!pos || pos.length <= 0 || !pos.hasOwnProperty('x') || !pos.hasOwnProperty('y')) {
 		pos = this.saveWindowPosition(id, options);
@@ -597,8 +597,7 @@ w.hkCreateClasses = function () {
 	  var key = "WindowPosition" + wid;
 	  var pos = this.getWindowPosition(id, options);
 	  window.hk.log('[HkWindow][DEBUG]Speichere Fensterposition für  ' + key + ': ' + Json.toString(pos));
-//	  this.storage.push(key, pos);
-	  this.push(key, pos);
+	  this.storage.push(key, pos);
 	  return pos;
 	},
 	showScrollButtons: function showScrollButton(id, options) {
@@ -800,9 +799,7 @@ w.hkCreateClasses = function () {
 	  }
 	}
   });
-  Hk.HkWindows.implement(new Events, new Options, new HkLogger, new Hk.HkStorage({
-	'storageKey': 'HkWindowsInternal'
-  }));
+  Hk.HkWindows.implement(new Events, new Options, new HkLogger);
 
   hk.Windows = new Hk.HkWindows();
 
