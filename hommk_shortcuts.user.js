@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkToolkit
-// @version       2012.01.06.11.19.340000
+// @version       2012.01.06.11.24.130000
 // @description   Werkzeugkasten für HOMMK
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -81,7 +81,7 @@ w.hkCreateClasses = function () {
   window.Hk = new Class({
 	$debug: 1,
 	idScript: "HkToolkit",
-	version: "2012.01.06.11.19.340000",
+	version: "2012.01.06.11.24.130000",
 	Coords: {
 	  lastRegion: {
 		x: 0,
@@ -404,7 +404,6 @@ w.hkCreateClasses = function () {
 	}
   });
   Hk.HkStorage.implement(new Events, new Options, new HkLogger);
-  window.Hk.HkStorage = Hk.HkStorage;
 
   hk.Storage = {
 	Common: new Hk.HkStorage()
@@ -453,15 +452,10 @@ w.hkCreateClasses = function () {
   });
   Hk.HkReducer.implement(new Events, new Options, new HkLogger);
 
-  hk.Storage.HkWindows = new Hk.HkStorage({
-	  'storageKey': 'HkWindowsCommon'
-  });
-
   Hk.HkWindows = new Class({
 	$debug: 1,
-	storage: window.hk.Storage.HkWindows,
+	storage: window.hk.Storage.Common,
 	windows: [],
-	id: 'HkWindow',
 	options: {
 	  'id': 'HkWindow',
 	  'reduceable': true,
@@ -503,12 +497,8 @@ w.hkCreateClasses = function () {
 	  this.options.scrollers.up = this.scrollUp;
 	  this.options.scrollers.down = this.scrollDown;
 	},
-	setWindowParameters: function setWindowParameters(id, options) {
-	  this.setOptions(options);
-	  this.id = id;
-	},
 	createWindow: function createWindow(id, options) {
-	  this.setWindowParameters(id, options);
+	  this.setOptions(options);
 	  var windowId = this.getWindowId(id, options);
 	  var windowNode = new Element("div", {
 		'id': windowId,
