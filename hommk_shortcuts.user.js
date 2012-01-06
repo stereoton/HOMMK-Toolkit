@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkToolkit
-// @version       2012.01.06.17.30.410000
+// @version       2012.01.06.18.14.490000
 // @description   Werkzeugkasten für HOMMK
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -79,9 +79,9 @@ w.hkCreateClasses = function () {
   var HkLogger = window.HkLogger;
 
   window.Hk = new Class({
-	$debug: 0,
+	$debug: 1,
 	idScript: "HkToolkit",
-	version: "2012.01.06.17.30.410000",
+	version: "2012.01.06.18.14.490000",
 	Coords: {
 	  lastRegion: {
 		x: 0,
@@ -321,7 +321,7 @@ w.hkCreateClasses = function () {
    *	clearStorage
    */
   Hk.HkStorage = new Class({
-	$debug: 0,
+	$debug: 1,
 	storageKey: "HkStorage" + window.hk.PlayerId + "" + window.hk.WorldId,
 	options: {
 	  'storageKey': "HkStorage" + window.hk.PlayerId + "" + window.hk.WorldId,
@@ -427,7 +427,7 @@ w.hkCreateClasses = function () {
   };
 
   Hk.HkReducer = new Class({
-	$debug: 0,
+	$debug: 1,
 	options: {
 	  'onTargetVisible': Class.empty,
 	  'onTargetReduced': Class.empty,
@@ -472,7 +472,7 @@ w.hkCreateClasses = function () {
   hk.Storage.HkWindows = new Hk.HkStorage({'storageKey': 'HkWindowsInternal'});
 
   Hk.HkWindows = new Class({
-	$debug: 0,
+	$debug: 1,
 	storage: window.hk.Storage.HkWindows,
 	windows: [],
 	options: {
