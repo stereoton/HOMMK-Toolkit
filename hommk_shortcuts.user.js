@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkToolkit
-// @version       2012.01.06.12.09.500000
+// @version       2012.01.06.12.16.090000
 // @description   Werkzeugkasten für HOMMK
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -81,7 +81,7 @@ w.hkCreateClasses = function () {
   window.Hk = new Class({
 	$debug: 1,
 	idScript: "HkToolkit",
-	version: "2012.01.06.12.09.500000",
+	version: "2012.01.06.12.16.090000",
 	Coords: {
 	  lastRegion: {
 		x: 0,
@@ -380,6 +380,7 @@ w.hkCreateClasses = function () {
 	},
 	isEmpty: function isEmpty(key) {
 	  var data = this.getStorageData();
+	  this.log('[HkStorage][DEBUG]Prüfe Vorhandensein von Daten in #' + this.storageKey + ": " + Json.toString(data));
 	  return (data == null || data == {} || data.length <= 0);
 	},
 	getStorageData: function getStorageData() {
@@ -387,7 +388,6 @@ w.hkCreateClasses = function () {
 	  this.log('[HkStorage][DEBUG]Abgerufene Daten aus #' + this.storageKey + ": " + Json.toString(data));
 	  if(null == typeof data || !data) return {};
 	  data = Json.evaluate(data);
-	  this.log("[HkStorage.getStorageData][DEBUG]Evaluierte Daten aus Speicher: " + Json.toString(data));
 	  return data;
 	},
 	setStorageData: function setStorageData(data) {
