@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkToolkit
-// @version       2012.01.06.13.18.160000
+// @version       2012.01.06.13.29.240000
 // @description   Werkzeugkasten für HOMMK
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -81,7 +81,7 @@ w.hkCreateClasses = function () {
   window.Hk = new Class({
 	$debug: 1,
 	idScript: "HkToolkit",
-	version: "2012.01.06.13.18.160000",
+	version: "2012.01.06.13.29.240000",
 	Coords: {
 	  lastRegion: {
 		x: 0,
@@ -509,7 +509,6 @@ w.hkCreateClasses = function () {
 		'class': "HkWindow",
 		'styles': this.options.windowStyles
 	  });
-	  windowNode.setAttribute('hkWindow', this);
 	  if(this.options.createContentContainer) {
 		var contentNode = this.createContentContainer(id, options);
 	  }
@@ -521,6 +520,7 @@ w.hkCreateClasses = function () {
 		var updateButton = this.createUpdateButton(id, options);
 		windowNode.adopt(updateButton);
 	  }
+	  windowNode.hkWindow = this;
 	  if(this.options.createHeader) {
 		var headerNode = this.createHeader(id, options);
 		windowNode.adopt(headerNode);
@@ -528,10 +528,10 @@ w.hkCreateClasses = function () {
 		  new Drag.Move(windowNode, {
 			handle: headerNode,
 			onComplete: function(evt) {
-			  window.hk.log('[HkWindow][DEBUG]Drag Complete Event an ' + evt.hkWindow.id + ' (Target Id: ' + evt.hkWindow.id + '): ' + Json.toString(evt) + ":");
+			  window.hk.log('[HkWindow][DEBUG]Drag Complete Event an ' + windowNode.hkWindow.id + ' (Target Id: ' + windowNode.hkWindow.id + '): ' + Json.toString(evt) + ":");
 			  window.hk.log(evt);
-			  if(evt.hkWindow.saveWindowPosition.attempt([evt.hkWindow.id, evt.hkWindow.options], evt.hkWindow)) {
-				window.hk.log('[HkWindow][DEBUG]Drag Event Handler saveWindowPosition fehlgeschlagen für ' + evt.hkWindow.id);
+			  if(windowNode.hkWindow.saveWindowPosition.attempt([windowNode.hkWindow.id, windowNode.hkWindow.options], windowNode.hkWindow)) {
+				window.hk.log('[HkWindow][DEBUG]Drag Event Handler saveWindowPosition fehlgeschlagen für ' + windowNode.hkWindow.id);
 			  }
 			}
 		  });
