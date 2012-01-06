@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkExplorer
-// @version       2012.01.04.17.35.460000
+// @version       2012.01.06.08.45.350000
 // @description   Explorer für HkToolkit
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -126,9 +126,7 @@ window.hkCreateExplorer = function() {
 	  if($chk(window.HOMMK.worldMap.regionList)) {
 		var regs = window.HOMMK.worldMap.regionList.elementList;
 		var cities = $A(regs).filter(function(reg, idx) {
-		  window.hk.log(reg);
-		  window.hk.log(reg);
-		  if("undefined" != typeof reg) {
+		  if(reg && "undefined" != typeof reg.contents) {
 			return reg.contents.hasOwnProperty('cN');
 		  }
 		  return false;
