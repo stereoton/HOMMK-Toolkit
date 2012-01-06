@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkToolkit
-// @version       2012.01.06.13.40.370000
+// @version       2012.01.06.13.43.380000
 // @description   Werkzeugkasten für HOMMK
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -81,7 +81,7 @@ w.hkCreateClasses = function () {
   window.Hk = new Class({
 	$debug: 1,
 	idScript: "HkToolkit",
-	version: "2012.01.06.13.40.370000",
+	version: "2012.01.06.13.43.380000",
 	Coords: {
 	  lastRegion: {
 		x: 0,
@@ -528,13 +528,9 @@ w.hkCreateClasses = function () {
 			handle: headerNode,
 			hkWindow: this,
 			onComplete: function(evt) {
-			  window.hk.log(this);
-			  if($defined(this.options)) window.hk.log(this.options);
-			  if($defined(this.options.hkWindow)) window.hk.log(this.options.hkWindow);
-			  if($defined(this.hkWindow)) window.hk.log(this.hkWindow);
-			  window.hk.log('[HkWindow][DEBUG]Drag Complete Event an ' + windowNode.hkWindow.id + ' (Target Id: ' + windowNode.hkWindow.id + '): ' + Json.toString(evt) + ":");
+			  window.hk.log('[HkWindow][DEBUG]Drag Complete Event an ' + this.options.hkWindow.id + ' (Target Id: ' + this.options.hkWindow.options.id + '): ' + Json.toString(evt) + ":");
 			  window.hk.log(evt);
-			  if(windowNode.hkWindow.saveWindowPosition.attempt([windowNode.hkWindow.id, windowNode.hkWindow.options], windowNode.hkWindow)) {
+			  if(this.options.hkWindow.saveWindowPosition.attempt([this.options.hkWindow.id, this.options.hkWindow.options], windowNode.hkWindow)) {
 				window.hk.log('[HkWindow][DEBUG]Drag Event Handler saveWindowPosition fehlgeschlagen für ' + windowNode.hkWindow.id);
 			  }
 			}
