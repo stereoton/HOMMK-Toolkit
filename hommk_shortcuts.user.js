@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkToolkit
-// @version       2012.01.06.14.34.360000
+// @version       2012.01.06.14.55.350000
 // @description   Werkzeugkasten für HOMMK
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -66,7 +66,7 @@ w.hkCreateClasses = function () {
 
   window.HkLogger = new Class({
 	log: function log(msg) {
-	  var $debug = this.hasOwnProperty('$debug') ? 1 : this.$debug;
+	  var $debug = this.hasOwnProperty('$debug') ? 0 : this.$debug;
 	  if($debug > 1) {
 		alert(msg);
 	  } else if($debug < 1 || undefined == typeof console || "undefined" == typeof console) {
@@ -79,9 +79,9 @@ w.hkCreateClasses = function () {
   var HkLogger = window.HkLogger;
 
   window.Hk = new Class({
-	$debug: 1,
+	$debug: 0,
 	idScript: "HkToolkit",
-	version: "2012.01.06.14.34.360000",
+	version: "2012.01.06.14.55.350000",
 	Coords: {
 	  lastRegion: {
 		x: 0,
@@ -321,7 +321,7 @@ w.hkCreateClasses = function () {
    *	clearStorage
    */
   Hk.HkStorage = new Class({
-	$debug: 1,
+	$debug: 0,
 	storageKey: "HkStorage" + window.hk.PlayerId + "" + window.hk.WorldId,
 	options: {
 	  'storageKey': "HkStorage" + window.hk.PlayerId + "" + window.hk.WorldId,
@@ -342,14 +342,27 @@ w.hkCreateClasses = function () {
 	  }
 	},
 	drop: function drop(key) {
+	  window.hk.log('[HkStorage][DEBUG]Entferne ' + key + ' aus ' + this.storageKey);
 	  var data = this.getStorageData();
 	  if(data.hasOwnProperty(key)) {
 		var dropped = data[key];
 		delete data[key];
 		this.setStorageData(data);
 		return dropped;
+	  }	else {
+		window.hk.log('[HkStorage][INFO]Kein Eintrag ' + key + ' in ' + this.storageKey);
 	  }
 	  return false;
+	},
+	dropAll: function dropAll() {
+	  var storageData = this.pull();
+	  window.hk.log('[HkStorage][DEBUG]Entferne Daten aus ' + this.storageKey);
+	  if(storageData) {
+		$each(storageData, function(val, key) {
+		  window.hk.log('[HkStorage][DEBUG]Verarbeite ' + shortcutName);
+		  this.drop(shortcutName);
+		});
+	  }
 	},
 	push: function push(key, item) {
 	  if(arguments.length < 2) this.log('[HkStorage][DEBUG]Speichere Daten: ' + Json.toString(key));
@@ -414,7 +427,7 @@ w.hkCreateClasses = function () {
   };
 
   Hk.HkReducer = new Class({
-	$debug: 1,
+	$debug: 0,
 	options: {
 	  'onTargetVisible': Class.empty,
 	  'onTargetReduced': Class.empty,
@@ -459,7 +472,7 @@ w.hkCreateClasses = function () {
   hk.Storage.HkWindows = new Hk.HkStorage({'storageKey': 'HkWindowsInternal'});
 
   Hk.HkWindows = new Class({
-	$debug: 1,
+	$debug: 0,
 	storage: window.hk.Storage.HkWindows,
 	windows: [],
 	options: {
@@ -532,7 +545,7 @@ w.hkCreateClasses = function () {
 			hkWindowId: id,
 			onComplete: function(evt) {
 			  window.hk.log('[HkWindow][DEBUG]Drag Complete Event an ' + this.options.hkWindowId);
-			  if(this.options.hkWindow.saveWindowPosition(this.options.hkWindowId, this.options.hkWindow.options)) {
+			  if(!this.options.hkWindow.saveWindowPosition(this.options.hkWindowId, this.options.hkWindow.options)) {
 				window.hk.log('[HkWindow][DEBUG]Drag Event Handler saveWindowPosition fehlgeschlagen für ' + windowNode.hkWindowId);
 			  }
 			}
@@ -865,6 +878,7 @@ w.hkCreateClasses = function () {
    */
   Hk.HkShortcutsWindow = new Class({
 	$debug: 1,
+	$cleanStorage: 1,
 	$hkWin: false,
 	'inputStyles': {
 	  'valid': {
@@ -875,8 +889,37 @@ w.hkCreateClasses = function () {
 	  }
 	},
 	initialize: function initialize() {
+	  if(this.$debug == 1 && $cleanStorage == 1) {
+		window.hk.Storage.Shortcuts.$debug = 1;
+		window.hk.Storage.Common.$debug = 1;
+		window.hk.log('[HkShortcutsWindow][DEBUG]Leere Shortcut-Speicher...');
+		window.hk.Storage.Shortcuts.dropAll();
+	  }
 	  if(window.hk.Storage.Shortcuts.isEmpty()) {
 		window.hk.log('[HkShortcutsWindow][DEBUG]Shortcut-Speicher leer, versuche Migration...');
+		var storageData = window.hk.Storage.Common.pull();
+		window.hk.log('[HkShortcutsWindow][DEBUG]Migrationsdaten: ' + Json.toString(storageData));
+		if(storageData) {
+		  $each(storageData, function(shortcutData, shortcutName) {
+			window.hk.log('[HkShortcutsWindow][DEBUG]Verarbeite ' + shortcutName);
+			if(shortcutName != "WindowPositionHkWindowHkShortcuts" && shortcutName != "WindowPositionHkWindowHkExplorer") {
+			  window.hk.Storage.Shortcuts.push(shortcutName, shortcutData);
+			  window.hk.Storage.Common.drop(shortcutName);
+			} else {
+			  window.hk.Storage.Common.drop(shortcutName);
+			}
+		  });
+		}
+	  }
+	  window.hk.Storage.Shortcuts.addEvent("onStorageUpdate", this.updateShortcutList);
+	  this.$hkWin = window.hk.Windows.createWindow("HkShortcuts", {
+		'title': "HkShortcuts"
+	  });
+	  this.createContent(this.$hkWin, window.hk.Windows, window.hk.Storage.Shortcuts);
+	},
+	cleanStorage: function(storage) {
+	  if(storage.isEmpty()) {
+		window.hk.log('[HkShortcutsWindow][DEBUG]Leere Speicher #' + storage.options.storageKey);
 		var storageData = window.hk.Storage.Common.pull();
 		window.hk.log('[HkShortcutsWindow][DEBUG]Migrationsdaten: ' + Json.toString(storageData));
 		if(storageData) {
@@ -890,11 +933,6 @@ w.hkCreateClasses = function () {
 		  });
 		}
 	  }
-	  window.hk.Storage.Shortcuts.addEvent("onStorageUpdate", this.updateShortcutList);
-	  this.$hkWin = window.hk.Windows.createWindow("HkShortcuts", {
-		'title': "HkShortcuts"
-	  });
-	  this.createContent(this.$hkWin, window.hk.Windows, window.hk.Storage.Shortcuts);
 	},
 	loadCurrentPosition: function loadCurrentPosition() {
 	  window.hk.log('[HkShortcutsWindow][DEBUG]Lade Shortcut...');
