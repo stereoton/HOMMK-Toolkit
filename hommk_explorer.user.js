@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkExplorer
-// @version       2012.01.06.08.45.350000
+// @version       2012.01.06.09.25.570000
 // @description   Explorer für HkToolkit
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
