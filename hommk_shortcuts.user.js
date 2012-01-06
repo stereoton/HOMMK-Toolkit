@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkToolkit
-// @version       2012.01.06.10.13.450000
+// @version       2012.01.06.10.21.410000
 // @description   Werkzeugkasten für HOMMK
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -81,7 +81,7 @@ w.hkCreateClasses = function () {
   window.Hk = new Class({
 	$debug: 1,
 	idScript: "HkToolkit",
-	version: "2012.01.06.10.13.450000",
+	version: "2012.01.06.10.21.410000",
 	Coords: {
 	  lastRegion: {
 		x: 0,
@@ -406,7 +406,9 @@ w.hkCreateClasses = function () {
   Hk.HkStorage.implement(new Events, new Options, new HkLogger);
 
   hk.Storage = {
-	Common: new Hk.HkStorage()
+	Common: new Hk.HkStorage({
+	  'storageKey': 'HkToolkitCommon'
+	})
   };
 
   Hk.HkReducer = new Class({
@@ -452,9 +454,13 @@ w.hkCreateClasses = function () {
   });
   Hk.HkReducer.implement(new Events, new Options, new HkLogger);
 
+  hk.Storage.HkWindows = new Hk.HkStorage({
+	  'storageKey': 'HkWindowsCommon'
+  });
+
   Hk.HkWindows = new Class({
 	$debug: 1,
-	storage: window.hk.Storage.Common,
+	storage: window.hk.Storage.HkWindows,
 	windows: [],
 	id: 'HkWindow',
 	options: {
@@ -789,7 +795,9 @@ w.hkCreateClasses = function () {
 	  }
 	}
   });
-  Hk.HkWindows.implement(new Events, new Options, new HkLogger);
+  Hk.HkWindows.implement(new Events, new Options, new HkLogger, new HkStorage({
+	'storageKey': 'HkWindowsInternal'
+  }));
 
   hk.Windows = new Hk.HkWindows();
 
