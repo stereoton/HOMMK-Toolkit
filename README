@@ -19,7 +19,7 @@ Die Technik. Im Gegensatz zu fast allen anderen Erweiterungsskripten für MMHK g
 Was ist geplant?
 
 - Auftrennung des Skripts in den "Core"-Teil und zusätzliche Erweiterungen, sodass Du dir den Funktionsumfang des Toolkits frei zusammenstellen kannst.
-- Allgemeine Verbesserungen der Nutzerschnittstelle, z.B. Speichern und Wiederherstellung der Fensterpositionen beim Neuladen.
+- Allgemeine Verbesserungen der Nutzerschnittstelle, z.B. Speichern und Wiederherstellung des Fensterzustands beim Neuladen.
 - Integration mit anderen Skripten durch "Andocken" an die Menüs von HOMMK GOLD und dem "klassischen" HOMMK-Userscript, falls Du eins oder mehrere davon parallel verwendest.
 
 Mit Ideen zu Erweiterungen, Anregungen und Änderungsvorschlägen kannst Du dich immer gerne an mich wenden.
