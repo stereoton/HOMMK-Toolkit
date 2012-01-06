@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkToolkit
-// @version       2012.01.06.13.29.240000
+// @version       2012.01.06.13.35.180000
 // @description   Werkzeugkasten für HOMMK
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -81,7 +81,7 @@ w.hkCreateClasses = function () {
   window.Hk = new Class({
 	$debug: 1,
 	idScript: "HkToolkit",
-	version: "2012.01.06.13.29.240000",
+	version: "2012.01.06.13.35.180000",
 	Coords: {
 	  lastRegion: {
 		x: 0,
@@ -520,14 +520,19 @@ w.hkCreateClasses = function () {
 		var updateButton = this.createUpdateButton(id, options);
 		windowNode.adopt(updateButton);
 	  }
-	  windowNode.hkWindow = this;
 	  if(this.options.createHeader) {
 		var headerNode = this.createHeader(id, options);
 		windowNode.adopt(headerNode);
 		if(this.options.draggable) {
 		  new Drag.Move(windowNode, {
 			handle: headerNode,
+			hkWindow: this,
 			onComplete: function(evt) {
+			  window.hk.log(hkWindow);
+			  window.hk.log(this);
+			  window.hk.log(this.options);
+			  window.hk.log(this.options.hkWindow);
+			  window.hk.log(this.hkWindow);
 			  window.hk.log('[HkWindow][DEBUG]Drag Complete Event an ' + windowNode.hkWindow.id + ' (Target Id: ' + windowNode.hkWindow.id + '): ' + Json.toString(evt) + ":");
 			  window.hk.log(evt);
 			  if(windowNode.hkWindow.saveWindowPosition.attempt([windowNode.hkWindow.id, windowNode.hkWindow.options], windowNode.hkWindow)) {
