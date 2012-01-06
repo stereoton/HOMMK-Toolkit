@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkToolkit
-// @version       2011.12.31.17.40.390000
+// @version       2012.01.06.08.51.510000
 // @description   Werkzeugkasten für HOMMK
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -81,7 +81,7 @@ w.hkCreateClasses = function () {
   window.Hk = new Class({
 	$debug: 1,
 	idScript: "HkToolkit",
-	version: "2011.12.31.17.40.390000",
+	version: "2012.01.06.08.51.510000",
 	Coords: {
 	  lastRegion: {
 		x: 0,
@@ -321,8 +321,8 @@ w.hkCreateClasses = function () {
    *	clearStorage
    */
   Hk.HkStorage = new Class({
-	'$debug': 1,
-	'storageKey': "HkStorage" + window.hk.PlayerId + "" + window.hk.WorldId,
+	$debug: 1,
+	storageKey: "HkStorage" + window.hk.PlayerId + "" + window.hk.WorldId,
 	options: {
 	  'storageKey': "HkStorage" + window.hk.PlayerId + "" + window.hk.WorldId,
 	  'clearStorage': false
@@ -521,7 +521,10 @@ w.hkCreateClasses = function () {
 		windowNode.adopt(headerNode);
 		if(this.options.draggable) {
 		  new Drag.Move(windowNode, {
-			handle: headerNode
+			handle: headerNode,
+			onComplete: function(evt) {
+			  this.saveWindowPosition(id, options);
+			}
 		  });
 		}
 	  }
@@ -540,7 +543,34 @@ w.hkCreateClasses = function () {
 //		if(this.options.scrollable) this.makeScrollable();
 		this.windows.push(windowNode);
 	  }
+	  this.loadWindowPosition(id, options);
 	  return windowNode;
+	},
+	getWindowPosition: function getWindowPosition(id, options) {
+	  var win = $(this.getWindowId(id, options));
+	  return win.getPosition();
+	},
+	setWindowPosition: function setWindowPosition(pos, id, options) {
+	  if("undefined" == typeof pos || !pos || !pos.hasOwnProperty('x') || !pos.hasOwnProperty('y')) return;
+	  var win = $(this.getWindowId(id, options));
+	  win.setStyles({
+		'top': pos.y,
+		'left': pos.x
+	  });
+	},
+	loadWindowPosition: function loadWindowPosition(id, options) {
+	  var key = "WindowPosition" + this.getWindowId(id, options);
+	  var pos = this.storage.pull(key);
+	  if(!pos || pos.length <= 0) {
+		pos = this.saveWindowPosition(id, options);
+	  }
+	  this.setWindowPosition(pos, id, options);
+	},
+	saveWindowPosition: function saveWindowPosition(id, options) {
+	  var key = "WindowPosition" + this.getWindowId(id, options);
+	  var pos = this.getWindowPosition();
+	  this.storage.push(key, pos);
+	  return pos;
 	},
 	showScrollButtons: function showScrollButton(id, options) {
 
