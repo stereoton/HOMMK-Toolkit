@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkToolkit
-// @version       2012.01.06.19.09.370000
+// @version       2012.01.06.19.13.200000
 // @description   Werkzeugkasten für HOMMK
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -81,7 +81,7 @@ w.hkCreateClasses = function () {
   window.Hk = new Class({
 	$debug: 0,
 	idScript: "HkToolkit",
-	version: "2012.01.06.19.09.370000",
+	version: "2012.01.06.19.13.200000",
 	Coords: {
 	  lastRegion: {
 		x: 0,
@@ -894,7 +894,7 @@ w.hkCreateClasses = function () {
 		window.hk.Storage.Common.$debug = 1;
 		window.hk.$debug = 1;
 	  }
-	  if(this.$debug == 1 && this.$cleanStorage == 1) {
+	  if(this.$cleanStorage == 1 && !window.hk.Storage.Common.isEmpty()) {
 		window.hk.log('[HkShortcutsWindow][DEBUG]Leere Shortcut-Speicher...');
 		window.hk.Storage.Shortcuts.dropAll();
 	  }
