@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkToolkit
-// @version       2012.01.06.09.44.530000
+// @version       2012.01.06.09.52.010000
 // @description   Werkzeugkasten für HOMMK
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -81,7 +81,7 @@ w.hkCreateClasses = function () {
   window.Hk = new Class({
 	$debug: 1,
 	idScript: "HkToolkit",
-	version: "2012.01.06.09.44.530000",
+	version: "2012.01.06.09.52.010000",
 	Coords: {
 	  lastRegion: {
 		x: 0,
@@ -556,13 +556,16 @@ w.hkCreateClasses = function () {
 	  return windowNode;
 	},
 	getWindowPosition: function getWindowPosition(id, options) {
-	  var win = $(this.getWindowId(id, options));
-	  return win.getPosition();
+	  var wid = this.getWindowId(id, options);
+	  var pos = $(wid).getPosition();
+	  window.hk.log('[HkWindow][DEBUG]Abgerufene Fensterposition für  ' + wid + ': ' + Json.toString(pos));
+	  return pos;
 	},
 	setWindowPosition: function setWindowPosition(pos, id, options) {
+	  var wid = this.getWindowId(id, options);
+	  window.hk.log('[HkWindow][DEBUG]Setze Fensterposition für  ' + wid + ': ' + Json.toString(pos));
 	  if("undefined" == typeof pos || !pos || !pos.hasOwnProperty('x') || !pos.hasOwnProperty('y')) return;
-	  var win = $(this.getWindowId(id, options));
-	  win.setStyles({
+	  $(wid).setStyles({
 		'top': pos.y,
 		'left': pos.x
 	  });
@@ -570,6 +573,7 @@ w.hkCreateClasses = function () {
 	loadWindowPosition: function loadWindowPosition(id, options) {
 	  var key = "WindowPosition" + this.getWindowId(id, options);
 	  var pos = this.storage.pull(key);
+	  window.hk.log('[HkWindow][DEBUG]Geladene Fensterposition für  ' + key + ': ' + Json.toString(pos));
 	  if(!pos || pos.length <= 0) {
 		pos = this.saveWindowPosition(id, options);
 	  }
@@ -578,6 +582,7 @@ w.hkCreateClasses = function () {
 	saveWindowPosition: function saveWindowPosition(id, options) {
 	  var key = "WindowPosition" + this.getWindowId(id, options);
 	  var pos = this.getWindowPosition();
+	  window.hk.log('[HkWindow][DEBUG]Speichere Fensterposition für  ' + key + ': ' + Json.toString(pos));
 	  this.storage.push(key, pos);
 	  return pos;
 	},
