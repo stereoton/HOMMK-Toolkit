@@ -1,33 +1,56 @@
 Werkzeugkasten für HOMMK.
 
-Framework für Erweiterungen zu Might and Magic Heroes Kingdoms. Mitgeliefert wird derzeit die Erweiterung HkShortcuts zum Setzen von Links zu beliebigen Punkten auf der Karte.
+Framework für Erweiterungen zu Might and Magic Heroes Kingdoms. Mitgeliefert wird derzeit die Erweiterung HkShortcuts
+zum Setzen von Links zu beliebigen Punkten auf der Karte.
 
 Die aktuelle, stabile Version findest Du hier: http://userscripts.org/scripts/show/121763
 
-Bitte bedenke, dass die hier bei GitHub veröffentlichten Versionen unter Umständen nicht funktionieren. Um wieder eine funktionierende Version verwenden zu können, kannst Du die über GitHub installierte Version entfernen und die bei userscripts.org veröffentlichte Version neu installieren: http://userscripts.org/scripts/source/121763.user.js - alternativ kannst Du Dir die stabile Version auch hier unter Tags/STABLE gezippt oder als tarball herunterladen.
+Bitte bedenke, dass die hier bei GitHub veröffentlichten Versionen unter Umständen nicht funktionieren. Um wieder eine
+funktionierende Version verwenden zu können, kannst Du die über GitHub installierte Version entfernen und die bei
+userscripts.org veröffentlichte Version neu installieren: http://userscripts.org/scripts/source/121763.user.js -
+alternativ kannst Du Dir die stabile Version auch hier unter Tags/STABLE gezippt oder als tarball herunterladen.
 
 ---
 
 Was ist bei HkToolkit anders?
 
-Die Lizenz. Anders als die meisten anderen Userskripte für MMHK steht HkToolkit unter einer Open-Source-Lizenz. Es ist also frei im Sinne der Redefreiheit - und frei im Sinne von Freibier. Das Skript darf beliebig kopiert, verteilt und verändert werden. Wenn Du Verbesserungen oder Erweiterungen vornimmst, lass sie mir wieder zukommen. So profitieren wir alle von Deinen Bemühungen - und lernen voneinander. Es gibt nur wenig, das du nicht darfst: Das Skript mit fehlender oder einer falschen Urheberschaft kennzeichnen oder in dieser oder einer abgewandelten Form unter eine restriktivere Lizenz stellen - was frei ist, hat auch frei zu bleiben. Wenn Du das Skript oder Teile davon unter einer anderen Lizenz veröffentlichen willst und nicht genau weißt, was erlaubt ist - frage einfach nach. So ersparst Du dir und mir eine Menge Ärger…
+Die Lizenz. Anders als die meisten anderen Userskripte für MMHK steht HkToolkit unter einer Open-Source-Lizenz. Es ist
+also frei im Sinne der Redefreiheit - und frei im Sinne von Freibier. Das Skript darf beliebig kopiert, verteilt und
+verändert werden. Wenn Du Verbesserungen oder Erweiterungen vornimmst, lass sie mir wieder zukommen. So profitieren wir
+alle von Deinen Bemühungen - und lernen voneinander. Es gibt nur wenig, das du nicht darfst: Das Skript mit fehlender
+oder einer falschen Urheberschaft kennzeichnen oder in dieser oder einer abgewandelten Form unter eine restriktivere
+Lizenz stellen - was frei ist, hat auch frei zu bleiben. Wenn Du das Skript oder Teile davon unter einer anderen Lizenz
+veröffentlichen willst und nicht genau weißt, was erlaubt ist - frage einfach nach. So ersparst Du dir und mir eine
+Menge Ärger…
 
-Die Technik. Im Gegensatz zu fast allen anderen Erweiterungsskripten für MMHK greift HkToolkit weder auf Greasemonkey-Funktionen noch auf das "alte" unsafeWindow-Objekt zu. HkToolkit lädt auch keine großen "3th-Party-Frameworks" nach - stattdessen nutzen wir das, was Heroes uns von Haus aus mitliefert - Mootools 1.12 (http://docs111.mootools.net). Dadurch erreichen wir eine erheblich bessere Performance im Vergleich zu anderen Ansätzen. Außerdem wird verhindert, dass UBI es allzu einfach hat, die Verwendung des Skripts zu "tracken" - oder gleich ganz zu verhindern.
+Die Technik. Im Gegensatz zu fast allen anderen Erweiterungsskripten für MMHK greift HkToolkit weder auf
+Greasemonkey-Funktionen noch auf das "alte" unsafeWindow-Objekt zu. HkToolkit lädt auch keine großen
+"3th-Party-Frameworks" nach - stattdessen nutzen wir das, was Heroes uns von Haus aus mitliefert - Mootools 1.12
+(http://docs111.mootools.net). Dadurch erreichen wir eine erheblich bessere Performance im Vergleich zu anderen
+Ansätzen. Außerdem wird verhindert, dass UBI es allzu einfach hat, die Verwendung des Skripts zu "tracken" - oder
+gleich ganz zu verhindern.
 
 ---
 
 Was ist geplant?
 
-- Auftrennung des Skripts in den "Core"-Teil und zusätzliche Erweiterungen, sodass Du dir den Funktionsumfang des Toolkits frei zusammenstellen kannst.
-- Allgemeine Verbesserungen der Nutzerschnittstelle, z.B. Speichern und Wiederherstellung des Fensterzustands beim Neuladen.
-- Integration mit anderen Skripten durch "Andocken" an die Menüs von HOMMK GOLD und dem "klassischen" HOMMK-Userscript, falls Du eins oder mehrere davon parallel verwendest.
+- Auftrennung des Skripts in den "Core"-Teil und zusätzliche Erweiterungen, sodass Du dir den Funktionsumfang des
+Toolkits frei zusammenstellen kannst.
+- Allgemeine Verbesserungen der Nutzerschnittstelle, z.B. Speichern und Wiederherstellung des Fensterzustands beim
+Neuladen.
+- Integration mit anderen Skripten durch "Andocken" an die Menüs von HOMMK GOLD und dem "klassischen" HOMMK-Userscript,
+falls Du eins oder mehrere davon parallel verwendest.
 
 Mit Ideen zu Erweiterungen, Anregungen und Änderungsvorschlägen kannst Du dich immer gerne an mich wenden.
 
-Wenn Du einen Fehler findest, kannst Du mir hier eine Nachricht mit kurzer Beschreibung zukommen lassen: https://github.com/gelgamek/HOMMK-Toolkit/issues/new
+Wenn Du einen Fehler findest, kannst Du mir hier eine Nachricht mit kurzer Beschreibung zukommen lassen:
+https://github.com/gelgamek/HOMMK-Toolkit/issues/new
 
 Copyright: Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
 
 ---
 
-Achja :)... - Du kannst die Entwicklung auch unterstützen, indem Du einen beliebigen Betrag spendest - ich freue mich auch über Kleinbeträge: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=CWES782TQV38L! - Du solltest aber wissen, dass mir PayPal grundsätzlich von jeder Spende 0,35€ als Gebühr abzieht - Spenden unter 0,36€ gehen also komplett an PayPal... :/
+Achja :)... - Du kannst die Entwicklung auch unterstützen, indem Du einen beliebigen Betrag spendest - ich freue mich
+auch über Kleinbeträge: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=CWES782TQV38L! - Du
+solltest aber wissen, dass mir PayPal grundsätzlich von jeder Spende 0,35€ als Gebühr abzieht - Spenden unter 0,36€
+gehen also komplett an PayPal... :/
