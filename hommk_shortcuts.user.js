@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkToolkit
-// @version       2012.01.06.11.36.410000
+// @version       2012.01.06.11.54.440000
 // @description   Werkzeugkasten für HOMMK
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -81,7 +81,7 @@ w.hkCreateClasses = function () {
   window.Hk = new Class({
 	$debug: 1,
 	idScript: "HkToolkit",
-	version: "2012.01.06.11.36.410000",
+	version: "2012.01.06.11.54.440000",
 	Coords: {
 	  lastRegion: {
 		x: 0,
@@ -855,7 +855,7 @@ w.hkCreateClasses = function () {
    * Shortcuts @todo Auslagern
    */
   Hk.HkShortcutsWindow = new Class({
-	$debug: 0,
+	$debug: 1,
 	$hkWin: false,
 	'inputStyles': {
 	  'valid': {
@@ -866,6 +866,21 @@ w.hkCreateClasses = function () {
 	  }
 	},
 	initialize: function initialize() {
+	  if(window.hk.Storage.Shortcuts.isEmpty()) {
+		window.hk.log('[HkShortcutsWindow][DEBUG]Shortcut-Speicher leer, versuche Migration...');
+		var storageData = window.hk.Storage.Common.pull();
+		window.hk.log('[HkShortcutsWindow][DEBUG]Migrationsdaten: ' + Json.toString(storageData));
+		if(storageData) {
+		  $each(storageData, function(shortcutData, shortcutName) {
+			window.hk.log('[HkShortcutsWindow][DEBUG]Verarbeite ' + shortcutName);
+			if(shortcutName != "WindowPositionHkWindowHkShortcuts" && shortcutName != "WindowPositionHkWindowHkExplorer") {
+			  window.hk.Storage.Shortcuts.push(shortcutName, shortcutData);
+			} else {
+			  window.hk.Storage.Common.drop(shortcutName);
+			}
+		  });
+		}
+	  }
 	  window.hk.Storage.Shortcuts.addEvent("onStorageUpdate", this.updateShortcutList);
 	  this.$hkWin = window.hk.Windows.createWindow("HkShortcuts", {
 		'title': "HkShortcuts"
