@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkToolkit
-// @version       2012.01.06.10.21.410000
+// @version       2012.01.06.10.30.230000
 // @description   Werkzeugkasten für HOMMK
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -81,7 +81,7 @@ w.hkCreateClasses = function () {
   window.Hk = new Class({
 	$debug: 1,
 	idScript: "HkToolkit",
-	version: "2012.01.06.10.21.410000",
+	version: "2012.01.06.10.30.230000",
 	Coords: {
 	  lastRegion: {
 		x: 0,
@@ -406,9 +406,7 @@ w.hkCreateClasses = function () {
   Hk.HkStorage.implement(new Events, new Options, new HkLogger);
 
   hk.Storage = {
-	Common: new Hk.HkStorage({
-	  'storageKey': 'HkToolkitCommon'
-	})
+	Common: new Hk.HkStorage()
   };
 
   Hk.HkReducer = new Class({
@@ -842,7 +840,14 @@ w.hkCreateClasses = function () {
   });
   Hk.Shortcut.implement(new Options, new HkLogger);
 
-  hk.Storage.Shortcuts = new Hk.HkStorage(window.hk.idScript + "HkShortcuts" + window.hk.WorldId);
+  hk.Storage.Shortcuts = new Hk.HkStorage({
+	'storageKey': window.hk.idScript + "HkShortcuts" + window.hk.WorldId
+  });
+  if(hk.Storage.Shortcuts.isEmpty()) {
+	var oldShortcutsStorage = new Hk.HkStorage(window.hk.idScript + "HkShortcuts" + window.hk.WorldId);
+	var oldShortcutsData = oldShortcutsStorage.getStorageData();
+	hk.Storage.Shortcuts.setStorageData(oldShortcutsData);
+  }
 
   /**
    * Shortcuts @todo Auslagern
