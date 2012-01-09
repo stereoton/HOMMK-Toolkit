@@ -79,7 +79,7 @@ w.hkCreateClasses = function () {
   var HkLogger = window.HkLogger;
 
   window.Hk = new Class({
-	$debug: 0,
+	$debug: 1,
 	idScript: "HkToolkit",
 	version: "$VersionString$",
 	Coords: {
@@ -175,7 +175,19 @@ w.hkCreateClasses = function () {
   window.hk.Styles = {
 	'Shortcuts': {
 	  'list': {
-		'paddingBottom': '10px'
+		'paddingTop': '2px',
+		'paddingBottom': '2px',
+		'marginLeft': '0px',
+		'marginRight': '0px',
+		'marginTop': '0px',
+		'marginBottom': '0px',
+		'clear': 'both',
+		'float': 'none',
+		'backgroundColor': '#0e0e0e',
+		'height': 'auto',
+		'maxHeight': '800px',
+		'width': 'auto',
+		'maxWidth': '1200px'
 	  },
 	  'Form': {
 		'inputX': {
@@ -228,7 +240,7 @@ w.hkCreateClasses = function () {
 	  },
 	},
 	'window': {
-	  'zIndex': 95000,
+	  'zIndex': '95000',
 	  'margin': 'auto',
 	  'display': 'block',
 	  'position': 'absolute',
@@ -236,8 +248,7 @@ w.hkCreateClasses = function () {
 	  'left': 'auto',
 	  'bottom': 'auto',
 	  'right': 'auto',
-	  'width': '160px',
-	  'maxWidth': '320px',
+	  'width': 'auto',
 	  'height': 'auto',
 	  'backgroundColor': '#0e0e0e',
 	  'color': '#f2f2f2',
@@ -246,13 +257,14 @@ w.hkCreateClasses = function () {
 	},
 	'footer': {
 	  'clear': 'both',
-	  'marginTop': '2px',
+	  'float': 'none',
+	  'marginTop': '0px',
 	  'paddingTop': '3px',
 	  'paddingBottom': '0px',
 	  'marginBottom': '0px',
 	  'marginLeft': '0px',
 	  'marginRight': '0px',
-	  'height': '19px',
+	  'height': 'auto',
 	  'width': '100%',
 	  'backgroundColor': '#1a1a1a'
 	},
@@ -272,21 +284,33 @@ w.hkCreateClasses = function () {
 	  'cursor': 'pointer'
 	},
 	'content': {
-	  'height': 'auto',
 	  'margin': '0px',
-	  'paddingTop': '0px',
+	  'marginBottom': '0px',
+	  'paddingTop': '2px',
+	  'paddingBottom': '2px',
 	  'overflow': 'hidden',
-	  'maxHeight': '450px'
+	  'height': '48px',
+	  'minHeight': '32px',
+	  'maxHeight': '800px',
+	  'width': '160px',
+	  'minWidth': '120px',
+	  'maxWidth': '1200px'
 	},
 	'header': {
-	  'zIndex': 96000,
-	  'paddingBottom': '0px',
+	  'zIndex': '96000',
+	  'marginTop': '0px',
+	  'marginBottom': '5px',
+	  'paddingTop': '1px',
+	  'paddingBottom': '1px',
 	  'backgroundColor': '#1a1a1a'
 	},
 	'title': {
 	  'fontSize': "0.8em",
 	  'paddingLeft': '3px',
-	  'backgroundColor': '#1a1a1a'
+	  'backgroundColor': '#1a1a1a',
+	  'paddingBottom': '2px',
+	  'marginTop': '2px',
+	  'marginBottom': '2px'
 	},
 	'reduceButton': {
 	  'zIndex': 97000,
