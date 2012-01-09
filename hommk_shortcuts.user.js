@@ -126,7 +126,7 @@ w.hkCreateClasses = function () {
 		str += "Region #" + this.HOMMK.getRegionNumberFromXY(x, y);
 	  }
 	  window.hk.log(region);
-	  window.hk.log(this.HOMMK.worldMap);
+//	  window.hk.log(this.HOMMK.worldMap);
 	  return str;
 	},
 	fixPosition: function fixPosition(p) {
@@ -313,7 +313,7 @@ w.hkCreateClasses = function () {
 	  'marginBottom': '2px'
 	},
 	'reduceButton': {
-	  'zIndex': 97000,
+	  'zIndex': '97000',
 	  'cursor': 'pointer',
 	  'float': 'right',
 	  'width': '22px',
@@ -323,14 +323,26 @@ w.hkCreateClasses = function () {
 	  'backgroundImage': 'url("http://cgit.compiz.org/fusion/decorators/emerald/plain/defaults/theme/buttons.min.png")'
 	},
 	'updateLink': {
-	  'zIndex': 97000,
+	  'zIndex': '97000',
 	  'verticalAlign': 'middle',
 	  'float': 'right',
-	  'paddingTop': '3px'
+	  'paddingTop': '2px',
+	  'fontSize': '0px'
 	},
 	'updateButton': {
-	  'zIndex': 97000,
+	  'zIndex': '97000',
 	  'border': ' none'
+	},
+	'resizeButton': {
+	  'zIndex': '97000',
+	  'verticalAlign': 'middle',
+	  'float': 'right',
+	  'cursor': 'se-resize',
+	  'border': ' none',
+	  'width': '12px',
+	  'height': '12px',
+	  'backgroundPosition': '0px 0px',
+	  'backgroundImage': "url(http://openiconlibrary.sourceforge.net/gallery2/open_icon_library-full/icons_by_subject/graphics/png/32x32/cursor-corner-bottom-right.png)"
 	},
 	'closeButton': {}
   };
@@ -345,7 +357,7 @@ w.hkCreateClasses = function () {
    *	clearStorage
    */
   Hk.HkStorage = new Class({
-	$debug: 0,
+	$debug: 1,
 	storageKey: "HkStorage" + window.hk.PlayerId + "" + window.hk.WorldId,
 	options: {
 	  'storageKey': "HkStorage" + window.hk.PlayerId + "" + window.hk.WorldId,
@@ -452,43 +464,76 @@ w.hkCreateClasses = function () {
 
   Hk.HkReducer = new Class({
 	$debug: 1,
+	$status: null,
+	$default: "TargetVisible",
+	IS_REDUCED: "TargetReduced",
+	IS_VISIBLE: "TargetVisible",
 	options: {
-	  'onTargetVisible': Class.empty,
-	  'onTargetReduced': Class.empty,
 	  'duration': 500
 	},
 	initialize: function(toggle, target, options) {
 	  this.setOptions(options);
 	  this.toggle = toggle;
 	  this.target = target;
-	  this.toggle.slider = new Fx.Slide(this.target, this.options);
+	  var slideOptions = this.options;
+	  slideOptions.onChange = function(evt) {
+		this.log("[HkReducer][Event]Slider Change Event");
+		window.hk.log(evt);
+		this.fireEvent("onTargetChange", [this.toggle, this.target]);
+	  }.bind(this);
+	  slideOptions.onTick = function(evt) {
+		this.log("[HkReducer][Event]Slider Tick Event");
+		window.hk.log(evt);
+		this.fireEvent("onTargetStep", [this.toggle, this.target]);
+	  }.bind(this);
+	  slideOptions.onComplete = function(evt) {
+		this.log("[HkReducer][Event]Slider Complete Event");
+		window.hk.log(evt);
+		this.$status = (this.$status == this.IS_REDUCED) ? this.IS_VISIBLE : this.IS_REDUCED;
+		this.fireEvent("on" + this.$status, [this.toggle, this.target]);
+		this.updateDimensions(this.target);
+		this.fireEvent("onTargetComplete", [this.toggle, this.target]);
+	  }.bind(this);
+	  this.toggle.slider = new Fx.Slide(this.target, slideOptions);
 	  this.toggle.target = this.target;
 	  this.toggle.reducer = this;
 	  this.target.reducer = this;
 	  this.toggle.addEvent('click', this.toggleClicked.bind(this));
+	  // @todo letzten Zustand laden
+	  if(this.$status == null) this.$status = this.$default;
+	  this.log(this.toggle.slider);
+	  this.updateDimensions(this.target);
 	},
 	toggleClicked: function toggleClicked(evt) {
 	  var toggle = evt.target;
 	  var target = toggle.target;
 	  var slider = toggle.slider;
-	  var parent = target.getParent();
-	  if(parent.getStyle('height').toString().toInt() == 0) {
-		slider.slideIn().chain(this.updateDimensions(target)).chain(this.fireEvent("onTargetVisible", [toggle, target]));
-	  } else {
-		slider.slideOut().chain(this.updateDimensions(target)).chain(function() {
-		  this.fireEvent("onTargetReduced", [toggle, target])
-		}.bind(this));
+	  if(this.$status == this.IS_VISIBLE) {
+		slider.slideOut();
+	  }	else {
+		slider.slideIn();
 	  }
+//	  var parent = target.getParent();
+//	  if(parent.getStyle('height').toString().toInt() == 0) {
+//		slider.slideIn();
+//		this.updateDimensions(target);
+//		this.fireEvent("onTargetVisible", [toggle, target]);
+//	  } else {
+//		slider.slideOut();
+//		this.updateDimensions(target);
+//		this.fireEvent("onTargetReduced", [toggle, target]);
+//	  }
 	},
 	updateDimensions: function updateDimensions(target) {
+	  window.hk.log("[HkReducer][DEBUG]Slider Tick Event");
 	  var divs = target.getElementsByTagName("div");
 	  $each(divs, function(aDiv) {
 		var divHeight = $(aDiv).getStyle('height');
-		if($chk(divHeight) && divHeight.toInt() <= 0) {
+		if($chk(divHeight) && divHeight.toInt() <= 0 && divHeight != 'auto') {
 		  aDiv.setStyle('height', 'auto');
 		}
 	  });
-	  target.setStyle('height', 'auto');
+	  $$(target, target.getParent()).setStyle('height', 'auto');
 	}
   });
   Hk.HkReducer.implement(new Events, new Options, new HkLogger);
@@ -496,7 +541,7 @@ w.hkCreateClasses = function () {
   hk.Storage.HkWindows = new Hk.HkStorage({'storageKey': 'HkWindowsInternal'});
 
   Hk.HkWindows = new Class({
-	$debug: 0,
+	$debug: 1,
 	storage: window.hk.Storage.HkWindows,
 	windows: [],
 	options: {
@@ -504,12 +549,14 @@ w.hkCreateClasses = function () {
 	  'reduceable': true,
 	  'closeable': false,
 	  'draggable': true,
+	  'resizeable': true,
 	  'scrollable': true,
 	  'autoScroll': true,
 	  'title': 'HkWindow',
 	  'createHeader': true,
 	  'createTitle': true,
 	  'createContentContainer': true,
+	  'createDonateButton': false,
 	  'preventTextSelection': true,
 	  'addToDOM': true,
 	  'reduce': false,
@@ -527,6 +574,7 @@ w.hkCreateClasses = function () {
 	  'donateStyles': window.hk.Styles.donate,
 	  'scrollAreaStyles': window.hk.Styles.scrollArea,
 	  'scrollButtonStyles': window.hk.Styles.scrollButton,
+	  'resizeButtonStyles': window.hk.Styles.resizeButton,
 	  'headerStyles': window.hk.Styles.header,
 	  'titleStyles': window.hk.Styles.title,
 	  'reduceButtonStyles': window.hk.Styles.reduceButton,
@@ -551,14 +599,6 @@ w.hkCreateClasses = function () {
 	  if(this.options.createContentContainer) {
 		var contentNode = this.createContentContainer(id, options);
 	  }
-	  if(this.options.reduceable) {
-		var reduceButton = this.createReduceButton(id, options);
-		windowNode.adopt(reduceButton);
-	  }
-	  if(this.options.updateable) {
-		var updateButton = this.createUpdateButton(id, options);
-		windowNode.adopt(updateButton);
-	  }
 	  if(this.options.createHeader) {
 		var headerNode = this.createHeader(id, options);
 		windowNode.adopt(headerNode);
@@ -580,6 +620,11 @@ w.hkCreateClasses = function () {
 		windowNode.adopt(contentNode);
 	  }
 	  var footer = this.createFooter(id, options);
+	  if(this.options.resizeable) {
+		window.hk.log('[HkWindow][DEBUG]Erzeuge Resize-Button für ' + id);
+		var resizeButton = this.createResizeButton(id, options);
+		footer.adopt(resizeButton);
+	  }
 	  if(this.options.scrollable && !this.options.autoScroll) {
 		var scrollArea = this.createScrollArea(id, options);
 		footer.adopt(scrollArea);
@@ -587,51 +632,69 @@ w.hkCreateClasses = function () {
 	  windowNode.adopt(footer);
 	  if(this.options.addToDOM) {
 		$('MainContainer').adopt(windowNode);
+		if(this.options.resizeable) {
+		  this.makeResizeable(id, options, contentNode);
+		}
 		this.windows.push(windowNode);
 	  }
 	  this.loadWindowPosition(id, options);
 	  return windowNode;
 	},
+	getWindowNode: function getWindowNode(id, options) {
+	  window.hk.log('[HkWindow][DEBUG]Rufe Fenster-Knoten für ' + id);
+	  var win = $(this.getWindowId(id, options));
+	  return "undefined" == typeof win ? null : win;
+	},
+	getWindowData: function getWindowData(id, options, path) {
+//	  var win;
+//	  if((win = this.getWindowNode(id, options)) == null) return null;
+//	  return this.extract(path, win);
+	},
+	setWindowData: function setWindowData(id, options, path, values) {
+//	  var win;
+//	  if((win = this.getWindowNode(id, options)) == null) return null;
+//	  return this.intract(path, values, win);
+	},
 	getWindowPosition: function getWindowPosition(id, options) {
-	  var wid = this.getWindowId(id, options);
-	  var win = $(wid);
-	  if(!$defined(win)) return null;
+	  var win = this.getWindowNode(id, options);
+	  if(win == null) return null;
 	  var pos = win.getPosition();
-	  window.hk.log('[HkWindow][DEBUG]Abgerufene Fensterposition für  ' + wid + ': ' + Json.toString(pos));
+	  window.hk.log('[HkWindow][DEBUG]Abgerufene Fensterposition für  ' + win.id + ': ' + Json.toString(pos));
 	  return pos;
+//	  return this.getWindowData(id, options, "getPosition");
 	},
 	setWindowPosition: function setWindowPosition(pos, id, options) {
-	  var wid = this.getWindowId(id, options);
-	  window.hk.log('[HkWindow][DEBUG]Setze Fensterposition für  ' + wid + ': ' + Json.toString(pos));
-	  if("undefined" == typeof pos || !pos || !pos.hasOwnProperty('x') || !pos.hasOwnProperty('y')) return;
-	  var win = $(wid);
-	  if(!$defined(win)) return;
-	  win.setStyles({
+	  var win = this.getWindowNode(id, options);
+	  if(win == null) return null;
+	  window.hk.log('[HkWindow][DEBUG]Setze Fensterposition für  ' + win.id + ': ' + Json.toString(pos));
+	  if("undefined" == typeof pos || !pos || !('x' in pos) || !('y' in pos)) return null;
+	  var windowPosition = {
 		'top': pos.y,
 		'left': pos.x
-	  });
+	  };
+	  win.setStyles(windowPosition);
+	  return windowPosition;
+//	  return this.setWindowData(id, options, "setStyles", {
+//		'top': pos.y,
+//		'left': pos.x
+//	  });
 	},
 	loadWindowPosition: function loadWindowPosition(id, options) {
-	  window.hk.log(this);
-	  var wid = this.getWindowId(id, options);
-	  var win = $(wid);
-	  window.hk.log(win);
-	  window.hk.log(win.attributes);
-	  if(!$defined(win)) return;
-	  var key = "WindowPosition" + wid;
+	  var win = this.getWindowNode(id, options);
+	  if(win == null) return null;
+	  var key = "WindowPosition" + win.id;
 	  var pos = this.storage.pull(key);
 	  window.hk.log('[HkWindow][DEBUG]Geladene Fensterposition für  ' + key + ': ' + Json.toString(pos));
-	  if(!pos || pos.length <= 0 || !pos.hasOwnProperty('x') || !pos.hasOwnProperty('y')) {
+	  if("undefined" == typeof pos || !pos || !('x' in pos) || !('y' in pos)) {
 		pos = this.saveWindowPosition(id, options);
 	  }
 	  this.setWindowPosition(pos, id, options);
+	  return pos;
 	},
 	saveWindowPosition: function saveWindowPosition(id, options) {
-	  var wid = this.getWindowId(id, options);
-	  var win = $(wid);
-	  window.hk.log(win);
-	  if(!$defined(win)) return false;
-	  var key = "WindowPosition" + wid;
+	  var win;
+	  if((win = this.getWindowNode(id, options)) == null) return null;
+	  var key = "WindowPosition" + win.id;
 	  var pos = this.getWindowPosition(id, options);
 	  window.hk.log('[HkWindow][DEBUG]Speichere Fensterposition für  ' + key + ': ' + Json.toString(pos));
 	  this.storage.push(key, pos);
@@ -650,17 +713,20 @@ w.hkCreateClasses = function () {
 		'id': scrId,
 		'styles': this.options.footerStyles
 	  });
-	  var donate = new Element("form", {
-		'action': "https://www.paypal.com/cgi-bin/webscr",
-		'method': 'post',
-		'target': '_blank',
-		'alt': 'Unterstütze den Entwickler!',
-		'title': 'Unterstütze den Entwickler!',
-		'name': 'Unterstütze den Entwickler!',
-		'styles': this.options.donateStyles
-	  });
-	  donate.innerHTML = '<input type="hidden" name="cmd" value="_s-xclick"><input type="hidden" name="hosted_button_id" value="WRWUH9K7JBMBY"><input type="image" src="http://icons.iconarchive.com/icons/visualpharm/magnets/16/coins-icon.png" border="0" name="submit" title="Den Entwickler unterstützen!" name="Den Entwickler unterstützen!" alt="Den Entwickler unterstützen!"><img alt="" border="0" src="https://www.paypalobjects.com/de_DE/i/scr/pixel.gif" width="1" height="1">';
-	  footerNode.adopt(donate);
+	  // @todo in createWindow verschieben
+	  if(this.options.createDonateButton) {
+		var donate = new Element("form", {
+		  'action': "https://www.paypal.com/cgi-bin/webscr",
+		  'method': 'post',
+		  'target': '_blank',
+		  'alt': 'Unterstütze den Entwickler!',
+		  'title': 'Unterstütze den Entwickler!',
+		  'name': 'Unterstütze den Entwickler!',
+		  'styles': this.options.donateStyles
+		});
+		donate.innerHTML = '<input type="hidden" name="cmd" value="_s-xclick"><input type="hidden" name="hosted_button_id" value="WRWUH9K7JBMBY"><input type="image" src="http://icons.iconarchive.com/icons/visualpharm/magnets/16/coins-icon.png" border="0" name="submit" title="Den Entwickler unterstützen!" name="Den Entwickler unterstützen!" alt="Den Entwickler unterstützen!"><img alt="" border="0" src="https://www.paypalobjects.com/de_DE/i/scr/pixel.gif" width="1" height="1">';
+		footerNode.adopt(donate);
+	  }
 	  return footerNode;
 	},
 	createScrollArea: function createScrollArea(id, options) {
@@ -735,6 +801,14 @@ w.hkCreateClasses = function () {
 		'class': "HkWindowHeader",
 		'styles': this.options.headerStyles
 	  });
+	  if(this.options.reduceable) {
+		var reduceButton = this.createReduceButton(id, options);
+		headerNode.adopt(reduceButton);
+	  }
+	  if(this.options.updateable) {
+		var updateButton = this.createUpdateButton(id, options);
+		headerNode.adopt(updateButton);
+	  }
 	  if(this.options.createTitle) {
 		var titleNode = this.createTitle(id, options);
 		headerNode.adopt(titleNode);
@@ -761,16 +835,6 @@ w.hkCreateClasses = function () {
 	  }
 	  return titleNode;
 	},
-	createReduceButton: function createReduceButton(id, options) {
-	  this.setOptions(options);
-	  var reduceButton = new Element("div", {
-		'class': 'HkReduce HkButton',
-		'title': 'Einrollen',
-		'name': 'Einrollen',
-		'styles': this.options.reduceButtonStyles
-	  });
-	  return reduceButton;
-	},
 	createUpdateButton: function createUpdateButton(id, options) {
 	  this.setOptions(options);
 	  var updateLink = new Element("a", {
@@ -786,6 +850,7 @@ w.hkCreateClasses = function () {
 		'styles': this.options.updateButtonStyles
 	  });
 	  updateLink.adopt(updateButton);
+	  if(this.options.preventTextSelection) updateLink.preventTextSelection();
 	  return updateLink;
 	},
 	createCloseButton: function createCloseButton(id, options) {
@@ -799,22 +864,36 @@ w.hkCreateClasses = function () {
 	createContentContainer: function createContentContainer(id, options) {
 	  this.setOptions(options);
 	  var contentId = this.getId("HkWindowContent", id, options);
-	  return new Element("div", {
+	  var contentNode = new Element("div", {
 		'id': contentId,
 		'class': "HkContent",
 		'styles': this.options.contentStyles
 	  });
+	  if(this.options.preventTextSelection) contentNode.preventTextSelection();
+	  return contentNode;
 	},
 	makeScrollable: function makeScrollable(id, options) {
 	  this.setOptions(options);
 	  if(!this.options.scroll || !this.options.autoScroll) {
 		return;
 	  }
-	  window.hk.log('[HkShortcutsWindow][DEBUG]makeScrollable wird verarbeitet mit Scroll-Objekt:');
+//	  window.hk.log('[HkShortcutsWindow][DEBUG]makeScrollable wird verarbeitet mit Scroll-Objekt:');
 	  var scroll = $(this.options.scroll);
-	  window.hk.log(scroll);
+//	  window.hk.log(scroll);
 	  this.options.scroller = new Scroller(scroll);
 	  this.options.scroller.start();
+	},
+	createReduceButton: function createReduceButton(id, options) {
+	  this.setOptions(options);
+	  var reduceButton = new Element("div", {
+		'class': 'HkReduce HkButton',
+		'title': 'Einrollen',
+		'name': 'Einrollen',
+		'styles': this.options.reduceButtonStyles
+	  });
+	  reduceButton.setOpacity('0.8');
+	  if(this.options.preventTextSelection) reduceButton.preventTextSelection();
+	  return reduceButton;
 	},
 	makeReduceable: function makeReduceable(id, options) {
 	  this.setOptions(options);
@@ -830,10 +909,213 @@ w.hkCreateClasses = function () {
 	  });
 	  if(reduceButton && reduce) {
 		new Hk.HkReducer(reduceButton, reduce, {
-		  onTargetVisible: window.hk.log,
-		  onTargetHidden: window.hk.log
+//		  onTargetVisible: function(evt) {
+//			window.hk.log("[HkWindow][Event]HkReducer Target Visible Event");
+//			window.hk.log(evt);
+//		  },
+//		  onTargetStep: function(evt) {
+//			window.hk.log("[HkWindow][Event]HkReducer Target Step Event");
+//			window.hk.log(evt);
+//		  },
+//		  onTargetChange: function(evt) {
+//			window.hk.log("[HkWindow][Event]HkReducer Target Change Event");
+//			window.hk.log(evt);
+//		  },
+//		  onTargetComplete: function(evt) {
+//			window.hk.log("[HkWindow][Event]HkReducer Target Complete Event");
+//			window.hk.log(evt);
+//		  },
+//		  onTargetReduced: function(evt) {
+//			window.hk.log("[HkWindow][Event]HkReducer Target Reduced Event");
+//			window.hk.log(evt);
+//		  },
+		  hkWindowId: id,
+		  hkWindow: this
 		});
 	  }
+	},
+	createResizeButton: function createResizeButton(id, options) {
+	  var btnId = this.getId("HkWindowResize", id, options);
+	  var resizeNode = new Element("div", {
+		'id': btnId,
+		'class': 'HkWindowResizeButton',
+		'styles': this.options.resizeButtonStyles
+	  });
+	  if(this.options.preventTextSelection) resizeNode.preventTextSelection();
+	  return resizeNode;
+	},
+	makeResizeable: function makeResizeable(id, options, resizeElement) {
+	  this.setOptions(options);
+	  if(!this.options.resizeable) return;
+	  var btnId = this.getId("HkWindowResize", id, options);
+//	  var dpnNode = this.getId("HkWindowContent", id, options);
+	  resizeElement = $(($defined(resizeElement) ? resizeElement : this.getId("HkWindow", id, options)));
+	  this.resizeElement = $(resizeElement);
+	  window.hk.log('[HkWindow][DEBUG]Erzeuge Resizeable-Funktion via ' + btnId);
+	  new Drag.Base(resizeElement, {
+		handle: $(btnId),
+//		hkDependent: $(dpnNode),
+		hkResize: this.resizeElement,
+		hkWindow: this,
+		hkWindowId: id,
+		modifiers: {
+		  x: 'width',
+		  y: 'height'
+		},
+		onStart: function(evt) {
+		  window.hk.log('[HkWindow][Event]Resize Start Event an ' + this.options.hkWindowId);
+//		  if(this.options.hkWindow.options.reduceable) {
+//			window.hk.log('[HkWindow][DEBUG]Löse Höhenfestlegung durch Reduceable für ' + this.options.hkWindowId);
+//			var reduceable = evt.getParent();
+////			window.hk.log('[HkWindow][DEBUG]Reduceable-Stile: ' + JSON.toString(evt.getStyles()));
+//			if(reduceable.getStyle('overflow') == 'hidden' && reduceable.getStyle('height') != 'auto') {
+//			  reduceable.setStyle('height', 'auto');
+//			}
+//		  }
+		},
+		onDrag: function(evt) {
+		  window.hk.log('[HkWindow][Event]Resize Event an ' + this.options.hkWindowId);
+		},
+		onComplete: function(evt) {
+		  window.hk.log('[HkWindow][Event]Resize Complete Event an ' + this.options.hkWindowId);
+		  if(this.options.hkWindow.options.reduceable) {
+			window.hk.log('[HkWindow][DEBUG]Löse Höhenfestlegung durch Reduceable für ' + this.options.hkWindowId);
+			var reduceable = evt.getParent();
+//			window.hk.log('[HkWindow][DEBUG]Reduceable-Stile: ' + JSON.toString(evt.getStyles()));
+			if(reduceable.getStyle('overflow') == 'hidden' && reduceable.getStyle('height') != 'auto') {
+			  reduceable.setStyle('height', 'auto');
+			}
+		  }
+		  if(!this.options.hkWindow.saveWindowSize(this.options.hkWindowId, this.options.hkWindow.options)) {
+			window.hk.log('[HkWindow][WARN]Resize Event Handler saveWindowSize fehlgeschlagen für ' + this.options.hkWindowId);
+		  }
+		}
+	  });
+	},
+	getWindowSize: function getWindowSize(id, options) {
+	  var win = this.resizeElement || this.getWindowNode(id, options);
+	  if(win == null) return null;
+	  var size = win.getSize();
+	  window.hk.log('[HkWindow][DEBUG]Abgerufene Fenstergröße für  ' + win.id + ': ' + Json.toString(size));
+	  return size;
+//	  return this.getWindowData(id, options, "getPosition");
+	},
+	setWindowSize: function setWindowSize(size, id, options) {
+	  var win = this.resizeElement || this.getWindowNode(id, options);
+	  if(win == null) return null;
+	  window.hk.log('[HkWindow][DEBUG]Setze Fenstergröße für  ' + win.id + ': ' + Json.toString(size));
+	  if("undefined" == typeof size || !size || !('size' in size) || !('x' in size.size) || !('y' in size.size)) return null;
+	  var windowSize = {
+		'width': size.size.x,
+		'height': size.size.y
+	  };
+	  win.setStyles(windowSize);
+	  return windowSize;
+//	  return this.setWindowData(id, options, "setStyles", {
+//		'top': pos.y,
+//		'left': pos.x
+//	  });
+	},
+	loadWindowSize: function loadWindowSize(id, options) {
+	  var win = this.resizeElement || this.getWindowNode(id, options);
+	  if(win == null) return null;
+	  var key = "WindowSize" + win.id;
+	  var size = this.storage.pull(key);
+	  window.hk.log('[HkWindow][DEBUG]Geladene Fenstergröße für  ' + key + ': ' + Json.toString(size));
+	  if("undefined" == typeof size || !size || !('size' in size) || !('x' in size.size) || !('y' in size.size)) {
+		size = this.saveWindowSize(id, options);
+	  }
+	  this.setWindowSize(size, id, options);
+	  return size;
+	},
+	saveWindowSize: function saveWindowSize(id, options) {
+	  var win = this.resizeElement || this.getWindowNode(id, options);
+	  if(win == null) return null;
+	  var key = "WindowSize" + win.id;
+	  var size = this.getWindowSize(id, options);
+	  window.hk.log('[HkWindow][DEBUG]Speichere Fenstergröße für  ' + key + ': ' + Json.toString(size));
+	  this.storage.push(key, size);
+	  return size;
+	},
+	/**
+	 * @param path
+	 * Objektpfad in Punktnotation, z.B. "parent.name"
+	 * Rudimentäre Unterstützung für Funktionen, der weitere Pfad wird dann aus dem Rückgabewert der Funktion gelesen,
+	 * z.B. 'parent.getAttribute("name").toString', 'text.getStrings().match(["foo", "bar"]).getRandom'
+	 * Die Argumente werden über JSON in Javascript-Objekte konvertiert und dürfen das Zeichen "." nicht enthalten.
+	 * Mehrere Argumente müssen als Array geschrieben werden.
+	 *
+	 * @param data
+	 * Objekt in dem der Pfad gelesen wird
+	 */
+	extract: function extract(path, data) {
+//	  var ref = data, prop, val, fnArgs = null;
+//	  path =  String(path).split('.');
+//	  for(var x =  0; x < path.length; x++) {
+//		if(!(path[x] in data)) return null;
+//		prop = path[x];
+//		if(prop.contains(/\(/)) {
+//		  var fn = prop.match(/([^\(]*)\(([^\)]*)\)$/);
+//		  if(fn == null || fn.length < 3) return null;
+//		  prop = fn.1;
+//		  fnArgs = fn.2;
+//		}
+//		val = data[prop];
+//		if($type(val) == "function") {
+//		  if(fnArgs != null) fnArgs = Json.evaluate("{" + fnArgs + "}");
+//		  try {
+//			var fnResult = val.attempt(fnArgs, ref);
+//			if($chk(fnResult)) val = fnResult;
+//		  } catch(ex) { } // do nothing → val bleibt die Funktion selbst… @todo ?
+//		}
+//		if(x + 1 > path.length) {
+//		  return val;
+//		}
+//		data = val;
+//	  }
+//	  return null;
+	},
+	intract: function extract(path, values, target) {
+//	  var ref = target, prop, val, setVal, fnArgs = null, fnResult;
+//	  path =  String(path).split('.');
+//	  for(var x =  0; x < path.length; x++) {
+//		if(!(path[x] in data)) return null;
+//		prop = path[x];
+//		if(prop.contains(/\(/)) {
+//		  var fn = prop.match(/([^\(]*)\(([^\)]*)\)$/);
+//		  if(fn == null || fn.length < 3) return null;
+//		  prop = fn.1;
+//		  fnArgs = fn.2;
+//		}
+//		val = data[prop];
+//		if($type(val) == "function" && x + 1 <= path.length) {
+//		  try {
+//			if(fnArgs != null) fnArgs = Json.evaluate("{" + fnArgs + "}");
+//			fnResult = val.attempt(fnArgs, ref);
+//			if($chk(fnResult)) val = fnResult;
+//		  } catch(ex) { } // do nothing → val bleibt die Funktion selbst… @todo ?
+//		} else if($type(val) == "function") {
+//		  if($type(values) == "object" && values.__count__ > 0) {
+//			fnArgs = {};
+//			for(setVal in values) {
+//			  if(!values.hasOwnProperty(setVal)) continue;
+//			  fnArgs[setVal] = values[setVal];
+//			}
+//		  }	else if(fnArgs != null) fnArgs = Json.evaluate("{" + fnArgs + "}");
+//		  try {
+//			return val.attempt(fnArgs, ref);
+//		  } catch(ex) { } // do nothing
+//		}
+//		if(x + 1 > path.length) {
+//		  for(setVal in values) {
+//			if(!values.hasOwnProperty(setVal)) continue;
+//			target[setVal] = values[setVal];
+//		  }
+//		  return true;
+//		}
+//		data = val;
+//	  }
+//	  return null;
 	}
   });
   Hk.HkWindows.implement(new Events, new Options, new HkLogger);
@@ -844,7 +1126,7 @@ w.hkCreateClasses = function () {
    * Datenstruktur für Shortcuts @todo Auslagern
    */
   Hk.Shortcut = new Class({
-	$debug: 0,
+	$debug: 1,
 	options: {
 	  x: -1,
 	  y: -1,
@@ -901,7 +1183,7 @@ w.hkCreateClasses = function () {
    * Shortcuts @todo Auslagern
    */
   Hk.HkShortcutsWindow = new Class({
-	$debug: 0,
+	$debug: 1,
 	$cleanStorage: 0,
 	$hkWin: false,
 	'inputStyles': {
@@ -1171,6 +1453,7 @@ w.hkCreateClasses = function () {
 	  submitInput.addEventListener('click', this.createShortcut);
 	  inputForm.adopt(inputX, inputY, gotoPosition, loadPosition, submitInput, inputName);
 	  contentNode.adopt(inputForm, shortcutList);
+
 	}
   });
   Hk.HkShortcutsWindow.implement(new Events, new Options, new HkLogger);
@@ -1198,6 +1481,10 @@ w.hkCreateClasses = function () {
 		'scroll': $("HkWindowContentHkShortcuts"),
 		'title': "HkShortcuts"
 	  });
+//	  window.hk.Windows.makeResizeable("HkShortcuts", {
+//		'resize': $("HkWindowContentHkShortcuts"),
+//		'title': "HkShortcuts"
+//	  }, $("ShortcutList"));
 	  window.hk.Shortcuts.updateDimensions();
 	} catch(ex) {
 	  window.hk.log('[HkPublic][ERROR]Fehler bei der Finalisierung des Shortcuts-Fensters: '+ex);
