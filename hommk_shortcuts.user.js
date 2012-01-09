@@ -66,7 +66,7 @@ w.hkCreateClasses = function () {
 
   window.HkLogger = new Class({
 	log: function log(msg) {
-	  var $debug = this.hasOwnProperty('$debug') ? 0 : this.$debug;
+	  var $debug = this.hasOwnProperty('$debug') ? 1 : this.$debug;
 	  if($debug > 1) {
 		alert(msg);
 	  } else if($debug < 1 || undefined == typeof console || "undefined" == typeof console) {
@@ -81,7 +81,7 @@ w.hkCreateClasses = function () {
   window.Hk = new Class({
 	$debug: 0,
 	idScript: "HkToolkit",
-	version: "2012.01.06.20.17.440000",
+	version: "$VersionString$",
 	Coords: {
 	  lastRegion: {
 		x: 0,
