@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkExplorer
-// @version       2012.01.06.09.25.570000
+// @version       2012.01.09.01.17.030000
 // @description   Explorer für HkToolkit
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -19,7 +19,7 @@
 // Element.Selectors.js 1.12 · http://mootools.net
 // @require http://pastebin.com/raw.php?i=2G8yXznG
 //
-// Scroller 1.12 · http://mootools.net
+// Scroller.js 1.12 · http://mootools.net
 // @require http://pastebin.com/raw.php?i=W0gZUcpe
 //
 // Prototype-Ergänzungen

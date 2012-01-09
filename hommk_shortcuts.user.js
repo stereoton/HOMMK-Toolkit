@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkToolkit
-// $Version$
+// @version       2012.01.09.01.17.030000
 // @description   Werkzeugkasten für HOMMK
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -81,7 +81,7 @@ w.hkCreateClasses = function () {
   window.Hk = new Class({
 	$debug: 1,
 	idScript: "HkToolkit",
-	version: "$VersionString$",
+	version: "2012.01.09.01.17.030000",
 	Coords: {
 	  lastRegion: {
 		x: 0,
@@ -125,7 +125,7 @@ w.hkCreateClasses = function () {
 	  }	else {
 		str += "Region #" + this.HOMMK.getRegionNumberFromXY(x, y);
 	  }
-	  window.hk.log(region);
+//	  window.hk.log(region);
 //	  window.hk.log(this.HOMMK.worldMap);
 	  return str;
 	},
