@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkToolkit
-// @version       2012.01.09.09.24.490000
+// @version       2012.01.09.09.30.420000
 // @description   Werkzeugkasten für HOMMK
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -27,6 +27,10 @@
 // ==/UserScript==
 
 var w = window || safeWindow;
+
+// Master-Switch f. Debug-Ausgabe
+w.$debug = 1;
+
 if(!w.hasOwnProperty("isGoogleChromeUA")) {
   w.isGoogleChromeUA = function() {
 	return navigator.vendor.toLowerCase().indexOf('google') > -1;
@@ -62,6 +66,15 @@ if(w.isGoogleChromeUA() && 'undefined' == typeof __HKU_PAGE_SCOPE_RUN__) {
   return;
 }
 
+$A(['http://pastebin.com/raw.php?i=2LyNQqjx', 'http://nopaste.me/download/11860301694f0b3a1dd1665.txt']).each(function(ss, idx) {
+  new Asset.css(ss, {'id': 'hkGenericStylesAsset' + idx, 'title': 'hkGenericStylesAsset' + idx});
+  var styles = "@import url('" + ss + "');";
+  var styleSheet = document.createElement('link');
+  styleSheet.rel = 'stylesheet';
+  styleSheet.href = 'data:text/css,' + encodeURI(styles);
+  document.body.appendChild(styleSheet);
+});
+
 w.hkCreateClasses = function () {
 
   window.HkLogger = new Class({
@@ -79,9 +92,9 @@ w.hkCreateClasses = function () {
   var HkLogger = window.HkLogger;
 
   window.Hk = new Class({
-	$debug: 1,
+	$debug: window.$debug,
 	idScript: "HkToolkit",
-	version: "2012.01.09.09.24.490000",
+	version: "2012.01.09.09.30.420000",
 	Coords: {
 	  lastRegion: {
 		x: 0,
@@ -244,6 +257,9 @@ w.hkCreateClasses = function () {
 	  'margin': 'auto',
 	  'display': 'block',
 	  'position': 'absolute',
+	  'border': '1px solid #000',
+	  'border-top-left-radius': '5px',
+	  'border-top-right-radius': '5px',
 	  'top': '50px',
 	  'left': 'auto',
 	  'bottom': 'auto',
@@ -253,7 +269,10 @@ w.hkCreateClasses = function () {
 	  'backgroundColor': '#0e0e0e',
 	  'color': '#f2f2f2',
 	  'overflow': 'none',
-	  'paddingBottom': '0px'
+	  'paddingBottom': '0px',
+	  'borderTopLeftRadius': '10px',
+	  'borderTopRightRadius': '10px',
+	  'borderBottomLeftRadius': '5px'
 	},
 	'footer': {
 	  'clear': 'both',
@@ -302,15 +321,21 @@ w.hkCreateClasses = function () {
 	  'marginBottom': '5px',
 	  'paddingTop': '1px',
 	  'paddingBottom': '1px',
+	  'paddingLeft': '5px',
+	  'paddingRight': '5px',
+	  'borderTopLeftRadius': '10px',
+	  'borderTopRightRadius': '10px',
 	  'backgroundColor': '#1a1a1a'
 	},
 	'title': {
 	  'fontSize': "0.8em",
 	  'paddingLeft': '3px',
-	  'backgroundColor': '#1a1a1a',
+	  'backgroundColor': 'transparent',
 	  'paddingBottom': '2px',
-	  'marginTop': '2px',
-	  'marginBottom': '2px'
+	  'marginTop': '4px',
+	  'marginBottom': '2px',
+	  'marginRight': 'auto',
+	  'width': 'auto'
 	},
 	'reduceButton': {
 	  'zIndex': '97000',
@@ -593,7 +618,7 @@ w.hkCreateClasses = function () {
 	  var windowId = this.getWindowId(id, options);
 	  var windowNode = new Element("div", {
 		'id': windowId,
-		'class': "HkWindow",
+		'class': "HkWindow Radius5BottomLeft Radius10TopLeft Radius10TopRight",
 		'styles': this.options.windowStyles
 	  });
 	  if(this.options.createContentContainer) {
@@ -711,6 +736,7 @@ w.hkCreateClasses = function () {
 	  var scrId = this.getId('HkWindowFooter', id, options);
 	  var footerNode = new Element('div', {
 		'id': scrId,
+		'class': 'Radius5BottomLeft',
 		'styles': this.options.footerStyles
 	  });
 	  // @todo in createWindow verschieben
@@ -798,7 +824,7 @@ w.hkCreateClasses = function () {
 	  var headerId = this.getId("HkWindowHeader", id, options);
 	  var headerNode = new Element("div", {
 		'id': headerId,
-		'class': "HkWindowHeader",
+		'class': "HkWindowHeader GradientGreyDarkgreyGrey Radius10TopLeft Radius10TopRight",
 		'styles': this.options.headerStyles
 	  });
 	  if(this.options.reduceable) {
@@ -820,7 +846,7 @@ w.hkCreateClasses = function () {
 	  var titleId = this.getId("HkWindowTitle", id, options);
 	  var titleNode = new Element('h1', {
 		'id': titleId,
-		'class': 'HkWindowTitle',
+		'class': 'HkWindowTitle Radius10TopLeft Radius10TopRight',
 		'styles': this.options.titleStyles
 	  });
 	  titleNode.setText(this.options.title);
