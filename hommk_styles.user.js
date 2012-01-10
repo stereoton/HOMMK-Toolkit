@@ -23,11 +23,21 @@ if ("undefined" == typeof(HkStylesGeneric)) {
 		  selection = $(style.selector.substr(1));
 		}
 		if(selection) {
-		  console.log("Wende Stile an:");
+		  console.log("Wende Stile an\u2026");
 		  console.log(style.selector);
 		  console.log(style.styles);
 		  console.log(selection);
-		  selection.setStyles(style.styles);
+		  if("undefined" == typeof selection.length) selection = [selection];
+		  selection = $A(selection);
+		  selection.each(function(elem, idx) {
+			console.log("Rufe alte Stile ab\u2026");
+			var oldStyles = elem.style;
+			console.log(oldStyles);
+			var oldStyleObject = elem.getStyles();
+			console.log(oldStyleObject);
+			console.log(oldStyleObject.toString());
+			elem.setStyles(style.styles);
+		  });
 		}
 	  });
 	},
