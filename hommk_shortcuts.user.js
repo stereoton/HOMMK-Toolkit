@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkToolkit
-// @version       2012.01.10.14.16.340000
+// @version       2012.01.10.15.21.050000
 // @description   Werkzeugkasten für HOMMK
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -75,7 +75,7 @@ w.hkCreateClasses = function () {
   window.Hk = new Class({
 	$debug: window.$debug,
 	idScript: "HkToolkit",
-	version: "2012.01.10.14.16.340000",
+	version: "2012.01.10.15.21.050000",
 	Coords: {
 	  lastRegion: {
 		x: 0,
@@ -516,17 +516,17 @@ w.hkCreateClasses = function () {
 	  var target = toggle.target;
 	  var slider = toggle.slider;
 	  if(this.$status == this.IS_VISIBLE) {
-		var targetHeight = target.getCoordinates().height;
-		target.style.height = targetHeight + "px";
-		slider.slideOut();
-		var resetTargetHeight = function(target) {
-		  if(parseInt(target.getStyle('height')) > 0) {
-			target.setStyle('height', 'auto');
-		  }
-		}
-		resetTargetHeight.delay(500, this, target);
+        this.log("[HkReducer][Event]Target height: " + target.style.height);
+//		var targetHeight = target.getCoordinates().height;
+//		target.style.height = targetHeight + "px";
+//		var resetTargetHeight = function(target) {
+//		  if(parseInt(target.getStyle('height')) > 0) {
+//			target.setStyle('height', 'auto');
+//		  }
+//		}
+//		resetTargetHeight.delay(500, this, target);
 	  }	else {
-		slider.slideIn();
+        this.log("[HkReducer][Event]Target height: " + target.style.height);
 	  }
 	},
 	toggleClicked: function toggleClicked(evt) {
@@ -548,7 +548,8 @@ w.hkCreateClasses = function () {
 		  aDiv.setStyle('height', 'auto');
 		}
 	  });
-	  $$(target, target.getParent()).setStyle('height', 'auto');
+//	  $$(target, target.getParent()).setStyle('height', 'auto');
+	  $$(target, target.getParent()).setStyle('height', target.getCoordinates().height + "px");
 	}
   });
   Hk.HkReducer.implement(new Events, new Options, new HkLogger);
