@@ -1,4 +1,15 @@
 if ("undefined" == typeof(HkStylesGeneric)) {
+
+  try {
+	if(!$type(console)) {
+	  var console = {
+		log: function log(msg) {
+		  // do nothing
+		}
+	  };
+	}
+  } catch(ex) {}
+
   var HkStylesGeneric = new Class({
 	initialize: function() {
 
@@ -11,7 +22,13 @@ if ("undefined" == typeof(HkStylesGeneric)) {
 		} else {
 		  selection = $(style.selector.substr(1));
 		}
-		if(selection) selection.setStyles(style.styles);
+		if(selection) {
+		  console.log("Wende Stile an:");
+		  console.log(style.selector);
+		  console.log(style.styles);
+		  console.log(selection);
+		  selection.setStyles(style.styles);
+		}
 	  });
 	},
 	'styles': [

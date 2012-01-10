@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkToolkit
-// @version       2012.01.10.10.26.370000
+// @version       2012.01.10.12.04.060000
 // @description   Werkzeugkasten für HOMMK
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -45,6 +45,16 @@ if(!w.hasOwnProperty("isGoogleChromeUA")) {
 	return navigator.vendor.toLowerCase().indexOf('google') > -1;
   }
 }
+
+try {
+  if(!$type(console)) {
+	var console = {
+	  log: function log(msg) {
+		// do nothing
+	  }
+	};
+  }
+} catch(ex) {}
 
 /**
  * Page Scrope Runner für Google Chrome wegen fehlendem @require-Support, siehe
@@ -98,7 +108,7 @@ w.hkCreateClasses = function () {
   window.Hk = new Class({
 	$debug: window.$debug,
 	idScript: "HkToolkit",
-	version: "2012.01.10.10.26.370000",
+	version: "2012.01.10.12.04.060000",
 	Coords: {
 	  lastRegion: {
 		x: 0,
