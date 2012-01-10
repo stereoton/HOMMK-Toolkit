@@ -26,6 +26,7 @@ if ("undefined" == typeof(HkStylesGeneric)) {
 		  if("undefined" == typeof selection.length) selection = [selection];
 		  selection = $A(selection);
 		  selection.each(function(elem, idx) {
+			console.log("Weise Stile zu\u2026");
 			console.log(elem);
 			$A(style.styles).each(function(val, prop) {
 			  console.log("Weise Wert '" + val + "' zu für Stil " + prop);
@@ -35,6 +36,7 @@ if ("undefined" == typeof(HkStylesGeneric)) {
 			  }	else {
 				console.log("Wert existiert bereits, Zuweisung erzwungen\u2026");
 			  }
+			  console.log("Alter Wert: " + elem.style[prop]);
 			  elem.style[prop] = val;
 			});
 		  });
