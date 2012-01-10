@@ -9,7 +9,7 @@ if ("undefined" == typeof(HkStylesGeneric)) {
 		if(style.selector.indexOf(".") == -1 || style.selector.indexOf('#') != -1) {
 		  selection = $$(style.selector);
 		} else {
-		  selection = $(selection.substr(1));
+		  selection = $(style.selector.substr(1));
 		}
 		selection.setStyles(style.styles);
 	  });
