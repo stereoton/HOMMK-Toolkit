@@ -11,7 +11,7 @@ if ("undefined" == typeof(HkStylesGeneric)) {
 		} else {
 		  selection = $(style.selector.substr(1));
 		}
-		selection.setStyles(style.styles);
+		if(selection) selection.setStyles(style.styles);
 	  });
 	},
 	'styles': [
