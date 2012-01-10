@@ -26,8 +26,15 @@ if ("undefined" == typeof(HkStylesGeneric)) {
 		  if("undefined" == typeof selection.length) selection = [selection];
 		  selection = $A(selection);
 		  selection.each(function(elem, idx) {
+			console.log(elem);
 			$A(style.styles).each(function(val, prop) {
-			  if(elem.style[prop] != "" && !style.force) return;
+			  console.log("Weise Wert '" + val + "' zu für Stil " + prop);
+			  if(elem.style[prop] != "" && !style.force) {
+				console.log("Wert existiert bereits, Zuweisung nicht erzwungen\u2026");
+				return;
+			  }	else {
+				console.log("Wert existiert bereits, Zuweisung erzwungen\u2026");
+			  }
 			  elem.style[prop] = val;
 			});
 		  });
