@@ -17,7 +17,7 @@ if ("undefined" == typeof(HkStylesGeneric)) {
 	applyStyles: function applyStyles() {
 	  $A(this.styles).each(function(style, idx) {
 		var selection;
-		if(style.selector.indexOf(".") == -1 || style.selector.indexOf('#') != -1) {
+		if(style.selector.indexOf(".") != -1 || style.selector.indexOf('#') != -1) {
 		  selection = $$(style.selector);
 		} else {
 		  selection = $(style.selector.substr(1));
