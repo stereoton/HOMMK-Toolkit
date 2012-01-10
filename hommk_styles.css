@@ -1,15 +1,7 @@
-/*
-    Document   : hommk_styles
-    Created on : 09.01.2012, 11:07:15
-    Author     : Gelgamek <gelgamek at arcor.de>
-    Description:
-        Generic styles for HkToolkit
-*/
-
 .GradientGreyDarkgreyGrey {
-  background-image: -webkit-linear-gradient(top, #1a1a1a, #040404 66%, #1a1a1a) !important;
+/*  background-image: -webkit-linear-gradient(top, #1a1a1a, #040404 66%, #1a1a1a) !important;
   background-image: -moz-linear-gradient(to bottom, #1a1a1a, #040404 66%, #1a1a1a) !important;
-  background-image: linear-gradient(to bottom, #1a1a1a, #040404 66%, #1a1a1a) !important;
+  background-image: linear-gradient(to bottom, #1a1a1a, #040404 66%, #1a1a1a) !important;*/
   background-image: linear-gradient(top, #1a1a1a, #040404 66%, #1a1a1a) !important;
 }
 
