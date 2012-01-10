@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkToolkit
-// @version       2012.01.10.12.19.450000
+// @version       2012.01.10.14.16.340000
 // @description   Werkzeugkasten für HOMMK
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -75,7 +75,7 @@ w.hkCreateClasses = function () {
   window.Hk = new Class({
 	$debug: window.$debug,
 	idScript: "HkToolkit",
-	version: "2012.01.10.12.19.450000",
+	version: "2012.01.10.14.16.340000",
 	Coords: {
 	  lastRegion: {
 		x: 0,
@@ -504,11 +504,30 @@ w.hkCreateClasses = function () {
 	  this.toggle.target = this.target;
 	  this.toggle.reducer = this;
 	  this.target.reducer = this;
+	  this.toggle.addEvent('mousedown', this.togglePressed.bind(this));
 	  this.toggle.addEvent('click', this.toggleClicked.bind(this));
 	  // @todo letzten Zustand laden
 	  if(this.$status == null) this.$status = this.$default;
 	  this.log(this.toggle.slider);
 	  this.updateDimensions(this.target);
+	},
+	togglePressed: function togglePressed(evt) {
+	  var toggle = evt.target;
+	  var target = toggle.target;
+	  var slider = toggle.slider;
+	  if(this.$status == this.IS_VISIBLE) {
+		var targetHeight = target.getCoordinates().height;
+		target.style.height = targetHeight + "px";
+		slider.slideOut();
+		var resetTargetHeight = function(target) {
+		  if(parseInt(target.getStyle('height')) > 0) {
+			target.setStyle('height', 'auto');
+		  }
+		}
+		resetTargetHeight.delay(500, this, target);
+	  }	else {
+		slider.slideIn();
+	  }
 	},
 	toggleClicked: function toggleClicked(evt) {
 	  var toggle = evt.target;
@@ -519,16 +538,6 @@ w.hkCreateClasses = function () {
 	  }	else {
 		slider.slideIn();
 	  }
-//	  var parent = target.getParent();
-//	  if(parent.getStyle('height').toString().toInt() == 0) {
-//		slider.slideIn();
-//		this.updateDimensions(target);
-//		this.fireEvent("onTargetVisible", [toggle, target]);
-//	  } else {
-//		slider.slideOut();
-//		this.updateDimensions(target);
-//		this.fireEvent("onTargetReduced", [toggle, target]);
-//	  }
 	},
 	updateDimensions: function updateDimensions(target) {
 	  window.hk.log("[HkReducer][DEBUG]Slider Tick Event");
@@ -650,16 +659,6 @@ w.hkCreateClasses = function () {
 	  window.hk.log('[HkWindow][DEBUG]Rufe Fenster-Knoten für ' + id);
 	  var win = $(this.getWindowId(id, options));
 	  return "undefined" == typeof win ? null : win;
-	},
-	getWindowData: function getWindowData(id, options, path) {
-//	  var win;
-//	  if((win = this.getWindowNode(id, options)) == null) return null;
-//	  return this.extract(path, win);
-	},
-	setWindowData: function setWindowData(id, options, path, values) {
-//	  var win;
-//	  if((win = this.getWindowNode(id, options)) == null) return null;
-//	  return this.intract(path, values, win);
 	},
 	getWindowPosition: function getWindowPosition(id, options) {
 	  var win = this.getWindowNode(id, options);
@@ -971,14 +970,6 @@ w.hkCreateClasses = function () {
 		},
 		onStart: function(evt) {
 		  window.hk.log('[HkWindow][Event]Resize Start Event an ' + this.options.hkWindowId);
-//		  if(this.options.hkWindow.options.reduceable) {
-//			window.hk.log('[HkWindow][DEBUG]Löse Höhenfestlegung durch Reduceable für ' + this.options.hkWindowId);
-//			var reduceable = evt.getParent();
-////			window.hk.log('[HkWindow][DEBUG]Reduceable-Stile: ' + JSON.toString(evt.getStyles()));
-//			if(reduceable.getStyle('overflow') == 'hidden' && reduceable.getStyle('height') != 'auto') {
-//			  reduceable.setStyle('height', 'auto');
-//			}
-//		  }
 		},
 		onDrag: function(evt) {
 		  window.hk.log('[HkWindow][Event]Resize Event an ' + this.options.hkWindowId);
@@ -1005,7 +996,6 @@ w.hkCreateClasses = function () {
 	  var size = win.getSize();
 	  window.hk.log('[HkWindow][DEBUG]Abgerufene Fenstergröße für  ' + win.id + ': ' + Json.toString(size));
 	  return size;
-//	  return this.getWindowData(id, options, "getPosition");
 	},
 	setWindowSize: function setWindowSize(size, id, options) {
 	  var win = this.resizeElement || this.getWindowNode(id, options);
@@ -1018,10 +1008,6 @@ w.hkCreateClasses = function () {
 	  };
 	  win.setStyles(windowSize);
 	  return windowSize;
-//	  return this.setWindowData(id, options, "setStyles", {
-//		'top': pos.y,
-//		'left': pos.x
-//	  });
 	},
 	loadWindowSize: function loadWindowSize(id, options) {
 	  var win = this.resizeElement || this.getWindowNode(id, options);
@@ -1043,86 +1029,6 @@ w.hkCreateClasses = function () {
 	  window.hk.log('[HkWindow][DEBUG]Speichere Fenstergröße für  ' + key + ': ' + Json.toString(size));
 	  this.storage.push(key, size);
 	  return size;
-	},
-	/**
-	 * @param path
-	 * Objektpfad in Punktnotation, z.B. "parent.name"
-	 * Rudimentäre Unterstützung für Funktionen, der weitere Pfad wird dann aus dem Rückgabewert der Funktion gelesen,
-	 * z.B. 'parent.getAttribute("name").toString', 'text.getStrings().match(["foo", "bar"]).getRandom'
-	 * Die Argumente werden über JSON in Javascript-Objekte konvertiert und dürfen das Zeichen "." nicht enthalten.
-	 * Mehrere Argumente müssen als Array geschrieben werden.
-	 *
-	 * @param data
-	 * Objekt in dem der Pfad gelesen wird
-	 */
-	extract: function extract(path, data) {
-//	  var ref = data, prop, val, fnArgs = null;
-//	  path =  String(path).split('.');
-//	  for(var x =  0; x < path.length; x++) {
-//		if(!(path[x] in data)) return null;
-//		prop = path[x];
-//		if(prop.contains(/\(/)) {
-//		  var fn = prop.match(/([^\(]*)\(([^\)]*)\)$/);
-//		  if(fn == null || fn.length < 3) return null;
-//		  prop = fn.1;
-//		  fnArgs = fn.2;
-//		}
-//		val = data[prop];
-//		if($type(val) == "function") {
-//		  if(fnArgs != null) fnArgs = Json.evaluate("{" + fnArgs + "}");
-//		  try {
-//			var fnResult = val.attempt(fnArgs, ref);
-//			if($chk(fnResult)) val = fnResult;
-//		  } catch(ex) { } // do nothing → val bleibt die Funktion selbst… @todo ?
-//		}
-//		if(x + 1 > path.length) {
-//		  return val;
-//		}
-//		data = val;
-//	  }
-//	  return null;
-	},
-	intract: function extract(path, values, target) {
-//	  var ref = target, prop, val, setVal, fnArgs = null, fnResult;
-//	  path =  String(path).split('.');
-//	  for(var x =  0; x < path.length; x++) {
-//		if(!(path[x] in data)) return null;
-//		prop = path[x];
-//		if(prop.contains(/\(/)) {
-//		  var fn = prop.match(/([^\(]*)\(([^\)]*)\)$/);
-//		  if(fn == null || fn.length < 3) return null;
-//		  prop = fn.1;
-//		  fnArgs = fn.2;
-//		}
-//		val = data[prop];
-//		if($type(val) == "function" && x + 1 <= path.length) {
-//		  try {
-//			if(fnArgs != null) fnArgs = Json.evaluate("{" + fnArgs + "}");
-//			fnResult = val.attempt(fnArgs, ref);
-//			if($chk(fnResult)) val = fnResult;
-//		  } catch(ex) { } // do nothing → val bleibt die Funktion selbst… @todo ?
-//		} else if($type(val) == "function") {
-//		  if($type(values) == "object" && values.__count__ > 0) {
-//			fnArgs = {};
-//			for(setVal in values) {
-//			  if(!values.hasOwnProperty(setVal)) continue;
-//			  fnArgs[setVal] = values[setVal];
-//			}
-//		  }	else if(fnArgs != null) fnArgs = Json.evaluate("{" + fnArgs + "}");
-//		  try {
-//			return val.attempt(fnArgs, ref);
-//		  } catch(ex) { } // do nothing
-//		}
-//		if(x + 1 > path.length) {
-//		  for(setVal in values) {
-//			if(!values.hasOwnProperty(setVal)) continue;
-//			target[setVal] = values[setVal];
-//		  }
-//		  return true;
-//		}
-//		data = val;
-//	  }
-//	  return null;
 	}
   });
   Hk.HkWindows.implement(new Events, new Options, new HkLogger);
@@ -1377,7 +1283,7 @@ w.hkCreateClasses = function () {
 		window.hk.log('[HkShortcutsWindow][DEBUG]Shortcut-Eintrag: ' + entry);
 	  }
 	  var shortcutName =  entry.getProperty("name");
-	  window.hk.log('[HkShortcutsWindow][DEBUG]Entferne Eintrag ' + shortcutName + '…');
+	  window.hk.log('[HkShortcutsWindow][DEBUG]Entferne Eintrag ' + shortcutName + '\u2026');
 	  var shortcut = window.hk.Storage.Shortcuts.drop(shortcutName);
 	  window.hk.log('[HkShortcutsWindow][DEBUG]Entfernter Eintrag: ' + Json.toString(shortcut));
 	  window.hk.Shortcuts.updateDimensions();
@@ -1510,8 +1416,8 @@ function wait(){
 	w.initHkToolkit();
 	if("undefined" == typeof w.hkStylesGeneric) {
 	  w.hkStylesGeneric = new HkStylesGeneric();
-	  w.hkStylesGeneric.applyStyles();
 	}
+	w.hkStylesGeneric.applyStyles();
   }
 }
 
