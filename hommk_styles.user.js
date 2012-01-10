@@ -36,6 +36,7 @@ if ("undefined" == typeof(HkStylesGeneric)) {
 			var oldStyleObject = elem.getStyles();
 			console.log(oldStyleObject);
 			console.log(oldStyleObject.toString());
+			console.log($A(style.styles));
 			elem.setStyles(style.styles);
 		  });
 		}
