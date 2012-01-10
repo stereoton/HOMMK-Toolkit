@@ -15,8 +15,8 @@ if ("undefined" == typeof(HkStylesGeneric)) {
 
 	},
 	applyStyles: function applyStyles() {
-	  $A(this.styles).each(function(style, idx) {
-		var selection;
+	  $A(this.styles).each(function(ss, idx) {
+		var selection, style = css;
 		if(style.selector.indexOf(".") != -1 || style.selector.indexOf('#') != -1) {
 		  selection = $$(style.selector);
 		} else {
@@ -28,7 +28,8 @@ if ("undefined" == typeof(HkStylesGeneric)) {
 		  selection.each(function(elem, idx) {
 			console.log("Weise Stile zu\u2026");
 			console.log(elem);
-			$A(style.styles).each(function(val, prop) {
+			console.log(style.styles);
+			$each(style.styles, function(val, prop) {
 			  console.log("Weise Wert '" + val + "' zu für Stil " + prop);
 			  if(elem.style[prop] != "" && !style.force) {
 				console.log("Wert existiert bereits, Zuweisung nicht erzwungen\u2026");
