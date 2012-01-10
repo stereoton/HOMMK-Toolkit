@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkToolkit
-// @version       2012.01.09.09.30.420000
+// @version       2012.01.10.09.30.530000
 // @description   Werkzeugkasten für HOMMK
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -66,7 +66,7 @@ if(w.isGoogleChromeUA() && 'undefined' == typeof __HKU_PAGE_SCOPE_RUN__) {
   return;
 }
 
-$A(['http://pastebin.com/raw.php?i=2LyNQqjx', 'http://nopaste.me/download/11860301694f0b3a1dd1665.txt']).each(function(ss, idx) {
+$A(['https://github.com/gelgamek/HOMMK-Toolkit/raw/master/hommk_styles.css', 'http://pastebin.com/raw.php?i=2LyNQqjx', 'http://nopaste.me/download/11860301694f0b3a1dd1665.txt']).each(function(ss, idx) {
   new Asset.css(ss, {'id': 'hkGenericStylesAsset' + idx, 'title': 'hkGenericStylesAsset' + idx});
   var styles = "@import url('" + ss + "');";
   var styleSheet = document.createElement('link');
@@ -94,7 +94,7 @@ w.hkCreateClasses = function () {
   window.Hk = new Class({
 	$debug: window.$debug,
 	idScript: "HkToolkit",
-	version: "2012.01.09.09.30.420000",
+	version: "2012.01.10.09.30.530000",
 	Coords: {
 	  lastRegion: {
 		x: 0,
