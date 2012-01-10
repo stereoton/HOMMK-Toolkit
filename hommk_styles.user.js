@@ -23,21 +23,13 @@ if ("undefined" == typeof(HkStylesGeneric)) {
 		  selection = $(style.selector.substr(1));
 		}
 		if(selection) {
-		  console.log("Wende Stile an\u2026");
-		  console.log(style.selector);
-		  console.log(style.styles);
-		  console.log(selection);
 		  if("undefined" == typeof selection.length) selection = [selection];
 		  selection = $A(selection);
 		  selection.each(function(elem, idx) {
-			console.log("Rufe alte Stile ab\u2026");
-			var oldStyles = elem.style;
-			console.log(oldStyles);
-			var oldStyleObject = elem.getStyles();
-			console.log(oldStyleObject);
-			console.log(oldStyleObject.toString());
-			console.log($A(style.styles));
-			elem.setStyles(style.styles);
+			$A(style.styles).each(function(val, prop) {
+			  if(elem.style[prop] != "" && !style.force) return;
+			  elem.style[prop] = val;
+			});
 		  });
 		}
 	  });
@@ -46,58 +38,58 @@ if ("undefined" == typeof(HkStylesGeneric)) {
 	  {
 		'selector': '.GradientGreyDarkgreyGrey',
 		'styles': {
-		  'background-image': 'linear-gradient(to bottom, #1a1a1a, #040404 66%, #1a1a1a)'
+		  'background': 'linear-gradient(top, #202020, #040404 20%, #040404 40%, #303030)'
 		}
 	  },
 	  {
 		'selector': '.GradientGreyDarkgreyGrey',
 		'styles': {
-		  'background-image': 'linear-gradient(top, #1a1a1a, #040404 66%, #1a1a1a)'
+		  'background': '-webkit-linear-gradient(top, #202020, #040404 20%, #040404 40%, #303030)'
 		}
 	  },
 	  {
 		'selector': '.GradientGreyDarkgreyGrey',
 		'styles': {
-		  'background-image': '-webkit-linear-gradient(top, #1a1a1a, #040404 66%, #1a1a1a)'
+		  'background': '-moz-linear-gradient(top, #202020, #040404 20%, #040404 40%, #303030)'
 		}
 	  },
 	  {
-		'selector': '.GradientGreyDarkgreyGrey',
-		'styles': {
-		  'background-image': '-moz-linear-gradient(to bottom, #1a1a1a, #040404 66%, #1a1a1a)'
-		}
-	  },
-	  {
+		'force': true,
 		'selector': '.Radius5',
 		'styles': {
 		  'border-radius': '5px'
 		}
 	  },
 	  {
+		'force': true,
 		'selector': '.Radius5BottomLeft',
 		'styles': {
 		  'border-bottom-left-radius': '5px'
 		}
 	  },
 	  {
+		'force': true,
 		'selector': '.Radius10',
 		'styles': {
 		  'border-radius': '10px'
 		}
 	  },
 	  {
+		'force': true,
 		'selector': '.Radius10TopLeft',
 		'styles': {
 		  'border-top-left-radius': '5px'
 		}
 	  },
 	  {
+		'force': true,
 		'selector': '.Radius10TopRight',
 		'styles': {
 		  'border-top-right-radius': '5px'
 		}
 	  },
 	  {
+		'force': true,
 		'selector': '.HkButton',
 		'styles': {
 		  'border': 'none'
