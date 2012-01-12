@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkToolkit
-// @version       2012.01.12.14.13.270000
+// @version       2012.01.12.14.19.210000
 // @description   Werkzeugkasten für HOMMK
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -285,7 +285,7 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 			window.Hk = new Class({
 			  $debug: window.$debug || $debug || 0,
 			  idScript: "HkToolkit",
-			  version: "2012.01.12.14.13.270000",
+			  version: "2012.01.12.14.19.210000",
 			  Coords: {
 				lastRegion: {
 				  x: 0,
@@ -1654,7 +1654,7 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 		  }
 		  window.hkStylesGeneric.applyStyles();
 		};
-		window.initHkToolkit();	
+		return window.initHkToolkit;	
 	  };
 	
 	  window.console.log('Erzeuge Loader-Objekt\u2026');
@@ -1676,7 +1676,8 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 			window.console.log('[HkPublic][DEBUG]Hk verfügbar, bereite HkToolkit vor\u2026');
 			try {
 			  window.HkToolkitLoader.loaded = true;
-			  window.hkCreateClasses();
+			  var initFunction = window.hkCreateClasses();
+			  initFunction();
 			} catch(ex) {
 			  alert('[HkPublic][ERROR]Fehler beim Erzeugen der Klassen für HkToolkit: ' + ex);
 			}
