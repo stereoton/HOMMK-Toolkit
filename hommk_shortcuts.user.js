@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkToolkit
-// @version       2012.01.12.11.15.010000
+// @version       2012.01.12.11.16.310000
 // @description   Werkzeugkasten für HOMMK
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -37,28 +37,28 @@
 // ==/UserScript==
 
 if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
-  (function page_scope_runner() {
-    // If we're _not_ already running in the page, grab the full source
-    // of this script.
-    var my_src = "(" + page_scope_runner.caller.toString() + ")();";
-
-    // Create a script node holding this script, plus a marker that lets us
-    // know we are running in the page scope (not the Greasemonkey sandbox).
-    // Note that we are intentionally *not* scope-wrapping here.
-    var script = document.createElement('script');
-    script.setAttribute("type", "text/javascript");
-    script.textContent = "var __PAGE_SCOPE_RUN__ = true;\n" + my_src;
-
-    // Insert the script node into the page, so it will run, and immediately
-    // remove it to clean up.  Use setTimeout to force execution "outside" of
-    // the user script scope completely.
-    setTimeout(function() {
+	(function page_scope_runner() {
+	    // If we're _not_ already running in the page, grab the full source
+	    // of this script.
+	    var my_src = "(" + page_scope_runner.caller.toString() + ")();";
+	
+	    // Create a script node holding this script, plus a marker that lets us
+	    // know we are running in the page scope (not the Greasemonkey sandbox).
+	    // Note that we are intentionally *not* scope-wrapping here.
+	    var script = document.createElement('script');
+	    script.setAttribute("type", "text/javascript");
+	    script.textContent = "var __PAGE_SCOPE_RUN__ = true;\n" + my_src;
+	
+	    // Insert the script node into the page, so it will run, and immediately
+	    // remove it to clean up.  Use setTimeout to force execution "outside" of
+	    // the user script scope completely.
+	    setTimeout(function() {
           document.body.appendChild(script);
           document.body.removeChild(script);
         }, 0);
-  })();
+	})();
 
-} else { // Nicht ausführen, wenn Greasemonkey im anonymen Wrapper läuft...
+} 	else { // Nicht ausführen, wenn Greasemonkey im anonymen Wrapper läuft...
 
 	try {
 	  // Master-Switch f. Debug-Ausgabe
@@ -76,35 +76,39 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 		  });
 		}
 	  });
-	  new AssetLoader().injectJavascript({
-		'MozillaLocalStorage': {
-		  'url': 'http://pastebin.com/raw.php?i=zrfAFeBc',
-		  'conditions': "!window.localStorage"
-		},
-		'HkLogger': {
-			'url': 'http://pastebin.com/raw.php?i=Tc4QTEkP'
-		},
-		'HkFinder': {
-			'url': 'http://pastebin.com/raw.php?i=tLq6swmK'
-		},
-		'HkStylesGeneric': {
-			'url': 'https://github.com/gelgamek/HOMMK-Toolkit/raw/master/hommk_styles.user.js',
-			'conditions': '"undefined" == typeof HkStylesGeneric'
-		},
-		'MootoolsElementSelectors': {
-		  'url': 'http://pastebin.com/raw.php?i=2G8yXznG',
-		  'conditions': '"undefined" == typeof $ES'
-		},
-		'MootoolsScroller': {
-		  'url': 'http://pastebin.com/raw.php?i=W0gZUcpe'
-		},
-		'SHA256CryptoJs': {
-		  'url': 'http://crypto-js.googlecode.com/files/2.5.3-crypto-sha256.js'
-		},
-		'HkPrototypes': {
-		  'url': 'http://pastebin.com/raw.php?i=NBX5T7pp'
-		}
-	  });
+	  try {
+		  new AssetLoader().injectJavascript({
+			'MozillaLocalStorage': {
+			  'url': 'http://pastebin.com/raw.php?i=zrfAFeBc',
+			  'conditions': "!window.localStorage"
+			},
+			'HkLogger': {
+				'url': 'http://pastebin.com/raw.php?i=Tc4QTEkP'
+			},
+			'HkFinder': {
+				'url': 'http://pastebin.com/raw.php?i=tLq6swmK'
+			},
+			'HkStylesGeneric': {
+				'url': 'https://github.com/gelgamek/HOMMK-Toolkit/raw/master/hommk_styles.user.js',
+				'conditions': '"undefined" == typeof HkStylesGeneric'
+			},
+			'MootoolsElementSelectors': {
+			  'url': 'http://pastebin.com/raw.php?i=2G8yXznG',
+			  'conditions': '"undefined" == typeof $ES'
+			},
+			'MootoolsScroller': {
+			  'url': 'http://pastebin.com/raw.php?i=W0gZUcpe'
+			},
+			'SHA256CryptoJs': {
+			  'url': 'http://crypto-js.googlecode.com/files/2.5.3-crypto-sha256.js'
+			},
+			'HkPrototypes': {
+			  'url': 'http://pastebin.com/raw.php?i=NBX5T7pp'
+			}
+		  });
+	  }	 catch(ex) {
+		 alert('[AssetLoader][ERROR]' + ex);
+	  }
 	
 	  var HkDataStorage = new Class({
 		$debug: 1,
@@ -245,11 +249,12 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 		window.console.log('[HkPublic][DEBUG]Erzeuge Klassen\u2026');
 	
 		window.HkStore = {};
-	
+
+		try {
 		window.Hk = new Class({
 		  $debug: window.$debug,
 		  idScript: "HkToolkit",
-		  version: "2012.01.12.11.15.010000",
+		  version: "2012.01.12.11.16.310000",
 		  Coords: {
 			lastRegion: {
 			  x: 0,
@@ -324,9 +329,16 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 		});
 		window.Hk.implement(new Events, new Options, new HkLogger);
 		var Hk = window.Hk;
+		}	catch(ex) {
+			alert('[Hk][ERROR]' + ex);
+		}
 	
+		try {
 		window.hkToolkit = new Hk();
 		window.hk = window.hkToolkit;
+		}	catch(ex) {
+			alert('[HkToolkit][ERROR]' + ex);
+		}
 		var hk = window.hk;
 	
 		window.HOMMK_HkToolkit = window.HOMMK_HkToolkit || {
@@ -528,6 +540,7 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 		};
 	
 	
+		try {
 		/**
 		* Events:
 		*	onStorageUpdate
@@ -644,10 +657,19 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 		  }
 		});
 		Hk.HkStorage.implement(new Events, new Options, new HkLogger);
+		}	catch(ex) {
+			alert('[HkStorage][ERROR]' + ex);
+			Hk.HkStorage = new Class();
+		}
 	
+		try {
 		hk.Storage = {
 		  Common: new Hk.HkStorage()
 		};
+		}	catch(ex) {
+			alert('[HkStorage.Common][ERROR]' + ex);
+			hk.Storage.Common = Object(null);
+		}
 	
 		Hk.HkReducer = new Class({
 		  $debug: 1,
