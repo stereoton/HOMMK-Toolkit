@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkToolkit
-// @version       2012.01.12.11.09.000000
+// @version       2012.01.12.11.15.010000
 // @description   Werkzeugkasten für HOMMK
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -249,7 +249,7 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 		window.Hk = new Class({
 		  $debug: window.$debug,
 		  idScript: "HkToolkit",
-		  version: "2012.01.12.11.09.000000",
+		  version: "2012.01.12.11.15.010000",
 		  Coords: {
 			lastRegion: {
 			  x: 0,
@@ -604,8 +604,10 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 			  this.log('[HkStorage][DEBUG]Kein Schlüssel angefragt, liefere alle Daten zurück: ' + Json.toString(key));
 			  var exp = {};
 			  for(d in data) {
+				  this.log('[HkStorage][DEBUG]Prüfe Eintrag: ' + Json.toString(d));
 				  if("function" == $type(data[d])) continue;
-				  exp[d] = data[d]);
+				  this.log('[HkStorage][DEBUG]Eintrag akzeptiert.');
+				  exp[d] = data[d];
 			  }
 			  return exp;
 			}
