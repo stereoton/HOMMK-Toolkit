@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkToolkit
-// @version       2012.01.12.16.34.080000
+// @version       2012.01.12.16.41.130000
 // @description   Werkzeugkasten für HOMMK
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -287,7 +287,7 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 			window.Hk = new Class({
 			  $debug: $pick(window.$debug, $debug, 0),
 			  idScript: "HkToolkit",
-			  version: "2012.01.12.16.34.080000",
+			  version: "2012.01.12.16.41.130000",
 			  Coords: {
 				lastRegion: {
 				  x: 0,
@@ -598,14 +598,14 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 			  initialize: function (options) {
 				try {
 					window.console.log('[HkPublic][DEBUG]Bereite HkStorage vor\u2026');
-				  this.setOptions(options);
-				  this.storageKey = this.options.storageKey;
-				  window.console.log('[HkPublic][DEBUG]Initialisiere HkStorage #' + this.storageKey);
-				  if(this.options.clearStorage) this.clearStorage();
-				  if(this.isEmpty()) {
-					  window.console.log('[HkStorage][DEBUG]Erzeuge lokalen Speicher für #' + this.storageKey);
-					this.setStorageData({});
-				  }
+					this.setOptions(options);
+					this.storageKey = this.options.storageKey;
+					window.console.log('[HkPublic][DEBUG]Initialisiere HkStorage #' + this.storageKey);
+					if(this.options.clearStorage) this.clearStorage();
+					if(this.isEmpty()) {
+						window.console.log('[HkStorage][DEBUG]Erzeuge lokalen Speicher für #' + this.storageKey);
+						this.setStorageData({});
+					}
 				}	catch(ex) {
 					window.console.log('[HkStorage][ERROR]Initialisierungsfehler: ' + ex);
 				}
@@ -614,12 +614,12 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 				window.console.log('[HkStorage][DEBUG]Entferne ' + key + ' aus ' + this.storageKey);
 				var data = this.getStorageData();
 				if($defined(data.key) || data.hasOwnProperty(key)) {
-				  var dropped = data[key];
-				  delete data[key];
-				  this.setStorageData(data);
-				  return dropped;
+					var dropped = data[key];
+					delete data[key];
+					this.setStorageData(data);
+					return dropped;
 				}	else {
-				  window.console.log('[HkStorage][INFO]Kein Eintrag ' + key + ' in ' + this.storageKey);
+					window.console.log('[HkStorage][INFO]Kein Eintrag ' + key + ' in ' + this.storageKey);
 				}
 				return false;
 			  },
@@ -648,20 +648,20 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 				var data = this.getStorageData();
 				if("null" == typeof data) {
 					window.console.log("[HkStorage.pull][DEBUG]null-Datentyp im Speicher");
-				  data = {};
+					data = {};
 				} else {
 					window.console.log("[HkStorage.pull][DEBUG]Datentyp im Speicher: " + typeof data);
 				}
 				if(!key) {
 					window.console.log('[HkStorage][DEBUG]Kein Schlüssel angefragt, liefere alle Daten zurück: ' + Json.toString(key));
-				  var exp = {};
-				  for(d in data) {
+					var exp = {};
+					for(d in data) {
 					  window.console.log('[HkStorage][DEBUG]Prüfe Eintrag: ' + Json.toString(d));
 					  if("function" == $type(data[d])) continue;
 					  window.console.log('[HkStorage][DEBUG]Eintrag akzeptiert.');
 					  exp[d] = data[d];
-				  }
-				  return exp;
+					}
+					return exp;
 				}
 				if(!data.hasOwnProperty(key)) return {};
 				var item = data[key];
@@ -671,7 +671,7 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 				var data = $H(this.getStorageData()).keys();
 				if (data == null || data.length <= 0) {
 					window.console.log('[HkStorage][DEBUG]Keine Daten in #' + this.storageKey + ": " + Json.toString(data));
-				  return true;
+					return true;
 				}
 				return false;
 			  },
@@ -691,11 +691,11 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 			  },
 			  clearStorage: function clearStorage() {
 				  window.console.log("[HkStorage][DEBUG]Leere Speicher...");
-				window.localStorage.clear();
-				this.fireEvent('onStorageUpdate', {});
+				  window.localStorage.clear();
+				  this.fireEvent('onStorageUpdate', {});
 			  }
 			});
-			Hk.HkStorage.implement(new Events, new Options, new HkLogger);
+			Hk.HkStorage.implement(new Events, new Options, new window.HkLogger());
 		}	catch(ex) {
 			alert('[HkStorage][ERROR]' + ex);
 			Hk.HkStorage = new Class();
