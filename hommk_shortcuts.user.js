@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkToolkit
-// @version       2012.01.12.01.16.180000
+// @version       2012.01.12.09.15.180000
 // @description   Werkzeugkasten für HOMMK
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -16,7 +16,10 @@
 // Local Storage-Kompatibilität · http://developer.mozilla.org
 // @require http://pastebin.com/raw.php?i=zrfAFeBc
 //
-// HkExtras
+// HkLogger
+// @require http://pastebin.com/raw.php?i=Tc4QTEkP
+//
+// HkFinder
 // @require http://pastebin.com/raw.php?i=tLq6swmK
 //
 // HkGenericStyles
@@ -82,7 +85,10 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 		  'url': 'http://pastebin.com/raw.php?i=zrfAFeBc',
 		  'conditions': "!window.localStorage"
 		},
-		'HkExtras': {
+		'HkLogger': {
+			'url': 'http://pastebin.com/raw.php?i=Tc4QTEkP'
+		},
+		'HkFinder': {
 			'url': 'http://pastebin.com/raw.php?i=tLq6swmK'
 		},
 		'HkStylesGeneric': {
@@ -107,38 +113,6 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 		  'url': 'http://pastebin.com/raw.php?i=NBX5T7pp'
 		}
 	  });
-	
-	  try {
-		if('undefined' == typeof console) { var console; }
-		var hkConsole = {log: function log(msg) {}}; // do nothing
-		if($type(window.console)) {
-		  window.jsConsole = window.console;
-		} else {
-		  window.jsConsole = window.hkConsole;
-		}
-		window.console = {
-		  log: function log(msg, debug) {
-			var dbg = $pick(window.$debug, debug, 0);
-			if(dbg >= 1) window.jsConsole.log(msg);
-			if(dbg > 1) alert(msg);
-		  }
-		};
-		console = window.console;
-	  } catch(ex) {}
-	
-	  var HkLogger = new Class({
-		log: function log(msg) {
-		  var $debug = window.$debug || (this.hasOwnProperty('$debug') ? this.$debug : 0);
-		  if($debug > 1) {
-			alert(msg);
-		  } else if($debug < 1 || "undefined" == typeof console || "undefined" == typeof window.console) {
-			return;
-		  } else {
-			window.console.log(msg);
-		  }
-		}
-	  });
-	  window.HkLogger = HkLogger;
 	
 	  var HkDataStorage = new Class({
 		$debug: 1,
@@ -284,7 +258,7 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 		window.Hk = new Class({
 		  $debug: window.$debug,
 		  idScript: "HkToolkit",
-		  version: "2012.01.12.01.16.180000",
+		  version: "2012.01.12.09.15.180000",
 		  Coords: {
 			lastRegion: {
 			  x: 0,
