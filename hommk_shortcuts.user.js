@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkToolkit
-// @version       2012.01.12.12.01.340000
+// @version       2012.01.12.12.10.440000
 // @description   Werkzeugkasten für HOMMK
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -65,19 +65,40 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 	  window.$debug = 1;
 	
 	  var AssetLoader = new Class({
-		initialize: function() { return this; },
-		injectJavascript: function injectJavascript(js) {
-		  $each(js, function(scriptDef, scriptName) {
-			var url = scriptDef.hasOwnProperty("url") ? scriptDef.url : false;
-			var conditions = scriptDef.hasOwnProperty("conditions") ? scriptDef.condition : "true";
-			if(url && eval(conditions) && !$(scriptName)) {
-			  new Asset.javascript(url, {'id': scriptName});
-			}
-		  });
-		}
+		  initialize: function(js) {
+			  this.completed = [];
+			  this.waiting = [];
+			  if(!!js) this.injectJavascript(js);
+		  },
+		  injectJavascript: function injectJavascript(js) {
+			  $each(js, function(scriptDef, scriptName) {
+				  this.waiting.push(scriptName);
+			  }, this);
+			  $each(js, function(scriptDef, scriptName) {
+				  if(!$(scriptName)) this.inject(scriptDef, scriptName);
+			  }, this);
+		  },
+		  inject: function(scriptDef, scriptName) {
+			  if($(scriptName)) $(scriptName).remove();			  
+			  var url = scriptDef.hasOwnProperty("url") ? scriptDef.url : false;
+			  var conditions = scriptDef.hasOwnProperty("conditions") ? eval(scriptDef.conditions) : true;
+			  if(url && conditions && !$(scriptName)) {
+				  new Asset.javascript(url, {'id': scriptName});
+				  this.check.delay(200, this, [scriptDef, scriptName]);
+			  }
+		  },
+		  check: function(scriptDef, scriptName) {
+			  var conditions = scriptDef.hasOwnProperty("conditions") ? eval(scriptDef.conditions) : false;
+			  if(conditions) {
+				  this.inject.delay(1000, this, [scriptDef, scriptName]);
+			  }	else {
+				  this.completed.push(scriptName);
+				  this.waiting.remove(scriptName);
+			  }
+		  }
 	  });
 	  try {
-		  new AssetLoader().injectJavascript({
+		  window.assetLoader = new AssetLoader({
 			'MozillaLocalStorage': {
 			  'url': 'http://pastebin.com/raw.php?i=zrfAFeBc',
 			  'conditions': "!window.localStorage"
@@ -254,7 +275,7 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 			window.Hk = new Class({
 			  $debug: window.$debug || $debug || 0,
 			  idScript: "HkToolkit",
-			  version: "2012.01.12.12.01.340000",
+			  version: "2012.01.12.12.10.440000",
 			  Coords: {
 				lastRegion: {
 				  x: 0,
