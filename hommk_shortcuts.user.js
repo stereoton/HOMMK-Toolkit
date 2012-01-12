@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkToolkit
-// @version       2012.01.12.11.01.230000
+// @version       2012.01.12.11.01.300000
 // @description   Werkzeugkasten für HOMMK
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -115,6 +115,7 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 		},
 		initialize: function (options) {
 		  try {
+			this.log('[HkDataStorage][DEBUG]Bereite HkDataStorage vor\u2026');
 			this.setOptions(options);
 			var useDefaults = !!this.options.useStorageKeyDefaults;
 			var storageKey;
@@ -234,7 +235,7 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 		  return data;
 		},
 		clearDataStorage: function clearDataStorage() {
-		  this.log("[HkDataStorage][DEBUG]Leere Speicher...");
+		  this.log("[HkDataStorage][DEBUG]Leere Speicher\u2026");
 		  window.localStorage.clear();
 		  this.fireEvent('onStorageUpdate', {});
 		}
@@ -243,16 +244,14 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 	
 	  window.hkCreateClasses = function () {
 	
-		window.console.log('Erzeuge Klassen\u2026');
+		window.console.log('[HkPublic][DEBUG]Erzeuge Klassen\u2026');
 	
-		window.HkStore = new Class({
-	
-		});
+		window.HkStore = {};
 	
 		window.Hk = new Class({
 		  $debug: window.$debug,
 		  idScript: "HkToolkit",
-		  version: "2012.01.12.11.01.230000",
+		  version: "2012.01.12.11.01.300000",
 		  Coords: {
 			lastRegion: {
 			  x: 0,
@@ -296,8 +295,8 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 			}	else {
 			  str += "Region #" + this.HOMMK.getRegionNumberFromXY(x, y);
 			}
-	  //	  window.hk.log(region);
-	  //	  window.hk.log(this.HOMMK.worldMap);
+//			window.hk.log(region);
+//			window.hk.log(this.HOMMK.worldMap);
 			return str;
 		  },
 		  fixPosition: function fixPosition(p) {
@@ -548,6 +547,7 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 		  },
 		  initialize: function (options) {
 			try {
+			  this.log('[HkPublic][DEBUG]Bereite HkStorage vor\u2026');
 			  this.setOptions(options);
 			  this.storageKey = this.options.storageKey;
 			  this.log('[HkPublic][DEBUG]Initialisiere HkStorage #' + this.storageKey);
