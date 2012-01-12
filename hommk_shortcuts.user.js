@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkToolkit
-// @version       2012.01.12.16.58.440000
+// @version       2012.01.12.17.13.230000
 // @description   Werkzeugkasten für HOMMK
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -117,7 +117,7 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 				'url': 'http://pastebin.com/raw.php?i=nC9wTKbb',
 				'conditions': '"undefined" == typeof HkFinder'
 			},
-			'HkStylesGeneric': {
+			'HkScriptedStyles': {
 				'url': 'https://github.com/gelgamek/HOMMK-Toolkit/raw/master/hommk_styles.user.js',
 				'conditions': '"undefined" == typeof HkStylesGeneric'
 			},
@@ -286,7 +286,7 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 		try {
 			window.Hk = new Class({
 			  idScript: "HkToolkit",
-			  version: "2012.01.12.16.58.440000",
+			  version: "2012.01.12.17.13.230000",
 			  Coords: {
 				lastRegion: {
 				  x: 0,
@@ -1651,7 +1651,7 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 		  }
 		  if("undefined" == typeof window.hkStylesGeneric) {
 			  try {
-				window.hkStylesGeneric = new HkStylesGeneric();
+				window.hkStylesGeneric = new window.HkStylesGeneric();
 			  } catch(ex) {
 				window.console.log('[HkPublic][ERROR]Fehler bei der Finalisierung des Shortcuts-Fensters: '+ex);
 			  }
