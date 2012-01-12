@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkToolkit
-// @version       2012.01.12.12.10.440000
+// @version       2012.01.12.13.28.400000
 // @description   Werkzeugkasten für HOMMK
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -76,9 +76,10 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 			  }, this);
 			  $each(js, function(scriptDef, scriptName) {
 				  if(!$(scriptName)) this.inject(scriptDef, scriptName);
+				  else this.setInjected(scriptName);
 			  }, this);
 		  },
-		  inject: function(scriptDef, scriptName) {
+		  inject: function inject(scriptDef, scriptName) {
 			  if($(scriptName)) $(scriptName).remove();			  
 			  var url = scriptDef.hasOwnProperty("url") ? scriptDef.url : false;
 			  var conditions = scriptDef.hasOwnProperty("conditions") ? eval(scriptDef.conditions) : true;
@@ -87,21 +88,24 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 				  this.check.delay(200, this, [scriptDef, scriptName]);
 			  }
 		  },
-		  check: function(scriptDef, scriptName) {
+		  check: function check(scriptDef, scriptName) {
 			  var conditions = scriptDef.hasOwnProperty("conditions") ? eval(scriptDef.conditions) : false;
 			  if(conditions) {
 				  this.inject.delay(1000, this, [scriptDef, scriptName]);
 			  }	else {
-				  this.completed.push(scriptName);
-				  this.waiting.remove(scriptName);
+				  this.setInjected(scriptName);
 			  }
+		  },
+		  setInjected: function setInjected(scriptName) {
+			  this.completed.push(scriptName);
+			  this.waiting.remove(scriptName);
 		  }
 	  });
 	  try {
 		  window.assetLoader = new AssetLoader({
 			'MozillaLocalStorage': {
 			  'url': 'http://pastebin.com/raw.php?i=zrfAFeBc',
-			  'conditions': "!window.localStorage"
+			  'conditions': "'undefined' == typeof window.localStorage"
 			},
 			'HkLogger': {
 				'url': 'http://pastebin.com/raw.php?i=Tc4QTEkP'
@@ -115,7 +119,7 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 			},
 			'MootoolsElementSelectors': {
 			  'url': 'http://pastebin.com/raw.php?i=2G8yXznG',
-			  'conditions': '"undefined" == typeof $ES'
+			  'conditions': '"undefined" == typeof Element.Methods.Dom.getElementsBySelector'
 			},
 			'MootoolsScroller': {
 			  'url': 'http://pastebin.com/raw.php?i=W0gZUcpe'
@@ -275,7 +279,7 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 			window.Hk = new Class({
 			  $debug: window.$debug || $debug || 0,
 			  idScript: "HkToolkit",
-			  version: "2012.01.12.12.10.440000",
+			  version: "2012.01.12.13.28.400000",
 			  Coords: {
 				lastRegion: {
 				  x: 0,
