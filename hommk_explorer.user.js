@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name HkExplorer
-// @version       2012.01.12.20.05.060000
+// @version       2012.01.12.21.04.490000
 // @description Explorer für HkToolkit
 // @author Gelgamek <gelgamek@arcor.de>
 // @copyright Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -42,43 +42,43 @@ try {
 		});
 	}
 	window.$debug = window.$debug || 1;
-	try {
-		window.explorerAssetLoader = new AssetLoader({
-		    'MozillaLocalStorage': {
-		        'url': 'http://pastebin.com/raw.php?i=zrfAFeBc',
-		        'conditions': '"undefined" == typeof window.localStorage'
-		    },
-		    'HkLogger': {
-		        'url': 'http://pastebin.com/raw.php?i=Tc4QTEkP',
-		        'conditions': '"undefined" == typeof HkLogger'
-		    },
-		    'HkFinder': {
-		        'url': 'http://pastebin.com/raw.php?i=nC9wTKbb',
-		        'conditions': '"undefined" == typeof HkFinder'
-		    },
-		    'HkScriptedStyles': {
-		        'url': 'https://github.com/gelgamek/HOMMK-Toolkit/raw/master/hommk_styles.user.js',
-		        'conditions': '"undefined" == typeof HkStylesGeneric'
-		    },
-		    'MootoolsElementSelectors': {
-		        'url': 'http://pastebin.com/raw.php?i=2G8yXznG',
-		        'conditions': '"undefined" == typeof Element.Methods.Dom.getElementsBySelector'
-		    },
-		    'MootoolsScroller': {
-			    'url': 'http://pastebin.com/raw.php?i=W0gZUcpe'
-		    },
-		    'SHA256CryptoJs': {
-			    'url': 'http://crypto-js.googlecode.com/files/2.5.3-crypto-sha256.js'
-		    },
-		    'HkPrototypes': {
-			    'url': 'http://pastebin.com/raw.php?i=NBX5T7pp'
-		    }
-		});
-	} catch(ex) {
-		alert('[ExplorerAssetLoader][ERROR]' + ex);
-	}
 	
 	window.hkCreateExplorer = function() {
+		try {
+			window.explorerAssetLoader = new AssetLoader({
+			    'MozillaLocalStorage': {
+			        'url': 'http://pastebin.com/raw.php?i=zrfAFeBc',
+			        'conditions': '"undefined" == typeof window.localStorage'
+			    },
+			    'HkLogger': {
+			        'url': 'http://pastebin.com/raw.php?i=Tc4QTEkP',
+			        'conditions': '"undefined" == typeof HkLogger'
+			    },
+			    'HkFinder': {
+			        'url': 'http://pastebin.com/raw.php?i=nC9wTKbb',
+			        'conditions': '"undefined" == typeof HkFinder'
+			    },
+			    'HkScriptedStyles': {
+			        'url': 'https://github.com/gelgamek/HOMMK-Toolkit/raw/master/hommk_styles.user.js',
+			        'conditions': '"undefined" == typeof HkStylesGeneric'
+			    },
+			    'MootoolsElementSelectors': {
+			        'url': 'http://pastebin.com/raw.php?i=2G8yXznG',
+			        'conditions': '"undefined" == typeof Element.Methods.Dom.getElementsBySelector'
+			    },
+			    'MootoolsScroller': {
+				    'url': 'http://pastebin.com/raw.php?i=W0gZUcpe'
+			    },
+			    'SHA256CryptoJs': {
+				    'url': 'http://crypto-js.googlecode.com/files/2.5.3-crypto-sha256.js'
+			    },
+			    'HkPrototypes': {
+				    'url': 'http://pastebin.com/raw.php?i=NBX5T7pp'
+			    }
+			});
+		} catch(ex) {
+			alert('[ExplorerAssetLoader][ERROR]' + ex);
+		}
 		
 		// if(window.HkExplorerLoader.loaded) return;
 		
@@ -223,7 +223,7 @@ try {
 			    return;
 		    }
 		    console.log('[HkPublic][DEBUG]Warte auf Toolkit\u2026');
-		    if(!!(window.hkCreateExplorer && window.initHkToolkit && window.hk && window.explorerAssetLoader && window.explorerAssetLoader.waiting.length == 0)) {
+		    if(!!(window.hkCreateExplorer && window.initHkToolkit && window.hk && window.AssetLoader && window.assetLoader && window.assetLoader.waiting.length == 0)) {
 			    window.console.log('[HkExplorerLoader][DEBUG]Toolkit verfügbar, bereite HkExplorer vor\u2026');
 			    try {
 				    window.HkExplorerLoader.loaded = true;
