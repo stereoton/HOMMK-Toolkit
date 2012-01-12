@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkToolkit
-// @version       2012.01.12.13.47.500000
+// @version       2012.01.12.14.00.190000
 // @description   Werkzeugkasten für HOMMK
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -86,8 +86,8 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 			  var conditions = scriptDef.hasOwnProperty("conditions") ? eval(scriptDef.conditions) : true;
 			  if(url && conditions && !$(scriptName)) {
 				  new Asset.javascript(url, {'id': scriptName});
-				  this.check.delay(200, this, [scriptDef, scriptName]);
 			  }
+			  this.check.delay(200, this, [scriptDef, scriptName]);
 		  },
 		  check: function check(scriptDef, scriptName) {
 			  var conditions = scriptDef.hasOwnProperty("conditions") ? eval(scriptDef.conditions) : false;
@@ -106,7 +106,7 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 		  window.assetLoader = new AssetLoader({
 			'MozillaLocalStorage': {
 			  'url': 'http://pastebin.com/raw.php?i=zrfAFeBc',
-			  'conditions': "'undefined' == typeof window.localStorage"
+			  'conditions': '"undefined" == typeof window.localStorage'
 			},
 			'HkLogger': {
 				'url': 'http://pastebin.com/raw.php?i=Tc4QTEkP'
@@ -280,7 +280,7 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 			window.Hk = new Class({
 			  $debug: window.$debug || $debug || 0,
 			  idScript: "HkToolkit",
-			  version: "2012.01.12.13.47.500000",
+			  version: "2012.01.12.14.00.190000",
 			  Coords: {
 				lastRegion: {
 				  x: 0,
