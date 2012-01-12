@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkToolkit
-// @version       2012.01.12.16.49.460000
+// @version       2012.01.12.16.55.280000
 // @description   Werkzeugkasten für HOMMK
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -286,7 +286,7 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 		try {
 			window.Hk = new Class({
 			  idScript: "HkToolkit",
-			  version: "2012.01.12.16.49.460000",
+			  version: "2012.01.12.16.55.280000",
 			  Coords: {
 				lastRegion: {
 				  x: 0,
@@ -311,7 +311,7 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 					this.WorldSize = this.Map.get('_size');
 					this.WorldId = this.Player.get('worldId');
 				  }	catch(ex) {
-					window.console.log('[Hk][ERROR]Hk-Initialisierung fehlgeschlagen: ' + ex);
+					alert('[Hk][ERROR]Hk-Initialisierung fehlgeschlagen: ' + ex);
 				  }
 			  },
 			  getRegionName: function getRegionName(x, y) {
@@ -332,7 +332,7 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 						str += "(" + region.content.rB.owner.name + ")"; // Name
 					}
 				}	else {
-					str += "Region #" + this.HOMMK.getRegionNumberFromXY(x, y);
+					str += "Region #" + window.HOMMK.getRegionNumberFromXY(x, y);
 				}
 	//			window.console.log(region);
 	//			window.console.log(this.HOMMK.worldMap);
@@ -350,10 +350,10 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 			  gotoPosition: function gotoPosition(x, y, zoom) {
 				var p;
 //				window.console.log(this.HOMMK);
-				if (!$defined(zoom)) zoom = this.HOMMK.REGION_WORLDMAP_ZOOM_13X13;
-				p = this.HOMMK.getRegionNumberFromXY(x, y);
+				if (!$defined(zoom)) zoom = window.HOMMK.REGION_WORLDMAP_ZOOM_13X13;
+				p = window.HOMMK.getRegionNumberFromXY(x, y);
 				if(!this.validatePosition(x) || !this.validatePosition(y)) return false;
-				this.HOMMK.setCurrentView(zoom, p, x, y);
+				window.HOMMK.setCurrentView(zoom, p, x, y);
 				return true;
 			  },
 			  getCurrentX: function getCurrentX() {
@@ -363,11 +363,11 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 				return this.validatePosition(this.Coords.lastRegion.y || window.HOMMK.currentView.regionY);
 			  }
 			});
-			try {
-				window.Hk.implement(new window.HkLogger());
-			}	catch(ex) {
-				alert('[Hk][ERROR]Logger-Implementierung fehlgeschlagen: ' + ex);
-			}
+//			try {
+//				window.Hk.implement(new window.HkLogger());
+//			}	catch(ex) {
+//				alert('[Hk][ERROR]Logger-Implementierung fehlgeschlagen: ' + ex);
+//			}
 		}	catch(ex) {
 			alert('[Hk][ERROR]' + ex);
 		}
