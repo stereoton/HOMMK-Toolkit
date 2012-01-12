@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkToolkit
-// @version       2012.01.12.09.36.580000
+// @version       2012.01.12.11.01.230000
 // @description   Werkzeugkasten für HOMMK
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -252,7 +252,7 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 		window.Hk = new Class({
 		  $debug: window.$debug,
 		  idScript: "HkToolkit",
-		  version: "2012.01.12.09.36.580000",
+		  version: "2012.01.12.11.01.230000",
 		  Coords: {
 			lastRegion: {
 			  x: 0,
@@ -604,14 +604,11 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 			}
 			if(!key) {
 			  this.log('[HkStorage][DEBUG]Kein Schlüssel angefragt, liefere alle Daten zurück: ' + Json.toString(key));
-			  var fData = $H(data).filter(function(val, key) {
-				  return !($type(val) == "function");
-			  });
 			  var exp = {};
-			  fData = fData.values().associate(fData.keys());
-			  fData.each(function(val, key) {
-				  this.setProperty(key, val);
-			  }, exp);
+			  for(d in data) {
+				  if($type(data[d]) == "function") continue;
+				  exp.setProperty(d, data[d]);
+			  }
 			  return exp;
 			}
 			if(!data.hasOwnProperty(key)) return {};
