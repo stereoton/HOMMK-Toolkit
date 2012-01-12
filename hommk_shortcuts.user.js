@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkToolkit
-// @version       2012.01.12.14.31.370000
+// @version       2012.01.12.14.57.040000
 // @description   Werkzeugkasten für HOMMK
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -285,7 +285,7 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 			window.Hk = new Class({
 			  $debug: $pick(window.$debug, $debug, 0),
 			  idScript: "HkToolkit",
-			  version: "2012.01.12.14.31.370000",
+			  version: "2012.01.12.14.57.040000",
 			  Coords: {
 				lastRegion: {
 				  x: 0,
@@ -1660,7 +1660,7 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 	  window.console.log('Erzeuge Loader-Objekt\u2026');
 	
 	  /**
-	  * Prüft die Verfügbarkeit der HOMMK-Objekte... @todo Braucht's das überhaupt?
+	  * Verfügbarkeit der HOMMK-Objekte prüfen
 	  */
 	  window.HkToolkitLoader = {
 		loaded: false,
@@ -1672,7 +1672,7 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 			return;
 		  }
 		  window.console.log('[HkPublic][DEBUG]Warte auf Hk\u2026');
-		  if(!!(window.HOMMK && window.HOMMK.worldMap && window.hkCreateClasses && window.assetLoader.waiting.length == 0)) {
+		  if(!!(window.HOMMK && window.HOMMK.worldMap && window.hkCreateClasses && window.assetLoader && window.assetLoader.waiting.length == 0)) {
 			window.console.log('[HkPublic][DEBUG]Hk verfügbar, bereite HkToolkit vor\u2026');
 			try {
 			  window.HkToolkitLoader.loaded = true;
@@ -1690,11 +1690,11 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 	  window.console.log('Starte Loader\u2026');
 	
 	  /**
-	  * Alle 1000ms die Verfügbarkeit prüfen.  @todo Braucht's das überhaupt?
+	  * Alle 1000ms die Verfügbarkeit prüfen.
 	  */
-	  window.HkToolkitLoaderActive = window.HkToolkitLoader.load.periodical(2000);
+	  window.HkToolkitLoaderActive = window.HkToolkitLoader.load.periodical(1000);
 	
 	} catch(ex) {
-		alert('[HkPublic][ERROR]' + ex);
+		alert('[HkPublic][ERROR]Unbekannter Fehler: ' + ex);
 	}
 }
