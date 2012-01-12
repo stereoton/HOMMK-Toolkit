@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkToolkit
-// @version       2012.01.12.14.00.190000
+// @version       2012.01.12.14.13.270000
 // @description   Werkzeugkasten für HOMMK
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -61,6 +61,7 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 } 	else { // Nicht ausführen, wenn Greasemonkey im anonymen Wrapper läuft...
 
 	try {
+		
 	  // Master-Switch f. Debug-Ausgabe
 	  window.$debug = 1;
 	
@@ -136,151 +137,155 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 		 alert('[AssetLoader][ERROR]' + ex);
 	  }
 	
-	  var HkDataStorage = new Class({
-		$debug: 1,
-		options: {
-		  'clearStorage': false
-		},
-		initialize: function (options) {
-		  try {
-			this.log('[HkDataStorage][DEBUG]Bereite HkDataStorage vor\u2026');
-			this.setOptions(options);
-			var useDefaults = !!this.options.useStorageKeyDefaults;
-			var storageKey;
-			if(!!this.options.storageKey) {
-			  storageKey = this.options.storageKey;
-			} else {
-			  storageKey = this.getStorageKey();
-			  useDefaults = false;
-			}
-			this.setStorageKey(storageKey, useDefaults);
-			this.log('[HkDataStorage][DEBUG]Initialisiere HkDataStorage #' + this.storageKey);
-			if(!!this.options.clearStorage) this.clearDataStorage();
-			if(this.isDataStorageEmpty()) {
-			  this.log('[HkDataStorage][DEBUG]Erzeuge lokalen Speicher für #' + this.storageKey);
-			  this.setDataStorageContent({});
-			}
-		  }	catch(ex) {
-			this.log('[HkDataStorage][ERROR]Initialisierungsfehler: ' + ex);
-		  }
-		},
-		/**
-		 * @param {String} storageKey
-		 * @param {Boolean} useDefaults, Pre-/Postfix für storageKey erzeugen, Default ist `true`
-		 */
-		setStorageKey: function setStorageKey(storageKey, useDefaults) {
-		  if("undefined" == typeof useDefaults) useDefaults = true;
-		  if(useDefaults) {
-			storageKey = "HkStorage" + storageKey + this.getStorageKeyPostfix();
-		  }
-		  this.storageKey = storageKey;
-		},
-		getStorageKey: function getStorageKey() {
-		  if(this.hasOwnProperty("storageKey")) return this.storageKey;
-		  var storageKey = "HkStorage" + this.getStorageId() + this.getStorageKeyPostfix();
-		  return storageKey;
-		},
-		getStorageId: function getStorageId() {
-		  var id = this.getRecursive("id", false);
-		  if(!id) id = Crypto.SHA256(this.toString(), {asString: true});
-		  return id;
-		},
-		getStorageKeyPostfix: function getStorageKeyPostfix() {
-		  var player = window.getRecursive("hk.PlayerId", "");
-		  var world = window.getRecursive("hk.WorldId", "");
-		  return String(player) + String(world);
-		},
-		dropFromDataStorage: function dropFromDataStorage(key) {
-		  window.hk.log('[HkDataStorage][DEBUG]Entferne ' + key + ' aus ' + this.storageKey);
-		  var data = this.getDataStorageContent();
-		  if($defined(data.key) || data.hasOwnProperty(key)) {
-			var dropped = data[key];
-			delete data[key];
-			this.setDataStorageContent(data);
-			return dropped;
-		  }	else {
-			window.hk.log('[HkDataStorage][INFO]Kein Eintrag ' + key + ' in ' + this.storageKey);
-		  }
-		  return false;
-		},
-		dropAllFromDataStorage: function dropAllFromStorage() {
-		  var storageData = this.pullFromDataStorage();
-		  window.hk.log('[HkDataStorage][DEBUG]Entferne Daten aus ' + this.storageKey);
-		  if(storageData) {
-			$each(storageData, function(val, key) {
-			  window.hk.log('[HkDataStorage][DEBUG]Verarbeite ' + key);
-			  this.dropFromDataStorage(key);
-			}.bind(this));
-		  }
-		},
-		pushToDataStorage: function pushToDataStorage(key, item) {
-		  if(arguments.length < 2) this.log('[HkDataStorage][DEBUG]Speichere Daten: ' + Json.toString(key));
-		  else this.log('[HkDataStorage][DEBUG]Speichere Daten unter #' + key + ": " + Json.toString(item));
-		  var data = this.getDataStorageContent();
-		  if(arguments.length < 2) {
-			$each(key, function(item, idx) {
-			  data[idx] = item;
-			});
-		  }	else data[key] = item;
-		  this.setDataStorageContent(data);
-		},
-		pullFromDataStorage: function pullFromDataStorage(key) {
-		  var data = this.getDataStorageContent();
-		  if("null" == typeof data) {
-			this.log("[HkDataStorage.pull][DEBUG]null-Datentyp im Speicher");
-			data = {};
-		  }	else {
-			this.log("[HkDataStorage.pull][DEBUG]Datentyp im Speicher: " + typeof data);
-		  }
-		  if(!key) {
-			this.log('[HkDataStorage][DEBUG]Kein Schlüssel angefragt, liefere alle Daten zurück: ' + Json.toString(key));
-			return data;
-		  }
-		  if(!data.hasOwnProperty(key)) return {};
-		  var item = data[key];
-		  return item;
-		},
-		isDataStorageEmpty: function isDataStorageEmpty(key) {
-		  var data = $H(this.getDataStorageContent()).keys();
-		  if (data == null || data.length <= 0) {
-			this.log('[HkDataStorage][DEBUG]Keine Daten in #' + this.storageKey);
-			return true;
-		  }
-		  return false;
-		},
-		getDataStorageContent: function getDataStorageContent() {
-		  var data = window.localStorage.getItem(this.storageKey);
-		  this.log('[HkDataStorage][DEBUG]Abgerufene Daten aus #' + this.storageKey + ": " + Json.toString(data));
-		  if(null == typeof data || !data) return {};
-		  data = Json.evaluate(data);
-		  return data;
-		},
-		setDataStorageContent: function setDataStorageContent(data) {
-		  var dataString = Json.toString(data);
-		  this.log('[HkDataStorage][DEBUG]Speichere Daten in #' + this.storageKey + ": " + dataString);
-		  window.localStorage.setItem(this.storageKey, dataString);
-		  this.fireEvent('onStorageUpdate', data);
-		  return data;
-		},
-		clearDataStorage: function clearDataStorage() {
-		  this.log("[HkDataStorage][DEBUG]Leere Speicher\u2026");
-		  window.localStorage.clear();
-		  this.fireEvent('onStorageUpdate', {});
-		}
-	  });
-	  HkDataStorage.implement(new Options, new Events);
-	
 	  window.hkCreateClasses = function () {
 	
 		window.console.log('[HkPublic][DEBUG]Erzeuge Klassen\u2026');
 	
 		window.HkStore = {};
 
+		  try {
+		  var HkDataStorage = new Class({
+			$debug: 1,
+			options: {
+			  'clearStorage': false
+			},
+			initialize: function (options) {
+			  try {
+				this.log('[HkDataStorage][DEBUG]Bereite HkDataStorage vor\u2026');
+				this.setOptions(options);
+				var useDefaults = !!this.options.useStorageKeyDefaults;
+				var storageKey;
+				if(!!this.options.storageKey) {
+				  storageKey = this.options.storageKey;
+				} else {
+				  storageKey = this.getStorageKey();
+				  useDefaults = false;
+				}
+				this.setStorageKey(storageKey, useDefaults);
+				this.log('[HkDataStorage][DEBUG]Initialisiere HkDataStorage #' + this.storageKey);
+				if(!!this.options.clearStorage) this.clearDataStorage();
+				if(this.isDataStorageEmpty()) {
+				  this.log('[HkDataStorage][DEBUG]Erzeuge lokalen Speicher für #' + this.storageKey);
+				  this.setDataStorageContent({});
+				}
+			  }	catch(ex) {
+				this.log('[HkDataStorage][ERROR]Initialisierungsfehler: ' + ex);
+			  }
+			},
+			/**
+			 * @param {String} storageKey
+			 * @param {Boolean} useDefaults, Pre-/Postfix für storageKey erzeugen, Default ist `true`
+			 */
+			setStorageKey: function setStorageKey(storageKey, useDefaults) {
+			  if("undefined" == typeof useDefaults) useDefaults = true;
+			  if(useDefaults) {
+				storageKey = "HkStorage" + storageKey + this.getStorageKeyPostfix();
+			  }
+			  this.storageKey = storageKey;
+			},
+			getStorageKey: function getStorageKey() {
+			  if(this.hasOwnProperty("storageKey")) return this.storageKey;
+			  var storageKey = "HkStorage" + this.getStorageId() + this.getStorageKeyPostfix();
+			  return storageKey;
+			},
+			getStorageId: function getStorageId() {
+			  var id = this.getRecursive("id", false);
+			  if(!id) id = Crypto.SHA256(this.toString(), {asString: true});
+			  return id;
+			},
+			getStorageKeyPostfix: function getStorageKeyPostfix() {
+			  var player = window.getRecursive("hk.PlayerId", "");
+			  var world = window.getRecursive("hk.WorldId", "");
+			  return String(player) + String(world);
+			},
+			dropFromDataStorage: function dropFromDataStorage(key) {
+			  window.hk.log('[HkDataStorage][DEBUG]Entferne ' + key + ' aus ' + this.storageKey);
+			  var data = this.getDataStorageContent();
+			  if($defined(data.key) || data.hasOwnProperty(key)) {
+				var dropped = data[key];
+				delete data[key];
+				this.setDataStorageContent(data);
+				return dropped;
+			  }	else {
+				window.hk.log('[HkDataStorage][INFO]Kein Eintrag ' + key + ' in ' + this.storageKey);
+			  }
+			  return false;
+			},
+			dropAllFromDataStorage: function dropAllFromStorage() {
+			  var storageData = this.pullFromDataStorage();
+			  window.hk.log('[HkDataStorage][DEBUG]Entferne Daten aus ' + this.storageKey);
+			  if(storageData) {
+				$each(storageData, function(val, key) {
+				  window.hk.log('[HkDataStorage][DEBUG]Verarbeite ' + key);
+				  this.dropFromDataStorage(key);
+				}.bind(this));
+			  }
+			},
+			pushToDataStorage: function pushToDataStorage(key, item) {
+			  if(arguments.length < 2) this.log('[HkDataStorage][DEBUG]Speichere Daten: ' + Json.toString(key));
+			  else this.log('[HkDataStorage][DEBUG]Speichere Daten unter #' + key + ": " + Json.toString(item));
+			  var data = this.getDataStorageContent();
+			  if(arguments.length < 2) {
+				$each(key, function(item, idx) {
+				  data[idx] = item;
+				});
+			  }	else data[key] = item;
+			  this.setDataStorageContent(data);
+			},
+			pullFromDataStorage: function pullFromDataStorage(key) {
+			  var data = this.getDataStorageContent();
+			  if("null" == typeof data) {
+				this.log("[HkDataStorage.pull][DEBUG]null-Datentyp im Speicher");
+				data = {};
+			  }	else {
+				this.log("[HkDataStorage.pull][DEBUG]Datentyp im Speicher: " + typeof data);
+			  }
+			  if(!key) {
+				this.log('[HkDataStorage][DEBUG]Kein Schlüssel angefragt, liefere alle Daten zurück: ' + Json.toString(key));
+				return data;
+			  }
+			  if(!data.hasOwnProperty(key)) return {};
+			  var item = data[key];
+			  return item;
+			},
+			isDataStorageEmpty: function isDataStorageEmpty(key) {
+			  var data = $H(this.getDataStorageContent()).keys();
+			  if (data == null || data.length <= 0) {
+				this.log('[HkDataStorage][DEBUG]Keine Daten in #' + this.storageKey);
+				return true;
+			  }
+			  return false;
+			},
+			getDataStorageContent: function getDataStorageContent() {
+			  var data = window.localStorage.getItem(this.storageKey);
+			  this.log('[HkDataStorage][DEBUG]Abgerufene Daten aus #' + this.storageKey + ": " + Json.toString(data));
+			  if(null == typeof data || !data) return {};
+			  data = Json.evaluate(data);
+			  return data;
+			},
+			setDataStorageContent: function setDataStorageContent(data) {
+			  var dataString = Json.toString(data);
+			  this.log('[HkDataStorage][DEBUG]Speichere Daten in #' + this.storageKey + ": " + dataString);
+			  window.localStorage.setItem(this.storageKey, dataString);
+			  this.fireEvent('onStorageUpdate', data);
+			  return data;
+			},
+			clearDataStorage: function clearDataStorage() {
+			  this.log("[HkDataStorage][DEBUG]Leere Speicher\u2026");
+			  window.localStorage.clear();
+			  this.fireEvent('onStorageUpdate', {});
+			}
+		  });
+		  HkDataStorage.implement(new Options, new Events);
+		  }	catch(ex) {
+			  alert("[HkDataStorage][ERROR]" + ex);
+		  }
+
 		try {
 			window.Hk = new Class({
 			  $debug: window.$debug || $debug || 0,
 			  idScript: "HkToolkit",
-			  version: "2012.01.12.14.00.190000",
+			  version: "2012.01.12.14.13.270000",
 			  Coords: {
 				lastRegion: {
 				  x: 0,
@@ -1666,14 +1671,14 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 			delete window.HkToolkitLoader;
 			return;
 		  }
-		  window.console.log('[HkPublic][DEBUG]Warte auf Hk: ' + Json.toString(!!(window.HOMMK && window.hkCreateClasses && window.HOMMK.worldMap)) + '\u2026');
-		  if(!!(window.HOMMK && window.hkCreateClasses && window.HOMMK.worldMap)) {
+		  window.console.log('[HkPublic][DEBUG]Warte auf Hk\u2026');
+		  if(!!(window.HOMMK && window.HOMMK.worldMap && window.hkCreateClasses && window.assetLoader.waiting.length == 0)) {
 			window.console.log('[HkPublic][DEBUG]Hk verfügbar, bereite HkToolkit vor\u2026');
 			try {
 			  window.HkToolkitLoader.loaded = true;
 			  window.hkCreateClasses();
 			} catch(ex) {
-			  window.console.log('[HkPublic][ERROR]Fehler beim Erzeugen der Klassen für HkToolkit: ' + ex);
+			  alert('[HkPublic][ERROR]Fehler beim Erzeugen der Klassen für HkToolkit: ' + ex);
 			}
 		  } else {
 			window.console.log('[HkPublic][DEBUG]HkToolkit wartet auf die Verfügbarkeit von Hk.');
@@ -1689,6 +1694,6 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 	  window.HkToolkitLoaderActive = window.HkToolkitLoader.load.periodical(2000);
 	
 	} catch(ex) {
-		alert(Json.toString(ex));
+		alert('[HkPublic][ERROR]' + ex);
 	}
 }
