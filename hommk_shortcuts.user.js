@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkToolkit
-// @version       2012.01.12.11.16.310000
+// @version       2012.01.12.12.01.340000
 // @description   Werkzeugkasten für HOMMK
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -251,87 +251,96 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 		window.HkStore = {};
 
 		try {
-		window.Hk = new Class({
-		  $debug: window.$debug,
-		  idScript: "HkToolkit",
-		  version: "2012.01.12.11.16.310000",
-		  Coords: {
-			lastRegion: {
-			  x: 0,
-			  y: 0
-			},
-			lastGoto: {
-			  x: 0,
-			  y: 0
-			},
-			regExp: /\(?\s*([0-9]+)\s*[,.\-]\s*([0-9]+)\s*\)?/
-		  },
-		  doNothing: Class.empty(),
-		  initialize: function() {
-			this.HOMMK = window.HOMMK;
-			this.Player = this.HOMMK.player;
-			this.PlayerId = this.Player.get('id');
-			this.UserId = this.Player.get('userId');
-			this.AllianceId = this.Player.get('allianceId');
-			this.AllianceName = this.Player.get('allianceName');
-			this.Map = this.HOMMK.worldMap;
-			this.WorldSize = this.Map.get('_size');
-			this.WorldId = this.Player.get('worldId');
-		  },
-		  getRegionName: function getRegionName(x, y) {
-			if(arguments.length == 1) {
-			  var xy = this.HOMMK.getXYFromRegionNumber();
-			  x = xy.x;
-			  y = xy.y;
-			}
-			var region = window.HOMMK.getRegionFromXY(x, y);
-			var str = "";
-			if(region.content.hasOwnProperty("cN")) { // Stadt
-			  str += region.content.cN; // Name
-			  if(region.content.hasOwnProperty("pN") && !!region.content.pN) str += ", " + region.content.pN; // Besitzer
-			  if(region.content.hasOwnProperty("iAN") && !!region.content.iAN) str += " (" + region.content.iAN + ")";  // Allianz
-			}	else if(region.content.hasOwnProperty("rB")) { // Gebietsgebäude
-			  str += region.content.rB.n; // Name
-			  if(region.content.rB.hasOwnProperty("owner") && !!region.content.rB.owner) {
-				str += "(" + region.content.rB.owner.name + ")"; // Name
+			window.Hk = new Class({
+			  $debug: window.$debug || $debug || 0,
+			  idScript: "HkToolkit",
+			  version: "2012.01.12.12.01.340000",
+			  Coords: {
+				lastRegion: {
+				  x: 0,
+				  y: 0
+				},
+				lastGoto: {
+				  x: 0,
+				  y: 0
+				},
+				regExp: /\(?\s*([0-9]+)\s*[,.\-]\s*([0-9]+)\s*\)?/
+			  },
+			  doNothing: Class.empty,
+			  initialize: function() {
+				  try {
+					this.HOMMK = window.HOMMK;
+					this.Player = this.HOMMK.player;
+					this.PlayerId = this.Player.get('id');
+					this.UserId = this.Player.get('userId');
+					this.AllianceId = this.Player.get('allianceId');
+					this.AllianceName = this.Player.get('allianceName');
+					this.Map = this.HOMMK.worldMap;
+					this.WorldSize = this.Map.get('_size');
+					this.WorldId = this.Player.get('worldId');
+				  }	catch(ex) {
+					window.console.log('[Hk][ERROR]Hk-Initialisierung fehlgeschlagen: ' + ex);
+				  }
+			  },
+			  getRegionName: function getRegionName(x, y) {
+				if(arguments.length == 1) {
+				  var xy = this.HOMMK.getXYFromRegionNumber();
+				  x = xy.x;
+				  y = xy.y;
+				}
+				var region = window.HOMMK.getRegionFromXY(x, y);
+				var str = "";
+				if(region.content.hasOwnProperty("cN")) { // Stadt
+				  str += region.content.cN; // Name
+				  if(region.content.hasOwnProperty("pN") && !!region.content.pN) str += ", " + region.content.pN; // Besitzer
+				  if(region.content.hasOwnProperty("iAN") && !!region.content.iAN) str += " (" + region.content.iAN + ")";  // Allianz
+				}	else if(region.content.hasOwnProperty("rB")) { // Gebietsgebäude
+				  str += region.content.rB.n; // Name
+				  if(region.content.rB.hasOwnProperty("owner") && !!region.content.rB.owner) {
+					str += "(" + region.content.rB.owner.name + ")"; // Name
+				  }
+				}	else {
+				  str += "Region #" + this.HOMMK.getRegionNumberFromXY(x, y);
+				}
+	//			window.hk.log(region);
+	//			window.hk.log(this.HOMMK.worldMap);
+				return str;
+			  },
+			  fixPosition: function fixPosition(p) {
+				if(p > this.WorldSize) return p - this.WorldSize;
+				return p;
+			  },
+			  validatePosition: function validatePosition(p) {
+				p = new Number(p).round();
+				if(isNaN(p) || p <= 0 || p > this.WorldSize) return false;
+				return p;
+			  },
+			  gotoPosition: function gotoPosition(x, y, zoom) {
+				var p;
+				this.log(this.HOMMK);
+				if (!$defined(zoom)) zoom = this.HOMMK.REGION_WORLDMAP_ZOOM_13X13;
+				p = this.HOMMK.getRegionNumberFromXY(x, y);
+				if(!this.validatePosition(x) || !this.validatePosition(y)) return false;
+				this.HOMMK.setCurrentView(zoom, p, x, y);
+				return true;
+			  },
+			  getCurrentX: function getCurrentX() {
+				return this.validatePosition(this.Coords.lastRegion.x || window.HOMMK.currentView.regionX);
+			  },
+			  getCurrentY: function getCurrentY() {
+				return this.validatePosition(this.Coords.lastRegion.y || window.HOMMK.currentView.regionY);
 			  }
-			}	else {
-			  str += "Region #" + this.HOMMK.getRegionNumberFromXY(x, y);
+			});
+			try {
+				window.Hk.implement(new Events, new Options, new HkLogger);
+			}	catch(ex) {
+				window.console.log('[Hk][ERROR]Hk-Implementierung fehlgeschlagen: ' + ex);
 			}
-//			window.hk.log(region);
-//			window.hk.log(this.HOMMK.worldMap);
-			return str;
-		  },
-		  fixPosition: function fixPosition(p) {
-			if(p > this.WorldSize) return p - this.WorldSize;
-			return p;
-		  },
-		  validatePosition: function validatePosition(p) {
-			p = new Number(p).round();
-			if(isNaN(p) || p <= 0 || p > this.WorldSize) return false;
-			return p;
-		  },
-		  gotoPosition: function gotoPosition(x, y, zoom) {
-			var p;
-			this.log(this.HOMMK);
-			if (!$defined(zoom)) zoom = this.HOMMK.REGION_WORLDMAP_ZOOM_13X13;
-			p = this.HOMMK.getRegionNumberFromXY(x, y);
-			if(!this.validatePosition(x) || !this.validatePosition(y)) return false;
-			this.HOMMK.setCurrentView(zoom, p, x, y);
-			return true;
-		  },
-		  getCurrentX: function getCurrentX() {
-			return this.validatePosition(this.Coords.lastRegion.x || window.HOMMK.currentView.regionX);
-		  },
-		  getCurrentY: function getCurrentY() {
-			return this.validatePosition(this.Coords.lastRegion.y || window.HOMMK.currentView.regionY);
-		  }
-		});
-		window.Hk.implement(new Events, new Options, new HkLogger);
-		var Hk = window.Hk;
 		}	catch(ex) {
 			alert('[Hk][ERROR]' + ex);
 		}
+		
+		var Hk = window.Hk;
 	
 		try {
 		window.hkToolkit = new Hk();
