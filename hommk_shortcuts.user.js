@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkToolkit
-// @version       2012.01.12.16.41.130000
+// @version       2012.01.12.16.45.160000
 // @description   Werkzeugkasten für HOMMK
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -287,7 +287,7 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 			window.Hk = new Class({
 			  $debug: $pick(window.$debug, $debug, 0),
 			  idScript: "HkToolkit",
-			  version: "2012.01.12.16.41.130000",
+			  version: "2012.01.12.16.45.160000",
 			  Coords: {
 				lastRegion: {
 				  x: 0,
@@ -588,7 +588,7 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 		 	 *	storageKey
 			 *	clearStorage
 			 */
-			Hk.HkStorage = new Class({
+			window.Hk.HkStorage = new Class({
 			  $debug: 1,
 			  storageKey: "HkStorage" + window.hk.PlayerId + "" + window.hk.WorldId,
 			  options: {
@@ -695,19 +695,19 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 				  this.fireEvent('onStorageUpdate', {});
 			  }
 			});
-			Hk.HkStorage.implement(new Events, new Options, new window.HkLogger());
+			window.Hk.HkStorage.implement(new Events, new Options);
 		}	catch(ex) {
 			alert('[HkStorage][ERROR]' + ex);
-			Hk.HkStorage = new Class();
+			throw new Exception(ex);
 		}
 	
 		try {
-		hk.Storage = {
-		  Common: new Hk.HkStorage()
-		};
+			hk.Storage = {
+			  Common: new Hk.HkStorage()
+			};
 		}	catch(ex) {
 			alert('[HkStorage.Common][ERROR]' + ex);
-			hk.Storage.Common = Object(null);
+			throw new Exception(ex);
 		}
 	
 		Hk.HkReducer = new Class({
