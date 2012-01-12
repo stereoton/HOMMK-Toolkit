@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkToolkit
-// @version       2012.01.12.16.24.010000
+// @version       2012.01.12.16.34.080000
 // @description   Werkzeugkasten für HOMMK
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -153,25 +153,25 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 				},
 				initialize: function (options) {
 				  try {
-					this.log('[HkDataStorage][DEBUG]Bereite HkDataStorage vor\u2026');
+					window.console.log('[HkDataStorage][DEBUG]Bereite HkDataStorage vor\u2026');
 					this.setOptions(options);
 					var useDefaults = !!this.options.useStorageKeyDefaults;
 					var storageKey;
 					if(!!this.options.storageKey) {
-					  storageKey = this.options.storageKey;
-					} else {
-					  storageKey = this.getStorageKey();
-					  useDefaults = false;
+						storageKey = this.options.storageKey;
+					} 	else {
+						storageKey = this.getStorageKey();
+					  	useDefaults = false;
 					}
 					this.setStorageKey(storageKey, useDefaults);
-					this.log('[HkDataStorage][DEBUG]Initialisiere HkDataStorage #' + this.storageKey);
+					window.console.log('[HkDataStorage][DEBUG]Initialisiere HkDataStorage #' + this.storageKey);
 					if(!!this.options.clearStorage) this.clearDataStorage();
 					if(this.isDataStorageEmpty()) {
-					  this.log('[HkDataStorage][DEBUG]Erzeuge lokalen Speicher für #' + this.storageKey);
-					  this.setDataStorageContent({});
+						window.console.log('[HkDataStorage][DEBUG]Erzeuge lokalen Speicher für #' + this.storageKey);
+						this.setDataStorageContent({});
 					}
 				  }	catch(ex) {
-					this.log('[HkDataStorage][ERROR]Initialisierungsfehler: ' + ex);
+					  window.console.log('[HkDataStorage][ERROR]Initialisierungsfehler: ' + ex);
 				  }
 				},
 				/**
@@ -181,7 +181,7 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 				setStorageKey: function setStorageKey(storageKey, useDefaults) {
 				  if("undefined" == typeof useDefaults) useDefaults = true;
 				  if(useDefaults) {
-					storageKey = "HkStorage" + storageKey + this.getStorageKeyPostfix();
+					  storageKey = "HkStorage" + storageKey + this.getStorageKeyPostfix();
 				  }
 				  this.storageKey = storageKey;
 				},
@@ -287,7 +287,7 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 			window.Hk = new Class({
 			  $debug: $pick(window.$debug, $debug, 0),
 			  idScript: "HkToolkit",
-			  version: "2012.01.12.16.24.010000",
+			  version: "2012.01.12.16.34.080000",
 			  Coords: {
 				lastRegion: {
 				  x: 0,
