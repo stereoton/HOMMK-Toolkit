@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkToolkit
-// @version       2012.01.12.16.16.170000
+// @version       2012.01.12.16.24.010000
 // @description   Werkzeugkasten für HOMMK
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -20,7 +20,7 @@
 // @require http://pastebin.com/raw.php?i=Tc4QTEkP
 //
 // HkFinder
-// @require http://pastebin.com/raw.php?i=tLq6swmK
+// @require http://pastebin.com/raw.php?i=nC9wTKbb
 //
 // HkGenericStyles
 // @require https://github.com/gelgamek/HOMMK-Toolkit/raw/master/hommk_styles.user.js
@@ -110,10 +110,12 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 			  'conditions': '"undefined" == typeof window.localStorage'
 			},
 			'HkLogger': {
-				'url': 'http://pastebin.com/raw.php?i=Tc4QTEkP'
+				'url': 'http://pastebin.com/raw.php?i=Tc4QTEkP',
+				'conditions': '"undefined" == typeof HkLogger'
 			},
 			'HkFinder': {
-				'url': 'http://pastebin.com/raw.php?i=tLq6swmK'
+				'url': 'http://pastebin.com/raw.php?i=nC9wTKbb',
+				'conditions': '"undefined" == typeof HkFinder'
 			},
 			'HkStylesGeneric': {
 				'url': 'https://github.com/gelgamek/HOMMK-Toolkit/raw/master/hommk_styles.user.js',
@@ -285,7 +287,7 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 			window.Hk = new Class({
 			  $debug: $pick(window.$debug, $debug, 0),
 			  idScript: "HkToolkit",
-			  version: "2012.01.12.16.16.170000",
+			  version: "2012.01.12.16.24.010000",
 			  Coords: {
 				lastRegion: {
 				  x: 0,
@@ -370,7 +372,6 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 		}	catch(ex) {
 			alert('[Hk][ERROR]' + ex);
 		}
-		
 		var Hk = window.Hk;
 	
 		try {
@@ -379,15 +380,13 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 		}	catch(ex) {
 			alert('[HkToolkit][ERROR]' + ex);
 		}
-		var hk = window.hk;
-	
-		window.HOMMK_HkToolkit = window.HOMMK_HkToolkit || {
-		  'version': hk.version
-		};
+		
+		var hk = window.hk;	
 		var HOMMK = hk.HOMMK;
 		var idScript = hk.idScript;
 		var version = hk.version;
-		hk.log('[PUBLIC][DEBUG]Starte HkToolkit\u2026');
+		window.HOMMK_HkToolkit = window.HOMMK_HkToolkit ? window.HOMMK_HkToolkit : {'version': hk.version};
+		window.console.log('[PUBLIC][DEBUG]Starte HkToolkit\u2026');
 	
 		/**
 		* CSS @todo Core und Shortcuts trennen - Ergänzungen warten auf Core und "docken" sich an...
@@ -581,122 +580,122 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 	
 	
 		try {
-		/**
-		* Events:
-		*	onStorageUpdate
-		*
-		* Options:
-		*	storageKey
-		*	clearStorage
-		*/
-		Hk.HkStorage = new Class({
-		  $debug: 1,
-		  storageKey: "HkStorage" + window.hk.PlayerId + "" + window.hk.WorldId,
-		  options: {
-			'storageKey': "HkStorage" + window.hk.PlayerId + "" + window.hk.WorldId,
-			'clearStorage': false
-		  },
-		  initialize: function (options) {
-			try {
-				window.console.log('[HkPublic][DEBUG]Bereite HkStorage vor\u2026');
-			  this.setOptions(options);
-			  this.storageKey = this.options.storageKey;
-			  window.console.log('[HkPublic][DEBUG]Initialisiere HkStorage #' + this.storageKey);
-			  if(this.options.clearStorage) this.clearStorage();
-			  if(this.isEmpty()) {
-				  window.console.log('[HkStorage][DEBUG]Erzeuge lokalen Speicher für #' + this.storageKey);
-				this.setStorageData({});
+			/**
+			 * Events:
+			 *	onStorageUpdate
+			 *
+		  	 * Options:
+		 	 *	storageKey
+			 *	clearStorage
+			 */
+			Hk.HkStorage = new Class({
+			  $debug: 1,
+			  storageKey: "HkStorage" + window.hk.PlayerId + "" + window.hk.WorldId,
+			  options: {
+				'storageKey': "HkStorage" + window.hk.PlayerId + "" + window.hk.WorldId,
+				'clearStorage': false
+			  },
+			  initialize: function (options) {
+				try {
+					window.console.log('[HkPublic][DEBUG]Bereite HkStorage vor\u2026');
+				  this.setOptions(options);
+				  this.storageKey = this.options.storageKey;
+				  window.console.log('[HkPublic][DEBUG]Initialisiere HkStorage #' + this.storageKey);
+				  if(this.options.clearStorage) this.clearStorage();
+				  if(this.isEmpty()) {
+					  window.console.log('[HkStorage][DEBUG]Erzeuge lokalen Speicher für #' + this.storageKey);
+					this.setStorageData({});
+				  }
+				}	catch(ex) {
+					window.console.log('[HkStorage][ERROR]Initialisierungsfehler: ' + ex);
+				}
+			  },
+			  drop: function drop(key) {
+				window.console.log('[HkStorage][DEBUG]Entferne ' + key + ' aus ' + this.storageKey);
+				var data = this.getStorageData();
+				if($defined(data.key) || data.hasOwnProperty(key)) {
+				  var dropped = data[key];
+				  delete data[key];
+				  this.setStorageData(data);
+				  return dropped;
+				}	else {
+				  window.console.log('[HkStorage][INFO]Kein Eintrag ' + key + ' in ' + this.storageKey);
+				}
+				return false;
+			  },
+			  dropAll: function dropAll() {
+				var storageData = this.pull();
+				window.console.log('[HkStorage][DEBUG]Entferne Daten aus ' + this.storageKey);
+				if(storageData) {
+				  $each(storageData, function(val, key) {
+					window.console.log('[HkStorage][DEBUG]Verarbeite ' + key);
+					this.drop(key);
+				  }.bind(this));
+				}
+			  },
+			  push: function push(key, item) {
+				if(arguments.length < 2) window.console.log('[HkStorage][DEBUG]Speichere Daten: ' + Json.toString(key));
+				else window.console.log('[HkStorage][DEBUG]Speichere Daten unter #' + key + ": " + Json.toString(item));
+				var data = this.getStorageData();
+				if(arguments.length < 2) {
+				  $each(key, function(item, idx) {
+					data[idx] = item;
+				  });
+				}	else data[key] = item;
+				this.setStorageData(data);
+			  },
+			  pull: function pull(key) {
+				var data = this.getStorageData();
+				if("null" == typeof data) {
+					window.console.log("[HkStorage.pull][DEBUG]null-Datentyp im Speicher");
+				  data = {};
+				} else {
+					window.console.log("[HkStorage.pull][DEBUG]Datentyp im Speicher: " + typeof data);
+				}
+				if(!key) {
+					window.console.log('[HkStorage][DEBUG]Kein Schlüssel angefragt, liefere alle Daten zurück: ' + Json.toString(key));
+				  var exp = {};
+				  for(d in data) {
+					  window.console.log('[HkStorage][DEBUG]Prüfe Eintrag: ' + Json.toString(d));
+					  if("function" == $type(data[d])) continue;
+					  window.console.log('[HkStorage][DEBUG]Eintrag akzeptiert.');
+					  exp[d] = data[d];
+				  }
+				  return exp;
+				}
+				if(!data.hasOwnProperty(key)) return {};
+				var item = data[key];
+				return item;
+			  },
+			  isEmpty: function isEmpty(key) {
+				var data = $H(this.getStorageData()).keys();
+				if (data == null || data.length <= 0) {
+					window.console.log('[HkStorage][DEBUG]Keine Daten in #' + this.storageKey + ": " + Json.toString(data));
+				  return true;
+				}
+				return false;
+			  },
+			  getStorageData: function getStorageData() {
+				var data = window.localStorage.getItem(this.storageKey);
+				window.console.log('[HkStorage][DEBUG]Abgerufene Daten aus #' + this.storageKey + ": " + Json.toString(data));
+				if(null == typeof data || !data) return {};
+				data = Json.evaluate(data);
+				return data;
+			  },
+			  setStorageData: function setStorageData(data) {
+				var dataString = Json.toString(data);
+				window.console.log('[HkStorage][DEBUG]Speichere Daten in #' + this.storageKey + ": " + dataString);
+				window.localStorage.setItem(this.storageKey, dataString);
+				this.fireEvent('onStorageUpdate', data);
+				return data;
+			  },
+			  clearStorage: function clearStorage() {
+				  window.console.log("[HkStorage][DEBUG]Leere Speicher...");
+				window.localStorage.clear();
+				this.fireEvent('onStorageUpdate', {});
 			  }
-			}	catch(ex) {
-				window.console.log('[HkStorage][ERROR]Initialisierungsfehler: ' + ex);
-			}
-		  },
-		  drop: function drop(key) {
-			window.console.log('[HkStorage][DEBUG]Entferne ' + key + ' aus ' + this.storageKey);
-			var data = this.getStorageData();
-			if($defined(data.key) || data.hasOwnProperty(key)) {
-			  var dropped = data[key];
-			  delete data[key];
-			  this.setStorageData(data);
-			  return dropped;
-			}	else {
-			  window.console.log('[HkStorage][INFO]Kein Eintrag ' + key + ' in ' + this.storageKey);
-			}
-			return false;
-		  },
-		  dropAll: function dropAll() {
-			var storageData = this.pull();
-			window.console.log('[HkStorage][DEBUG]Entferne Daten aus ' + this.storageKey);
-			if(storageData) {
-			  $each(storageData, function(val, key) {
-				window.console.log('[HkStorage][DEBUG]Verarbeite ' + key);
-				this.drop(key);
-			  }.bind(this));
-			}
-		  },
-		  push: function push(key, item) {
-			if(arguments.length < 2) window.console.log('[HkStorage][DEBUG]Speichere Daten: ' + Json.toString(key));
-			else window.console.log('[HkStorage][DEBUG]Speichere Daten unter #' + key + ": " + Json.toString(item));
-			var data = this.getStorageData();
-			if(arguments.length < 2) {
-			  $each(key, function(item, idx) {
-				data[idx] = item;
-			  });
-			}	else data[key] = item;
-			this.setStorageData(data);
-		  },
-		  pull: function pull(key) {
-			var data = this.getStorageData();
-			if("null" == typeof data) {
-				window.console.log("[HkStorage.pull][DEBUG]null-Datentyp im Speicher");
-			  data = {};
-			} else {
-				window.console.log("[HkStorage.pull][DEBUG]Datentyp im Speicher: " + typeof data);
-			}
-			if(!key) {
-				window.console.log('[HkStorage][DEBUG]Kein Schlüssel angefragt, liefere alle Daten zurück: ' + Json.toString(key));
-			  var exp = {};
-			  for(d in data) {
-				  window.console.log('[HkStorage][DEBUG]Prüfe Eintrag: ' + Json.toString(d));
-				  if("function" == $type(data[d])) continue;
-				  window.console.log('[HkStorage][DEBUG]Eintrag akzeptiert.');
-				  exp[d] = data[d];
-			  }
-			  return exp;
-			}
-			if(!data.hasOwnProperty(key)) return {};
-			var item = data[key];
-			return item;
-		  },
-		  isEmpty: function isEmpty(key) {
-			var data = $H(this.getStorageData()).keys();
-			if (data == null || data.length <= 0) {
-				window.console.log('[HkStorage][DEBUG]Keine Daten in #' + this.storageKey + ": " + Json.toString(data));
-			  return true;
-			}
-			return false;
-		  },
-		  getStorageData: function getStorageData() {
-			var data = window.localStorage.getItem(this.storageKey);
-			window.console.log('[HkStorage][DEBUG]Abgerufene Daten aus #' + this.storageKey + ": " + Json.toString(data));
-			if(null == typeof data || !data) return {};
-			data = Json.evaluate(data);
-			return data;
-		  },
-		  setStorageData: function setStorageData(data) {
-			var dataString = Json.toString(data);
-			window.console.log('[HkStorage][DEBUG]Speichere Daten in #' + this.storageKey + ": " + dataString);
-			window.localStorage.setItem(this.storageKey, dataString);
-			this.fireEvent('onStorageUpdate', data);
-			return data;
-		  },
-		  clearStorage: function clearStorage() {
-			  window.console.log("[HkStorage][DEBUG]Leere Speicher...");
-			window.localStorage.clear();
-			this.fireEvent('onStorageUpdate', {});
-		  }
-		});
-		Hk.HkStorage.implement(new Events, new Options, new HkLogger);
+			});
+			Hk.HkStorage.implement(new Events, new Options, new HkLogger);
 		}	catch(ex) {
 			alert('[HkStorage][ERROR]' + ex);
 			Hk.HkStorage = new Class();
@@ -867,9 +866,12 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 			  'class': "HkWindow Radius5BottomLeft Radius10TopLeft Radius10TopRight",
 			  'styles': this.options.windowStyles
 			});
+			var contentNode;
 			if(this.options.createContentContainer) {
-			  var contentNode = this.createContentContainer(id, options);
-			}
+				contentNode = this.createContentContainer(id, options);
+			}	else {
+				contentNode = new Object;
+			} 
 			if(this.options.createHeader) {
 			  var headerNode = this.createHeader(id, options);
 			  windowNode.adopt(headerNode);
@@ -1302,7 +1304,7 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 			  'x': x,
 			  'y': y,
 			  'name': name
-			}
+			};
 			this.setOptions(options);
 		  },
 		  isValid: function isValid() {
@@ -1616,7 +1618,6 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 			submitInput.addEventListener('click', this.createShortcut);
 			inputForm.adopt(inputX, inputY, gotoPosition, loadPosition, submitInput, inputName);
 			contentNode.adopt(inputForm, shortcutList);
-	
 		  }
 		});
 		Hk.HkShortcutsWindow.implement(new Events, new Options, new HkLogger);
