@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkToolkit
-// @version       2012.01.12.14.19.210000
+// @version       2012.01.12.14.23.540000
 // @description   Werkzeugkasten für HOMMK
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -222,8 +222,8 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 			  }
 			},
 			pushToDataStorage: function pushToDataStorage(key, item) {
-			  if(arguments.length < 2) this.log('[HkDataStorage][DEBUG]Speichere Daten: ' + Json.toString(key));
-			  else this.log('[HkDataStorage][DEBUG]Speichere Daten unter #' + key + ": " + Json.toString(item));
+			  if(arguments.length < 2) window.hk.log('[HkDataStorage][DEBUG]Speichere Daten: ' + Json.toString(key));
+			  else window.hk.log('[HkDataStorage][DEBUG]Speichere Daten unter #' + key + ": " + Json.toString(item));
 			  var data = this.getDataStorageContent();
 			  if(arguments.length < 2) {
 				$each(key, function(item, idx) {
@@ -235,13 +235,13 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 			pullFromDataStorage: function pullFromDataStorage(key) {
 			  var data = this.getDataStorageContent();
 			  if("null" == typeof data) {
-				this.log("[HkDataStorage.pull][DEBUG]null-Datentyp im Speicher");
+				window.hk.log("[HkDataStorage.pull][DEBUG]null-Datentyp im Speicher");
 				data = {};
 			  }	else {
-				this.log("[HkDataStorage.pull][DEBUG]Datentyp im Speicher: " + typeof data);
+				window.hk.log("[HkDataStorage.pull][DEBUG]Datentyp im Speicher: " + typeof data);
 			  }
 			  if(!key) {
-				this.log('[HkDataStorage][DEBUG]Kein Schlüssel angefragt, liefere alle Daten zurück: ' + Json.toString(key));
+				window.hk.log('[HkDataStorage][DEBUG]Kein Schlüssel angefragt, liefere alle Daten zurück: ' + Json.toString(key));
 				return data;
 			  }
 			  if(!data.hasOwnProperty(key)) return {};
@@ -251,27 +251,27 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 			isDataStorageEmpty: function isDataStorageEmpty(key) {
 			  var data = $H(this.getDataStorageContent()).keys();
 			  if (data == null || data.length <= 0) {
-				this.log('[HkDataStorage][DEBUG]Keine Daten in #' + this.storageKey);
+				window.hk.log('[HkDataStorage][DEBUG]Keine Daten in #' + this.storageKey);
 				return true;
 			  }
 			  return false;
 			},
 			getDataStorageContent: function getDataStorageContent() {
 			  var data = window.localStorage.getItem(this.storageKey);
-			  this.log('[HkDataStorage][DEBUG]Abgerufene Daten aus #' + this.storageKey + ": " + Json.toString(data));
+			  window.hk.log('[HkDataStorage][DEBUG]Abgerufene Daten aus #' + this.storageKey + ": " + Json.toString(data));
 			  if(null == typeof data || !data) return {};
 			  data = Json.evaluate(data);
 			  return data;
 			},
 			setDataStorageContent: function setDataStorageContent(data) {
 			  var dataString = Json.toString(data);
-			  this.log('[HkDataStorage][DEBUG]Speichere Daten in #' + this.storageKey + ": " + dataString);
+			  window.hk.log('[HkDataStorage][DEBUG]Speichere Daten in #' + this.storageKey + ": " + dataString);
 			  window.localStorage.setItem(this.storageKey, dataString);
 			  this.fireEvent('onStorageUpdate', data);
 			  return data;
 			},
 			clearDataStorage: function clearDataStorage() {
-			  this.log("[HkDataStorage][DEBUG]Leere Speicher\u2026");
+			  window.hk.log("[HkDataStorage][DEBUG]Leere Speicher\u2026");
 			  window.localStorage.clear();
 			  this.fireEvent('onStorageUpdate', {});
 			}
@@ -285,7 +285,7 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 			window.Hk = new Class({
 			  $debug: window.$debug || $debug || 0,
 			  idScript: "HkToolkit",
-			  version: "2012.01.12.14.19.210000",
+			  version: "2012.01.12.14.23.540000",
 			  Coords: {
 				lastRegion: {
 				  x: 0,
@@ -598,17 +598,17 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 		  },
 		  initialize: function (options) {
 			try {
-			  this.log('[HkPublic][DEBUG]Bereite HkStorage vor\u2026');
+				window.hk.log('[HkPublic][DEBUG]Bereite HkStorage vor\u2026');
 			  this.setOptions(options);
 			  this.storageKey = this.options.storageKey;
-			  this.log('[HkPublic][DEBUG]Initialisiere HkStorage #' + this.storageKey);
+			  window.hk.log('[HkPublic][DEBUG]Initialisiere HkStorage #' + this.storageKey);
 			  if(this.options.clearStorage) this.clearStorage();
 			  if(this.isEmpty()) {
-				this.log('[HkStorage][DEBUG]Erzeuge lokalen Speicher für #' + this.storageKey);
+				  window.hk.log('[HkStorage][DEBUG]Erzeuge lokalen Speicher für #' + this.storageKey);
 				this.setStorageData({});
 			  }
 			}	catch(ex) {
-			  this.log('[HkStorage][ERROR]Initialisierungsfehler: ' + ex);
+				window.hk.log('[HkStorage][ERROR]Initialisierungsfehler: ' + ex);
 			}
 		  },
 		  drop: function drop(key) {
@@ -635,8 +635,8 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 			}
 		  },
 		  push: function push(key, item) {
-			if(arguments.length < 2) this.log('[HkStorage][DEBUG]Speichere Daten: ' + Json.toString(key));
-			else this.log('[HkStorage][DEBUG]Speichere Daten unter #' + key + ": " + Json.toString(item));
+			if(arguments.length < 2) window.hk.log('[HkStorage][DEBUG]Speichere Daten: ' + Json.toString(key));
+			else window.hk.log('[HkStorage][DEBUG]Speichere Daten unter #' + key + ": " + Json.toString(item));
 			var data = this.getStorageData();
 			if(arguments.length < 2) {
 			  $each(key, function(item, idx) {
@@ -648,18 +648,18 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 		  pull: function pull(key) {
 			var data = this.getStorageData();
 			if("null" == typeof data) {
-			  this.log("[HkStorage.pull][DEBUG]null-Datentyp im Speicher");
+				window.hk.log("[HkStorage.pull][DEBUG]null-Datentyp im Speicher");
 			  data = {};
 			} else {
-			  this.log("[HkStorage.pull][DEBUG]Datentyp im Speicher: " + typeof data);
+				window.hk.log("[HkStorage.pull][DEBUG]Datentyp im Speicher: " + typeof data);
 			}
 			if(!key) {
-			  this.log('[HkStorage][DEBUG]Kein Schlüssel angefragt, liefere alle Daten zurück: ' + Json.toString(key));
+				window.hk.log('[HkStorage][DEBUG]Kein Schlüssel angefragt, liefere alle Daten zurück: ' + Json.toString(key));
 			  var exp = {};
 			  for(d in data) {
-				  this.log('[HkStorage][DEBUG]Prüfe Eintrag: ' + Json.toString(d));
+				  window.hk.log('[HkStorage][DEBUG]Prüfe Eintrag: ' + Json.toString(d));
 				  if("function" == $type(data[d])) continue;
-				  this.log('[HkStorage][DEBUG]Eintrag akzeptiert.');
+				  window.hk.log('[HkStorage][DEBUG]Eintrag akzeptiert.');
 				  exp[d] = data[d];
 			  }
 			  return exp;
@@ -671,27 +671,27 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 		  isEmpty: function isEmpty(key) {
 			var data = $H(this.getStorageData()).keys();
 			if (data == null || data.length <= 0) {
-			  this.log('[HkStorage][DEBUG]Keine Daten in #' + this.storageKey + ": " + Json.toString(data));
+				window.hk.log('[HkStorage][DEBUG]Keine Daten in #' + this.storageKey + ": " + Json.toString(data));
 			  return true;
 			}
 			return false;
 		  },
 		  getStorageData: function getStorageData() {
 			var data = window.localStorage.getItem(this.storageKey);
-			this.log('[HkStorage][DEBUG]Abgerufene Daten aus #' + this.storageKey + ": " + Json.toString(data));
+			window.hk.log('[HkStorage][DEBUG]Abgerufene Daten aus #' + this.storageKey + ": " + Json.toString(data));
 			if(null == typeof data || !data) return {};
 			data = Json.evaluate(data);
 			return data;
 		  },
 		  setStorageData: function setStorageData(data) {
 			var dataString = Json.toString(data);
-			this.log('[HkStorage][DEBUG]Speichere Daten in #' + this.storageKey + ": " + dataString);
+			window.hk.log('[HkStorage][DEBUG]Speichere Daten in #' + this.storageKey + ": " + dataString);
 			window.localStorage.setItem(this.storageKey, dataString);
 			this.fireEvent('onStorageUpdate', data);
 			return data;
 		  },
 		  clearStorage: function clearStorage() {
-			this.log("[HkStorage][DEBUG]Leere Speicher...");
+			  window.hk.log("[HkStorage][DEBUG]Leere Speicher...");
 			window.localStorage.clear();
 			this.fireEvent('onStorageUpdate', {});
 		  }
@@ -726,17 +726,17 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 			this.target = target;
 			var slideOptions = this.options;
 			slideOptions.onChange = function(evt) {
-			  this.log("[HkReducer][Event]Slider Change Event");
+				window.hk.log("[HkReducer][Event]Slider Change Event");
 			  window.hk.log(evt);
 			  this.fireEvent("onTargetChange", [this.toggle, this.target]);
 			}.bind(this);
 			slideOptions.onTick = function(evt) {
-			  this.log("[HkReducer][Event]Slider Tick Event");
+				window.hk.log("[HkReducer][Event]Slider Tick Event");
 			  window.hk.log(evt);
 			  this.fireEvent("onTargetStep", [this.toggle, this.target]);
 			}.bind(this);
 			slideOptions.onComplete = function(evt) {
-			  this.log("[HkReducer][Event]Slider Complete Event");
+				window.hk.log("[HkReducer][Event]Slider Complete Event");
 			  window.hk.log(evt);
 			  this.$status = (this.$status == this.IS_REDUCED) ? this.IS_VISIBLE : this.IS_REDUCED;
 			  this.fireEvent("on" + this.$status, [this.toggle, this.target]);
@@ -751,7 +751,7 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 			this.toggle.addEvent('click', this.toggleClicked.bind(this));
 			// @todo letzten Zustand laden
 			if(this.$status == null) this.$status = this.$default;
-			this.log(this.toggle.slider);
+			window.hk.log(this.toggle.slider);
 			this.updateDimensions(this.target);
 		  },
 		  togglePressed: function togglePressed(evt) {
@@ -759,7 +759,7 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 			var target = toggle.target;
 			var slider = toggle.slider;
 			if(this.$status == this.IS_VISIBLE) {
-			  this.log("[HkReducer][Event]Target height: " + target.style.height);
+				window.hk.log("[HkReducer][Event]Target height: " + target.style.height);
 	  //		var targetHeight = target.getCoordinates().height;
 	  //		target.style.height = targetHeight + "px";
 	  //		var resetTargetHeight = function(target) {
@@ -769,7 +769,7 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 	  //		}
 	  //		resetTargetHeight.delay(500, this, target);
 			}	else {
-			  this.log("[HkReducer][Event]Target height: " + target.style.height);
+				window.hk.log("[HkReducer][Event]Target height: " + target.style.height);
 			}
 		  },
 		  toggleClicked: function toggleClicked(evt) {
@@ -1495,9 +1495,9 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 			$('ShortcutList').setStyle('height', 'auto');
 		  },
 		  addShortcutToList: function addShortcutToList(shortcut) {
-			hk.log('[HkShortcutsWindow][DEBUG]Shortcut: ' + Json.toString(shortcut.options));
+			window.hk.log('[HkShortcutsWindow][DEBUG]Shortcut: ' + Json.toString(shortcut.options));
 			var str = shortcut.name() + "   (" + shortcut.x() + ", " + shortcut.y() + ")";
-			hk.log('[HkShortcutsWindow][DEBUG]Shortcut: ' + str);
+			window.hk.log('[HkShortcutsWindow][DEBUG]Shortcut: ' + str);
 			var text = new Element('p', {
 			  'class': 'EntryText EntryLink',
 			  'styles': window.hk.Styles.Shortcuts.Entry.text
