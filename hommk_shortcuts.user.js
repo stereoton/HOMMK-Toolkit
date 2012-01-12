@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkToolkit
-// @version       2012.01.12.13.28.400000
+// @version       2012.01.12.13.47.500000
 // @description   Werkzeugkasten für HOMMK
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -71,6 +71,7 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 			  if(!!js) this.injectJavascript(js);
 		  },
 		  injectJavascript: function injectJavascript(js) {
+			  this.scriptsToInject = js;
 			  $each(js, function(scriptDef, scriptName) {
 				  this.waiting.push(scriptName);
 			  }, this);
@@ -279,7 +280,7 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 			window.Hk = new Class({
 			  $debug: window.$debug || $debug || 0,
 			  idScript: "HkToolkit",
-			  version: "2012.01.12.13.28.400000",
+			  version: "2012.01.12.13.47.500000",
 			  Coords: {
 				lastRegion: {
 				  x: 0,
