@@ -1,4 +1,4 @@
-if ("undefined" == typeof(HkStylesGeneric)) {
+if ("undefined" == typeof HkStylesGeneric) {
 
   try {
 	if(!$type(console)) {
