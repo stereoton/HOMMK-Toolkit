@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkToolkit
-// @version       2012.01.12.16.55.280000
+// @version       2012.01.12.16.58.440000
 // @description   Werkzeugkasten für HOMMK
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -286,7 +286,7 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 		try {
 			window.Hk = new Class({
 			  idScript: "HkToolkit",
-			  version: "2012.01.12.16.55.280000",
+			  version: "2012.01.12.16.58.440000",
 			  Coords: {
 				lastRegion: {
 				  x: 0,
@@ -805,7 +805,7 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 			target.getParent().setStyle('height', realParentHeight);
 		  }
 		});
-		Hk.HkReducer.implement(new Events, new Options, new HkLogger);
+		Hk.HkReducer.implement(new Events, new Options);
 	
 		hk.Storage.HkWindows = new Hk.HkStorage({'storageKey': 'HkWindowsInternal'});
 	
@@ -1282,7 +1282,7 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 			return size;
 		  }
 		});
-		Hk.HkWindows.implement(new Events, new Options, new HkLogger);
+		Hk.HkWindows.implement(new Events, new Options);
 	
 		hk.Windows = new Hk.HkWindows();
 	
@@ -1325,7 +1325,7 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 			return Json.toString(this.options);
 		  }
 		});
-		Hk.Shortcut.implement(new Options, new HkLogger);
+		Hk.Shortcut.implement(new Options);
 	
 		hk.Storage.Shortcuts = new Hk.HkStorage({
 		  'storageKey': window.hk.idScript + "HkShortcuts" + window.hk.PlayerId + "" + window.hk.WorldId,
@@ -1619,7 +1619,7 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 			contentNode.adopt(inputForm, shortcutList);
 		  }
 		});
-		Hk.HkShortcutsWindow.implement(new Events, new Options, new HkLogger);
+		Hk.HkShortcutsWindow.implement(new Events, new Options);
 	
 		/**
 		* Erzeugt Shortcuts-Fenster @todo Umbenennen und auslagern
