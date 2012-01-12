@@ -1,19 +1,17 @@
-if ("undefined" == typeof HkStylesGeneric) {
-
-  try {
-	if(!$type(console)) {
-	  var console = {
-		log: function log(msg) {
-		  // do nothing
-		}
-	  };
+try {
+	if("undefined" == typeof window.console) {
+		window.console = {
+				log: function log(msg) {
+					// do nothing
+				}
+		};
 	}
-  } catch(ex) {}
+} catch(ex) {}
+  
+if ("undefined" == typeof window.HkStylesGeneric) {
 
-  var HkStylesGeneric = new Class({
-	initialize: function() {
-
-	},
+  window.HkStylesGeneric = new Class({
+	initialize: function() { },
 	applyStyles: function applyStyles() {
 	  $A(this.styles).each(function(ss, idx) {
 		var selection, style = ss;
@@ -26,18 +24,18 @@ if ("undefined" == typeof HkStylesGeneric) {
 		  if("undefined" == typeof selection.length) selection = [selection];
 		  selection = $A(selection);
 		  selection.each(function(elem, idx) {
-			console.log("Weise Stile zu\u2026");
-			console.log(elem);
-			console.log(style.styles);
+			window.console.log("Weise Stile zu\u2026");
+			window.console.log(elem);
+			window.console.log(style.styles);
 			$each(style.styles, function(val, prop) {
-			  console.log("Weise Wert '" + val + "' zu für Stil " + prop);
+			  window.console.log("Weise Wert '" + val + "' zu für Stil " + prop);
 			  if(elem.style[prop] != "" && !style.force) {
-				console.log("Wert existiert bereits, Zuweisung nicht erzwungen\u2026");
+				window.console.log("Wert existiert bereits, Zuweisung nicht erzwungen\u2026");
 				return;
 			  }	else {
-				console.log("Wert existiert bereits, Zuweisung erzwungen\u2026");
+				window.console.log("Wert existiert bereits, Zuweisung erzwungen\u2026");
 			  }
-			  console.log("Alter Wert: " + elem.style[prop]);
+			  window.console.log("Alter Wert: " + elem.style[prop]);
 			  elem.style[prop] = val;
 			});
 		  });
@@ -107,4 +105,7 @@ if ("undefined" == typeof HkStylesGeneric) {
 	  }
 	]
   });
+  var HkStylesGeneric = window.HkStylesGeneric;
+}	else {
+	window.console.log("[HkStylesGeneric][WARN]Klasse existiert bereits: " + Json.toString(window.HkStylesGeneric));
 }
