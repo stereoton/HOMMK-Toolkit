@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          HkToolkit
-// @version       2012.01.12.11.01.300000
+// @version       2012.01.12.11.09.000000
 // @description   Werkzeugkasten für HOMMK
 // @author        Gelgamek <gelgamek@arcor.de>
 // @copyright	  Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -65,7 +65,7 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 	  window.$debug = 1;
 	
 	  var AssetLoader = new Class({
-		initialize: function() { },
+		initialize: function() { return this; },
 		injectJavascript: function injectJavascript(js) {
 		  $each(js, function(scriptDef, scriptName) {
 			var url = scriptDef.hasOwnProperty("url") ? scriptDef.url : false;
@@ -76,9 +76,7 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 		  });
 		}
 	  });
-	
-	  window.assetLoader = new AssetLoader();
-	  window.assetLoader.injectJavascript({
+	  new AssetLoader().injectJavascript({
 		'MozillaLocalStorage': {
 		  'url': 'http://pastebin.com/raw.php?i=zrfAFeBc',
 		  'conditions': "!window.localStorage"
@@ -251,7 +249,7 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 		window.Hk = new Class({
 		  $debug: window.$debug,
 		  idScript: "HkToolkit",
-		  version: "2012.01.12.11.01.300000",
+		  version: "2012.01.12.11.09.000000",
 		  Coords: {
 			lastRegion: {
 			  x: 0,
@@ -606,8 +604,8 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 			  this.log('[HkStorage][DEBUG]Kein Schlüssel angefragt, liefere alle Daten zurück: ' + Json.toString(key));
 			  var exp = {};
 			  for(d in data) {
-				  if($type(data[d]) == "function") continue;
-				  exp.setProperty(d, data[d]);
+				  if("function" == $type(data[d])) continue;
+				  exp[d] = data[d]);
 			  }
 			  return exp;
 			}
@@ -617,7 +615,6 @@ if ('undefined' == typeof __PAGE_SCOPE_RUN__) {
 		  },
 		  isEmpty: function isEmpty(key) {
 			var data = $H(this.getStorageData()).keys();
-	  //	  this.log('[HkStorage][DEBUG]Prüfe Vorhandensein von Daten in #' + this.storageKey + ": " + Json.toString(data));
 			if (data == null || data.length <= 0) {
 			  this.log('[HkStorage][DEBUG]Keine Daten in #' + this.storageKey + ": " + Json.toString(data));
 			  return true;
