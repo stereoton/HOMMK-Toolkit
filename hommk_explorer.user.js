@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name HkExplorer
-// @version       2012.01.13.01.56.250000
+// @version       2012.01.13.02.02.380000
 // @description Explorer für HkToolkit
 // @author Gelgamek <gelgamek@arcor.de>
 // @copyright Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -40,12 +40,34 @@ try {
 		// new Asset.javascript('http://pastebin.com/raw.php?i=LasRLxsF', {
 		// 'id': 'ExplorerPageScopeRunner'
 		// });
-		var headNode = document.getElementsByTagName("head")[0];
-		var explorerScopeRunner = document.createElement("script");
-		explorerScopeRunner.id = 'ExplorerPageScopeRunner';
-		explorerScopeRunner.type = "text/javascript";
-		explorerScopeRunner.src = 'http://pastebin.com/raw.php?i=LasRLxsF';
-		headNode.appendChild(explorerScopeRunner);
+		// var headNode = document.getElementsByTagName("head")[0];
+		// var explorerScopeRunner = document.createElement("script");
+		// explorerScopeRunner.id = 'ExplorerPageScopeRunner';
+		// explorerScopeRunner.type = "text/javascript";
+		// explorerScopeRunner.src = 'http://pastebin.com/raw.php?i=LasRLxsF';
+		// headNode.appendChild(explorerScopeRunner);
+		
+		// http://pastebin.com/raw.php?i=LasRLxsF
+		(function page_scope_runner() {
+			// If we're _not_ already running in the page, grab the full source
+			// of this script.
+			var my_src = "(" + page_scope_runner.caller.toString() + ")();";
+			
+			// Create a script node holding this script, plus a marker that lets us
+			// know we are running in the page scope (not the Greasemonkey sandbox).
+			// Note that we are intentionally *not* scope-wrapping here.
+			var script = document.createElement('script');
+			script.setAttribute("type", "text/javascript");
+			script.textContent = "var __HKEXP_PAGE_SCOPE_RUN__ = true;\n" + my_src;
+			
+			// Insert the script node into the page, so it will run, and immediately
+			// remove it to clean up. Use setTimeout to force execution "outside" of
+			// the user script scope completely.
+			setTimeout(function() {
+				document.body.appendChild(script);
+				document.body.removeChild(script);
+			}, 0);
+		})();
 	} else {
 		window.$debug = window.$debug || 1;
 		
