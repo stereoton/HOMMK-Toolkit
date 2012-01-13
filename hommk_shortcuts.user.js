@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name HkToolkit
-// @version       2012.01.13.02.02.380000
+// @version       2012.01.13.02.16.250000
 // @description Werkzeugkasten für HOMMK
 // @author Gelgamek <gelgamek@arcor.de>
 // @copyright Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -23,7 +23,7 @@
 // @require http://pastebin.com/raw.php?i=nC9wTKbb
 //
 // HkGenericStyles
-// @require https://github.com/gelgamek/HOMMK-Toolkit/raw/master/hommk_styles.user.js
+// @require http://pastebin.com/raw.php?i=mEWtDz8K
 //
 // Element.Selectors.js 1.12 · http://mootools.net
 // @require http://pastebin.com/raw.php?i=2G8yXznG
@@ -130,7 +130,7 @@ if('undefined' == typeof __PAGE_SCOPE_RUN__) {
 			        'conditions': '"undefined" == typeof HkFinder'
 			    },
 			    'HkScriptedStyles': {
-			        'url': 'https://github.com/gelgamek/HOMMK-Toolkit/raw/master/hommk_styles.user.js',
+			        'url': 'http://pastebin.com/raw.php?i=mEWtDz8K',
 			        'conditions': '"undefined" == typeof HkStylesGeneric'
 			    },
 			    'MootoolsElementSelectors': {
@@ -300,7 +300,7 @@ if('undefined' == typeof __PAGE_SCOPE_RUN__) {
 			try {
 				window.Hk = new Class({
 				    idScript: "HkToolkit",
-				    version: "2012.01.13.02.02.380000",
+				    version: "2012.01.13.02.16.250000",
 				    Coords: {
 				        lastRegion: {
 				            x: 0,
