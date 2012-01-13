@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name HkToolkit
-// @version       2012.01.13.02.16.250000
+// @version       2012.01.13.02.37.090000
 // @description Werkzeugkasten für HOMMK
 // @author Gelgamek <gelgamek@arcor.de>
 // @copyright Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -116,11 +116,11 @@ if('undefined' == typeof __PAGE_SCOPE_RUN__) {
 		    }
 		});
 		try {
-			window.assetLoader = new AssetLoader({
+			window.assetLoader = new AssetLoader({/*
 			    'MozillaLocalStorage': {
 			        'url': 'http://pastebin.com/raw.php?i=zrfAFeBc',
 			        'conditions': '"undefined" == typeof window.localStorage'
-			    },
+			    },*/
 			    'HkLogger': {
 			        'url': 'http://pastebin.com/raw.php?i=Tc4QTEkP',
 			        'conditions': '"undefined" == typeof HkLogger'
@@ -128,7 +128,7 @@ if('undefined' == typeof __PAGE_SCOPE_RUN__) {
 			    'HkFinder': {
 			        'url': 'http://pastebin.com/raw.php?i=nC9wTKbb',
 			        'conditions': '"undefined" == typeof HkFinder'
-			    },
+			    },/*
 			    'HkScriptedStyles': {
 			        'url': 'http://pastebin.com/raw.php?i=mEWtDz8K',
 			        'conditions': '"undefined" == typeof HkStylesGeneric'
@@ -136,7 +136,7 @@ if('undefined' == typeof __PAGE_SCOPE_RUN__) {
 			    'MootoolsElementSelectors': {
 			        'url': 'http://pastebin.com/raw.php?i=2G8yXznG',
 			        'conditions': '"undefined" == typeof Element.Methods.Dom.getElementsBySelector'
-			    },
+			    },*/
 			    'MootoolsScroller': {
 				    'url': 'http://pastebin.com/raw.php?i=W0gZUcpe'
 			    },
@@ -300,7 +300,7 @@ if('undefined' == typeof __PAGE_SCOPE_RUN__) {
 			try {
 				window.Hk = new Class({
 				    idScript: "HkToolkit",
-				    version: "2012.01.13.02.16.250000",
+				    version: "2012.01.13.02.37.090000",
 				    Coords: {
 				        lastRegion: {
 				            x: 0,
