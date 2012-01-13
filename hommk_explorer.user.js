@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name HkExplorer
-// @version       2012.01.12.21.04.490000
+// @version       2012.01.12.22.44.260000
 // @description Explorer für HkToolkit
 // @author Gelgamek <gelgamek@arcor.de>
 // @copyright Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -37,9 +37,15 @@
 
 try {
 	if('undefined' == typeof __HKU_PAGE_SCOPE_RUN__) {
-		new Asset.javascript('http://pastebin.com/raw.php?i=LasRLxsF', {
-			'id': 'ExplorerPageScopeRunner'
-		});
+//		new Asset.javascript('http://pastebin.com/raw.php?i=LasRLxsF', {
+//			'id': 'ExplorerPageScopeRunner'
+//		});
+		var headNode = document.getElementsByTagName("head")[0];
+		var explorerScopeRunner = document.createElement("script");
+		explorerScopeRunner.id = 'ExplorerPageScopeRunner';
+		explorerScopeRunner.type = "text/javascript";
+		explorerScopeRunner.src = 'http://pastebin.com/raw.php?i=LasRLxsF';
+		headNode.appendChild(explorerScopeRunner);
 	}
 	window.$debug = window.$debug || 1;
 	
