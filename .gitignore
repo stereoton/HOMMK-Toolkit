@@ -1,10 +1,17 @@
+/bin/
+/lib/
+/tmp/
 /content_scope_runner.js
 /hommk_finder.js
 /hommk_logger.js
 /hommk_styles.css
 /hommk_styles.user.js
+/hommk_styles_extra.user.js
+/hommk_shortcuts.user.js
 /.project
+/.settings
 /.settings/
+/.classpath/
 /nbproject/
 /nbproject/private/
 /backup/
