@@ -65,10 +65,11 @@
 	<target name="pagescope-end" depends="pagescope-uuid" />
 
 	<macrodef name="minify">
+		<attribute name="pkg"/>
 		<attribute name="srcdir"/>
 		<attribute name="targetdir" default=""/>
-		<attribute name="includes" default="*.*"/>
-		<attribute name="tmpdir" default="${tmp.dir}/minify"/>
+		<attribute name="includes" default="**/*.*"/>
+		<attribute name="tmpdir" default="${tmp.dir}/@{pkg}/minify/"/>
 		<element name="include"/>
 		<sequential>
 			<local name="minify.target.dir" />
@@ -97,13 +98,11 @@
 			<delete dir="@{tmpdir}" />
 		</sequential>
 	</macrodef>
-
-	<target name="deploy" />
 	
 	<macrodef name="replace-placeholders">
-		<attribute name="dir" default="${tmp.dir}"/>
-		<attribute name="filepattern" default="*.*"/>
-		<attribute name="target"/>
+		<attribute name="dir" default="${tmp.dir}" description="Verzeichnis mit zu ersetzenden Daten" />
+		<attribute name="filepattern" default="*.*" description="Pattern der zu ersetzenden Dateien"/>
+		<attribute name="target" description="Ort der zu ersetzenden Dateien" />
 		<attribute name="pkg"/>
 		<attribute name="name"/>
 		<attribute name="description" default="Werkzeugkasten für HOMMK" />
@@ -128,19 +127,22 @@
 		<attribute name="name"/>
 		<attribute name="description" default="Werkzeugkasten für MMHK/HOMMK" />
 		<attribute name="icon" default="http://icons.iconarchive.com/icons/webiconset/mobile/32/maps-icon.png" />
-		<attribute name="tmpdir" default="${tmp.dir}/gm"/>
+		<attribute name="tmpdir" default="${tmp.dir}/@{pkg}/gm"/>
 		<sequential>
 			<local name="gm.tmp.file" />
-			<property name="gm.tmp.file" value="gm-head.js" />
+			<local name="gm.tmp.target" />
+			<property name="gm.tmp.file" value="gm-head-@{pkg}.js" />
+			<property name="gm.tmp.target" location="@{tmpdir}/${gm.tmp.file}" />
 			
 			<mkdir dir="@{tmpdir}"/>
 			
-			<copy file="${basedir}/common/header_greasemonkey.js" tofile="@{tmpdir}/${gm.tmp.file}" />
+			<copy file="${basedir}/common/header_greasemonkey.js" tofile="${gm.tmp.target}" />
+			
 			<replace-placeholders 
 				description="@{description}" icon="@{icon}" name="@{name}" pkg="@{pkg}" 
-				dir="@{tmpdir}" filepattern="*.*" target="@{tmpdir}/${gm.tmp.file}"/>
+				dir="@{tmpdir}" filepattern="${gm.tmp.file}" target="${gm.tmp.target}"/>
 			
-			<copy file="@{tmpdir}/${gm.tmp.file}" tofile="@{target}" />
+			<copy file="${gm.tmp.target}" tofile="@{target}" />
 			
 			<delete dir="@{tmpdir}" />
 		</sequential>
@@ -150,18 +152,21 @@
 		<attribute name="pkg"/>
 		<attribute name="currentVersion" />
 		<attribute name="dir" default="${src.dir}" />
-		<attribute name="filePattern" default="**/*.*" />
+		<attribute name="filePattern" default="*.*" />
 		<attribute name="versionPattern" default="$$Version$$" />
 		<sequential>
 			<echo message="Ersetze @{versionPattern} durch @{currentVersion} in @{dir}..." />
-			<replace dir="@{dir}" includes="@{filePattern}" token="@{versionPattern}" value="@{currentVersion}" />
+			<replace dir="@{dir}" token="@{versionPattern}" value="@{currentVersion}">
+				<include name="@{filePattern}"/>
+			</replace>
 		</sequential>
 	</macrodef>
 	
 	<macrodef name="git-replace-all-versions">
 		<attribute name="pkg"/>
 		<attribute name="dir" default="${src.dir}" />
-		<attribute name="filePattern" default="**/*.*" />
+		<attribute name="filePattern" default="*.*" />
+		<attribute name="tmpdir" default="${tmp.dir}/@{pkg}/git" />
 		<sequential>
 			<echo message="Rufe aktuelle Version von @{pkg} ab" />
 			<local name="git.version"/>
@@ -171,13 +176,15 @@
 				outputproperty="git.version" errorproperty="git.error" resultproperty="git.result" />
 			
 			<echo message="Schreibe aktuelle Version von @{pkg} in Properties-Datei: ${git.version}" />
-			<echoproperties destfile="${tmp.dir}/currentversion" prefix="git.version" />
+			<echoproperties destfile="@{tmpdir}/currentversion" prefix="git.version" />
 			
 			<echo message="Ersetze $$Version$$ für @{pkg} in @{dir}/@{filepattern}: ${git.version}" />
 			<git-replace-version pkg="@{pkg}" dir="@{dir}" filepattern="@{filepattern}" versionpattern="$$Version$$" currentversion="@@version ${git.version}" />
 			
 			<echo message="Ersetze $$VersionString$$ für @{pkg} in @{dir}/@{filepattern}: ${git.version}" />
 			<git-replace-version pkg="@{pkg}" dir="@{dir}" filepattern="@{filepattern}" versionpattern="$$VersionString$$" currentversion="${git.version}" />
+			
+			<delete dir="@{tmpdir}" />
 		</sequential>
 	</macrodef>
 	
@@ -189,7 +196,7 @@
 			<local name="ps.uuid"/>
 			<local name="ps.error"/>
 			<local name="ps.dir"/>
-			<property name="ps.dir" value="${basedir}/pagescoperunner"/>
+			<property name="ps.dir" location="${basedir}/pagescoperunner"/>
 			<exec executable="uuidvargen" errorproperty="ps.error" outputproperty="ps.uuid" />
 			
 			<echo message="Erzeuge PageScopeRunner ${ps.uuid}" />
@@ -201,10 +208,10 @@
 			<copy todir="@{tmpdir}" file="${ps.dir}/${psr_main}"/>
 			
 			<echo message="Ersetze __PAGE_SCOPE_RUN__ durch __PAGE_SCOPE_${ps.uuid}_RUN__ in @{tmpdir}" />
-			<replace dir="@{tmpdir}" value="__PAGE_SCOPE_${ps.uuid}_RUN__" token="__PAGE_SCOPE_RUN__" />
+			<replace file="@{tmpdir}/${psr_main}" value="__PAGE_SCOPE_${ps.uuid}_RUN__" token="__PAGE_SCOPE_RUN__"  />
 			
 			<echo message="Komprimiere @{tmpdir}/${psr_main}..." />
-			<minify tmpdir="@{tmpdir}/minify" srcdir="@{tmpdir}" includes="*.*">
+			<minify srcdir="@{tmpdir}">
 				<include name="${psr_main}" />
 			</minify>
 			
@@ -212,7 +219,7 @@
 			<copy todir="@{tmpdir}" file="${ps.dir}/${psr_start}"/>
 			
 			<echo message="Ersetze __PAGE_SCOPE_RUN__ durch __PAGE_SCOPE_${ps.uuid}_RUN__ in @{tmpdir}" />
-			<replace dir="@{tmpdir}" value="__PAGE_SCOPE_${ps.uuid}_RUN__" token="__PAGE_SCOPE_RUN__" />
+			<replace file="@{tmpdir}/${psr_start}" value="__PAGE_SCOPE_${ps.uuid}_RUN__" token="__PAGE_SCOPE_RUN__" />
 			
 			<echo message="Kopiere ${psr_end} in das temporäre Verzeichnis @{tmpdir}..." />
 			<copy todir="@{tmpdir}" file="${ps.dir}/${psr_end}"/>
@@ -233,9 +240,9 @@
 			<attribute name="description" />
 			<attribute name="icon" />
 			<attribute name="target" />
-			<attribute name="srcdir" />
+			<attribute name="srcdir" default="${basedir}/common" />
 			<attribute name="srcfiles" />
-			<attribute name="tmpdir" default="${tmp.dir}/concat_files" />
+			<attribute name="tmpdir" default="${tmp.dir}/@{pkg}/concat_files" />
 			<sequential>
 				<local name="cf.tmp.file" />
 				<local name="cf.tmp.dir" />
@@ -300,7 +307,7 @@
 				dir="${cf.tmp.dir}" filepattern="*.*" target="${cf.tmp.targetlocation}"/>
 			
 			<echo message="Komprimiere ${cf.tmp.targetlocation}..." />
-			<minify tmpdir="${cf.tmp.dir}/minify" srcdir="${cf.tmp.dir}" includes="${cf.tmp.file}">
+			<minify srcdir="${cf.tmp.dir}">
 				<include name="${cf.tmp.file}" />
 			</minify>
 			
@@ -309,14 +316,14 @@
 			<local name="ps.targetlocation"/>
 			<property name="ps.file" value="@{pkg}_pagescope.user.js"/>
 			<property name="ps.targetlocation" location="${cf.tmp.dir}/${ps.file}"/>
-			<ps-runner pkg="@{pkg}" tmpdir="@{tmpdir}/ps" location="${ps.targetlocation}" />
+			<ps-runner pkg="@{pkg}" location="${ps.targetlocation}" />
 			
 			<echo message="Ergänze GM-Header..." />
 			<local name="gm.header" />
 			<local name="gm.file" />
 			<property name="gm.file" value="@{pkg}_gm.header"/>
 			<property name="gm.location" location="${cf.tmp.dir}/${gm.file}"/>
-			<gm-header tmpdir="${tmp.dir}/@{pkg}/gmheader" pkg="@{pkg}" name="@{name}" icon="@{icon}" 
+			<gm-header pkg="@{pkg}" name="@{name}" icon="@{icon}" 
 				description="@{description}" target="${gm.location}" />
 			
 			<echo message="Füge Dateien zusammen nach @{target}: ${gm.location},${ps.targetlocation},${cf.tmp.targetlocation}" />
@@ -334,7 +341,7 @@
 	</macrodef>
 
 	<property name="hk.commons.file" value="hommk_commons.js"/>
-	<property name="hk.commons.location" location="${build.dir}/${hk.commons.file}"/>
+	<property name="hk.commons.location" location="${basedir}/build/${hk.commons.file}"/>
 
 	<target name="build-hkcommons" description="Builds HkCommons in build dir" depends="init">
 		<local name="pkg.name"/>
@@ -348,17 +355,17 @@
 		<mkdir dir="${pkg.temp.dir}"/>
 		
 		<echo message="Baue ${hk.commons.file}" />
-		<concat-commons pkg='${pkg.name}' name="HkCommons" description="Commons · Werkzeugkasten für MMHK"
+		<concat-commons pkg='${pkg.name}' name="HkCommons" 
+			description="Commons · Werkzeugkasten für MMHK"
 			icon="http://icons.iconarchive.com/icons/webiconset/mobile/32/maps-icon.png" 
-			target="${hk.commons.location}" srcdir="${src.dir}/${pkg.name}" tmpdir="${pkg.temp.dir}" 
-			srcfiles="${pkg.srcfiles}" />
+			target="${hk.commons.location}" srcfiles="${pkg.srcfiles}" />
 		
-		<echo message="Räume auf..." />
 		<echo message="Lösche ${pkg.temp.dir}"/>
-		<delete file="${pkg.temp.dir}" />
+		<delete dir="${pkg.temp.dir}" />
 	</target>
 
-	<target name="build-hktoolkit" description="Builds HkToolkit in build dir" depends="init">
+	<target name="build-hktoolkit" description="Builds HkToolkit in build dir" 
+		depends="init">
 		<local name="pkg.name"/>
 		<local name="pkg.temp.dir"/>
 		<local name="pkg.file"/>
@@ -372,13 +379,16 @@
 		<mkdir dir="${pkg.temp.dir}"/>
 		
 		<echo message="Baue ${pkg.buildlocation}" />
-		<concat-files pkg='${pkg.name}' name="HkToolkit" description="Werkzeugkasten für MMHK"
+		<concat-files pkg='${pkg.name}' name="HkToolkit" 
+			description="Werkzeugkasten für MMHK"
 			icon="http://icons.iconarchive.com/icons/webiconset/mobile/32/maps-icon.png" 
-			target="${pkg.buildlocation}" srcdir="${src.dir}/${pkg.name}" tmpdir="${pkg.temp.dir}" 
+			target="${pkg.buildlocation}" srcdir="${src.dir}/${pkg.name}" 
 			srcfiles="hommk_localstorage.js,hommk_logger.js,hommk_finder.js,hommk_styles.js,mootools_element_selectors.js,mootools_scroller.js,hommk_prototypes.js,hommk_styles_extra.js" />
 	</target>
 
-	<target name="build-hkshortcuts" description="Builds HkShortcuts in build dir" depends="init,build-hkcommons">
+	<property name="hkshortcuts.file" value="hommk_shortcuts.user.js" />
+	<target name="build-hkshortcuts" description="Builds HkShortcuts in build dir" 
+		depends="init,build-hkcommons">
 		<local name="pkg.name"/>
 		<local name="pkg.temp.dir"/>
 		<local name="pkg.file"/>
@@ -386,7 +396,7 @@
 		<local name="pkg.srcfiles"/>
 		<property name="pkg.name"	value="hkshortcuts" />
 		<property name="pkg.temp.dir"	location="${tmp.dir}/${pkg.name}" />
-		<property name="pkg.file" value="hommk_shortcuts.user.js"/>
+		<property name="pkg.file" value="${hkshortcuts.file}"/>
 		<property name="pkg.buildlocation" location="${build.dir}/${pkg.file}"/>
 		<property name="pkg.srcfiles" value="${hk.commons.file},${pkg.file}"/>
 		
@@ -397,20 +407,61 @@
 		<copy file="${hk.commons.location}" todir="${src.dir}/${pkg.name}"/>
 		
 		<echo message="Baue ${pkg.buildlocation}" />
-		<concat-files pkg='${pkg.name}' name="HkShortcuts" description="HOMMK Shortcuts · Werkzeugkasten für MMHK"
+		<concat-files pkg='${pkg.name}' name="HkShortcuts" 
+			description="HOMMK Shortcuts · Werkzeugkasten für MMHK"
 			icon="http://icons.iconarchive.com/icons/webiconset/mobile/32/maps-icon.png" 
-			target="${pkg.buildlocation}" srcdir="${src.dir}/${pkg.name}" tmpdir="${pkg.temp.dir}" 
+			target="${pkg.buildlocation}" srcdir="${src.dir}/${pkg.name}" 
 			srcfiles="${pkg.srcfiles}" />
 		
 		<echo message="Lösche ${hk.commons.file}"/>
-		<delete file="${src.dir}/${pkg.name}/${hk.commons.file}}" />
+		<delete file="${src.dir}/${pkg.name}/${hk.commons.file}" />
 		
 		<echo message="Lösche ${pkg.temp.dir}"/>
 		<delete file="${pkg.temp.dir}" />
 	</target>
-	
-	<target name="dist-hktoolkit" depends="build-hktoolkit,deploy">
+
+	<property name="hkexplorer.file" value="hommk_explorer.user.js" />
+	<target name="build-hkexplorer" description="Builds HkExplorer in build dir" 
+		depends="init,build-hkcommons">
+		<local name="pkg.name"/>
+		<local name="pkg.temp.dir"/>
+		<local name="pkg.file"/>
+		<local name="pkg.buildlocation"/>
+		<local name="pkg.srcfiles"/>
+		<property name="pkg.name"	value="hkexplorer" />
+		<property name="pkg.temp.dir"	location="${tmp.dir}/${pkg.name}" />
+		<property name="pkg.file" value="${hkexplorer.file}"/>
+		<property name="pkg.buildlocation" location="${build.dir}/${pkg.file}"/>
+		<property name="pkg.srcfiles" value="${hk.commons.file},${pkg.file}"/>
 		
+		<echo message="Erzeuge temporäres Verzeichnis ${pkg.temp.dir}..."/>
+		<mkdir dir="${pkg.temp.dir}"/>
+		
+		<echo message="Kopiere commons nach ${src.dir}/${pkg.name}..." />
+		<copy file="${hk.commons.location}" todir="${src.dir}/${pkg.name}"/>
+		
+		<echo message="Baue ${pkg.buildlocation}" />
+		<concat-files pkg='${pkg.name}' name="HkShortcuts" 
+			description="HOMMK Explorer · Werkzeugkasten für MMHK"
+			icon="http://icons.iconarchive.com/icons/webiconset/mobile/32/maps-icon.png" 
+			target="${pkg.buildlocation}" srcdir="${src.dir}/${pkg.name}" 
+			srcfiles="${pkg.srcfiles}" />
+		
+		<echo message="Lösche ${hk.commons.file}"/>
+		<delete file="${src.dir}/${pkg.name}/${hk.commons.file}" />
+		
+		<echo message="Lösche ${pkg.temp.dir}"/>
+		<delete file="${pkg.temp.dir}" />
+	</target>
+
+	<target name="deploy-hktoolkit" depends="dist-hktoolkit">
+		<copy file="${dist.dir}/${hkexplorer.file}" todir="${basedir}" overwrite="true"/>
+		<copy file="${dist.dir}/${hkshortcuts.file}" todir="${basedir}" overwrite="true"/>
+	</target>
+	
+	<target name="dist-hktoolkit" depends="build-hkshortcuts,build-hkexplorer">
+		<copy file="${build.dir}/${hkexplorer.file}" todir="${dist.dir}" overwrite="true"/>
+		<copy file="${build.dir}/${hkshortcuts.file}" todir="${dist.dir}" overwrite="true"/>
 	</target>
 
 	<target name="build" depends="init" description="Builds files to build dir">
