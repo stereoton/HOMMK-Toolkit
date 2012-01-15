@@ -1,6 +1,6 @@
 // ==UserScript==
-// @name HkShortcuts
-// @version 2012.01.15.11.49.580000
+// @name HkExplorer
+// @version 2012.01.15.13.44.320000
 // @description Explorer für HkToolkit
 // @author Gelgamek <gelgamek@arcor.de>
 // @copyright Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -12,7 +12,7 @@
 // @require http://userscripts.org/scripts/source/68059.user.js
 // ==/UserScript==
 
-if('undefined' == typeof __PAGE_SCOPE_x_8061a88c_6d32_4965_800a_4110a02a508a_RUN__) { (function page_scope_runner() {
+if('undefined' == typeof __PAGE_SCOPE_x_c6a40ef4_1923_4287_9b86_026f7d3b5108_RUN__) { (function page_scope_runner() {
 	// If we're _not_ already running in the page, grab the full source
 	// of this script.
 	var my_src = "(" + page_scope_runner.caller.toString() + ")();";
@@ -22,7 +22,7 @@ if('undefined' == typeof __PAGE_SCOPE_x_8061a88c_6d32_4965_800a_4110a02a508a_RUN
 	// Note that we are intentionally *not* scope-wrapping here.
 	var script = document.createElement('script');
 	script.setAttribute("type", "text/javascript");
-	script.textContent = "var __PAGE_SCOPE_x_8061a88c_6d32_4965_800a_4110a02a508a_RUN__ = true;\n" + my_src;
+	script.textContent = "var __PAGE_SCOPE_x_c6a40ef4_1923_4287_9b86_026f7d3b5108_RUN__ = true;\n" + my_src;
 	
 	// Insert the script node into the page, so it will run, and immediately
 	// remove it to clean up. Use setTimeout to force execution "outside" of
