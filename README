@@ -41,12 +41,26 @@ Neuladen.
 - Integration mit anderen Skripten durch "Andocken" an die Menüs von HOMMK GOLD und dem "klassischen" HOMMK-Userscript,
 falls Du eins oder mehrere davon parallel verwendest.
 
+---
+
+"Bauen" des Toolkits
+
+Die eigentlichen Userscripts liegen im Hauptverzeichnis und können so, wie sie sind verwendet werden. Wenn du dir die
+Skripte selbst bauen willst, müssen ein paar Pakete zusätzlich benutzt werden:
+
+- Apache Ant ab Version 1.8
+- YUI Compressor Ant Task 0.5.7 von Viktor Lieskovsky <viktor.lieskovsky@gmail.com> + YUI Compressor 2.4.7 von 
+Julien Lecomte <jlecomte@yahoo-inc.com>
+
+Die Build-Files sind für GNU/Linux ausgelegt und sind mit anderen Betriebssystemen nicht getestet. Du musst die
+Buildfiles also für deine Plattform unter Umständen anpassen.  
+
+---
+
 Mit Ideen zu Erweiterungen, Anregungen und Änderungsvorschlägen kannst Du dich immer gerne an mich wenden.
 
 Wenn Du einen Fehler findest, kannst Du mir hier eine Nachricht mit kurzer Beschreibung zukommen lassen:
 https://github.com/gelgamek/HOMMK-Toolkit/issues/new
-
-Copyright: Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
 
 ---
 
@@ -54,3 +68,7 @@ Achja :)... - Du kannst die Entwicklung auch unterstützen, indem Du einen belie
 auch über Kleinbeträge: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=CWES782TQV38L! - Du
 solltest aber wissen, dass mir PayPal grundsätzlich von jeder Spende 0,35€ als Gebühr abzieht - Spenden unter 0,36€
 gehen also komplett an PayPal... :/
+
+---
+
+Copyright: Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
