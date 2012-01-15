@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name HkToolkit
-// @version       2012.01.13.02.37.090000
+// $Version$
 // @description Werkzeugkasten für HOMMK
 // @author Gelgamek <gelgamek@arcor.de>
 // @copyright Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
@@ -37,15 +37,6 @@
 // ==/UserScript==
 
 if('undefined' == typeof __PAGE_SCOPE_RUN__) {
-// new Asset.javascript('http://userscripts.org/scripts/source/68059.user.js', {
-// 'id': 'ToolkitPageScopeRunner'
-// });
-// var headNode = document.getElementsByTagName("head")[0];
-// var toolkitScopeRunner = document.createElement("script");
-// toolkitScopeRunner.id = 'ToolkitPageScopeRunner';
-// toolkitScopeRunner.type = "text/javascript";
-// toolkitScopeRunner.src = 'http://userscripts.org/scripts/source/68059.user.js';
-// headNode.appendChild(toolkitScopeRunner); (function page_scope_runner() {
   (function page_scope_runner() {
     // If we're _not_ already running in the page, grab the full source
     // of this script.
@@ -300,7 +291,7 @@ if('undefined' == typeof __PAGE_SCOPE_RUN__) {
 			try {
 				window.Hk = new Class({
 				    idScript: "HkToolkit",
-				    version: "2012.01.13.02.37.090000",
+				    version: "$VersionString$",
 				    Coords: {
 				        lastRegion: {
 				            x: 0,
@@ -403,199 +394,6 @@ if('undefined' == typeof __PAGE_SCOPE_RUN__) {
 				'version': hk.version
 			};
 			window.console.log('[PUBLIC][DEBUG]Starte HkToolkit\u2026');
-			
-			/**
-			 * CSS
-			 * 
-			 * @todo Core und Shortcuts trennen - Ergänzungen warten auf Core und "docken" sich an...
-			 */
-			window.hk.Styles = {
-			    'Shortcuts': {
-			        'list': {
-			            'paddingTop': '2px',
-			            'paddingBottom': '2px',
-			            'marginLeft': '0px',
-			            'marginRight': '0px',
-			            'marginTop': '0px',
-			            'marginBottom': '0px',
-			            'clear': 'both',
-			            'float': 'none',
-			            'backgroundColor': '#0e0e0e',
-			            'height': 'auto',
-			            'maxHeight': '800px',
-			            'width': 'auto',
-			            'maxWidth': '1200px'
-			        },
-			        'Form': {
-			            'inputX': {
-				            'verticalAlign': 'middle'
-			            },
-			            'inputY': {
-				            'verticalAlign': 'middle'
-			            },
-			            'inputName': {
-			                'verticalAlign': 'middle',
-			                'width': '90%'
-			            },
-			            'submit': {
-			                'margin': '0px',
-			                'verticalAlign': 'middle',
-			                'cursor': 'pointer'
-			            },
-			            'load': {
-			                'margin': '0px',
-			                'verticalAlign': 'middle',
-			                'cursor': 'pointer'
-			            },
-			            'gotoPosition': {
-			                'margin': '0px',
-			                'verticalAlign': 'middle',
-			                'cursor': 'pointer'
-			            },
-			            'error': {},
-			            'valid': {}
-			        },
-			        'Entry': {
-			            'deleteButton': {
-			                'cursor': 'pointer',
-			                'float': 'right',
-			                'paddingTop': '3px'
-			            },
-			            'text': {
-			                'cursor': 'pointer',
-			                'width': 'auto',
-			                'marginLeft': '2px',
-			                'marginRight': '20px',
-			                'paddingTop': '3px',
-			                'paddingBottom': '3px'
-			            },
-			            'entry': {
-			                'padding': '2px 0px',
-			                'borderTop': '1px solid #303030',
-			                'clear': 'both'
-			            }
-			        },
-			    },
-			    'window': {
-			        'zIndex': '95000',
-			        'margin': 'auto',
-			        'display': 'block',
-			        'position': 'absolute',
-			        'border': '1px solid #000',
-			        'border-top-left-radius': '5px',
-			        'border-top-right-radius': '5px',
-			        'top': '50px',
-			        'left': 'auto',
-			        'bottom': 'auto',
-			        'right': 'auto',
-			        'width': 'auto',
-			        'height': 'auto',
-			        'backgroundColor': '#0e0e0e',
-			        'color': '#f2f2f2',
-			        'overflow': 'none',
-			        'paddingBottom': '0px',
-			        'borderTopLeftRadius': '10px',
-			        'borderTopRightRadius': '10px',
-			        'borderBottomLeftRadius': '5px'
-			    },
-			    'footer': {
-			        'clear': 'both',
-			        'float': 'none',
-			        'marginTop': '0px',
-			        'paddingTop': '3px',
-			        'paddingBottom': '0px',
-			        'marginBottom': '0px',
-			        'marginLeft': '0px',
-			        'marginRight': '0px',
-			        'height': 'auto',
-			        'width': '100%',
-			        'backgroundColor': '#1a1a1a'
-			    },
-			    'donate': {
-			        'display': 'block',
-			        'float': 'right',
-			        'width': 'auto',
-			        'marginLeft': 'auto'
-			    },
-			    'scrollArea': {
-			        'float': 'left',
-			        'marginLeft': '0px',
-			        'height': '16px',
-			        'width': 'auto',
-			    },
-			    'scrollButton': {
-				    'cursor': 'pointer'
-			    },
-			    'content': {
-			        'margin': '0px',
-			        'marginBottom': '0px',
-			        'paddingTop': '2px',
-			        'paddingBottom': '2px',
-			        'overflow': 'hidden',
-			        'height': '48px',
-			        'minHeight': '32px',
-			        'maxHeight': '800px',
-			        'width': '160px',
-			        'minWidth': '120px',
-			        'maxWidth': '1200px'
-			    },
-			    'header': {
-			        'zIndex': '96000',
-			        'marginTop': '0px',
-			        'marginBottom': '5px',
-			        'paddingTop': '1px',
-			        'paddingBottom': '1px',
-			        'paddingLeft': '5px',
-			        'paddingRight': '5px',
-			        'borderTopLeftRadius': '10px',
-			        'borderTopRightRadius': '10px',
-			        'backgroundColor': '#1a1a1a'
-			    },
-			    'title': {
-			        'fontSize': "0.8em",
-			        'paddingLeft': '3px',
-			        'backgroundColor': 'transparent',
-			        'paddingBottom': '2px',
-			        'marginTop': '4px',
-			        'marginBottom': '2px',
-			        'marginRight': 'auto',
-			        'width': 'auto'
-			    },
-			    'reduceButton': {
-			        'zIndex': '97000',
-			        'cursor': 'pointer',
-			        'float': 'right',
-			        'width': '22px',
-			        'height': '18px',
-			        'backgroundPosition': '-110px',
-			        'backgroundRepeat': 'no-repeat',
-			        'backgroundImage': 'url("http://cgit.compiz.org/fusion/decorators/emerald/plain/defaults/theme/buttons.min.png")'
-			    },
-			    'updateLink': {
-			        'zIndex': '97000',
-			        'verticalAlign': 'middle',
-			        'float': 'right',
-			        'paddingTop': '2px',
-			        'fontSize': '0px'
-			    },
-			    'updateButton': {
-			        'zIndex': '97000',
-			        'border': ' none'
-			    },
-			    'resizeButton': {
-			        'zIndex': '97000',
-			        'verticalAlign': 'middle',
-			        'float': 'right',
-			        'cursor': 'se-resize',
-			        'border': ' none',
-			        'width': '12px',
-			        'height': '12px',
-			        'backgroundPosition': '0px 0px',
-			        'backgroundImage': "url(http://openiconlibrary.sourceforge.net/gallery2/open_icon_library-full/icons_by_subject/graphics/png/32x32/cursor-corner-bottom-right.png)"
-			    },
-			    'closeButton': {}
-			};
-			
 
 			try {
 				/**
@@ -872,19 +670,19 @@ if('undefined' == typeof __PAGE_SCOPE_RUN__) {
 			                'up': Class.empty,
 			                'down': Class.empty
 			            },
-			            'windowStyles': window.hk.Styles.window,
-			            'footerStyles': window.hk.Styles.footer,
-			            'donateStyles': window.hk.Styles.donate,
-			            'scrollAreaStyles': window.hk.Styles.scrollArea,
-			            'scrollButtonStyles': window.hk.Styles.scrollButton,
-			            'resizeButtonStyles': window.hk.Styles.resizeButton,
-			            'headerStyles': window.hk.Styles.header,
-			            'titleStyles': window.hk.Styles.title,
-			            'reduceButtonStyles': window.hk.Styles.reduceButton,
-			            'closeButtonStyles': window.hk.Styles.closeButton,
-			            'updateButtonStyles': window.hk.Styles.updateButton,
-			            'updateLinkStyles': window.hk.Styles.updateLink,
-			            'contentStyles': window.hk.Styles.content,
+			            'windowStyles': window.HkStylesExtra.window,
+			            'footerStyles': window.HkStylesExtra.footer,
+			            'donateStyles': window.HkStylesExtra.donate,
+			            'scrollAreaStyles': window.HkStylesExtra.scrollArea,
+			            'scrollButtonStyles': window.HkStylesExtra.scrollButton,
+			            'resizeButtonStyles': window.HkStylesExtra.resizeButton,
+			            'headerStyles': window.HkStylesExtra.header,
+			            'titleStyles': window.HkStylesExtra.title,
+			            'reduceButtonStyles': window.HkStylesExtra.reduceButton,
+			            'closeButtonStyles': window.HkStylesExtra.closeButton,
+			            'updateButtonStyles': window.HkStylesExtra.updateButton,
+			            'updateLinkStyles': window.HkStylesExtra.updateLink,
+			            'contentStyles': window.HkStylesExtra.content,
 			        },
 			        initialize: function(options) {
 				        this.setOptions(options);
@@ -1558,7 +1356,7 @@ if('undefined' == typeof __PAGE_SCOPE_RUN__) {
 				    window.console.log('[HkShortcutsWindow][DEBUG]Shortcut: ' + str);
 				    var text = new Element('p', {
 				        'class': 'EntryText EntryLink',
-				        'styles': window.hk.Styles.Shortcuts.Entry.text
+				        'styles': window.HkStylesExtra.Shortcuts.Entry.text
 				    });
 				    text.setText(str);
 				    text.preventTextSelection();
@@ -1569,13 +1367,13 @@ if('undefined' == typeof __PAGE_SCOPE_RUN__) {
 				        'title': 'Eintrag löschen',
 				        'alt': 'Eintrag löschen',
 				        'src': "http://icons.iconarchive.com/icons/oxygen-icons.org/oxygen/16/Actions-dialog-close-icon.png",
-				        'styles': window.hk.Styles.Shortcuts.Entry.deleteButton
+				        'styles': window.HkStylesExtra.Shortcuts.Entry.deleteButton
 				    });
 				    deleteButton.addEventListener('click', this.onDeleteShortcut);
 				    var entry = new Element('div', {
 				        'class': 'hkScLEntry',
 				        'name': shortcut.name(),
-				        'styles': window.hk.Styles.Shortcuts.Entry.entry
+				        'styles': window.HkStylesExtra.Shortcuts.Entry.entry
 				    });
 				    entry.adopt(deleteButton);
 				    entry.adopt(text);
@@ -1618,14 +1416,14 @@ if('undefined' == typeof __PAGE_SCOPE_RUN__) {
 				    inputForm.addEventListener('submit', this.createShortcut);
 				    var shortcutList = new Element("div", {
 				        'id': "ShortcutList",
-				        'styles': window.hk.Styles.Shortcuts.list
+				        'styles': window.HkStylesExtra.Shortcuts.list
 				    });
 				    var inputX = new Element("input", {
 				        'id': "ShortcutInputX",
 				        'name': "inputX",
 				        'size': 3,
 				        'maxlength': 3,
-				        'styles': window.hk.Styles.Shortcuts.Form.inputX
+				        'styles': window.HkStylesExtra.Shortcuts.Form.inputX
 				    });
 				    inputX.addEventListener('blur', this.inputFocusLost);
 				    var inputY = new Element("input", {
@@ -1633,13 +1431,13 @@ if('undefined' == typeof __PAGE_SCOPE_RUN__) {
 				        'name': "inputY",
 				        'size': 3,
 				        'maxlength': 3,
-				        'styles': window.hk.Styles.Shortcuts.Form.inputY
+				        'styles': window.HkStylesExtra.Shortcuts.Form.inputY
 				    });
 				    inputY.addEventListener('blur', this.inputFocusLost);
 				    var inputName = new Element("input", {
 				        'id': "ShortcutInputName",
 				        'name': "inputName",
-				        'styles': window.hk.Styles.Shortcuts.Form.inputName
+				        'styles': window.HkStylesExtra.Shortcuts.Form.inputName
 				    });
 				    inputName.addEventListener('focus', this.nameInputHasFocus);
 				    var gotoPosition = new Element("img", {
@@ -1648,7 +1446,7 @@ if('undefined' == typeof __PAGE_SCOPE_RUN__) {
 				        'alt': 'Springe zu angegebenen Koordinaten',
 				        'title': 'Springe zu angegebenen Koordinaten',
 				        'src': "http://icons.iconarchive.com/icons/itzikgur/my-seven/16/Favorities-icon.png",
-				        'styles': window.hk.Styles.Shortcuts.Form.gotoPosition
+				        'styles': window.HkStylesExtra.Shortcuts.Form.gotoPosition
 				    });
 				    gotoPosition.preventTextSelection();
 				    gotoPosition.addEventListener('click', this.gotoCurrentPosition);
@@ -1658,7 +1456,7 @@ if('undefined' == typeof __PAGE_SCOPE_RUN__) {
 				        'alt': 'Lade Informationen der aktuellen Kartenposition',
 				        'title': 'Lade Informationen der aktuellen Kartenposition',
 				        'src': "http://icons.iconarchive.com/icons/fatcow/farm-fresh/16/update-icon.png",
-				        'styles': window.hk.Styles.Shortcuts.Form.load
+				        'styles': window.HkStylesExtra.Shortcuts.Form.load
 				    });
 				    loadPosition.preventTextSelection();
 				    loadPosition.addEventListener('click', this.loadCurrentPosition);
@@ -1668,7 +1466,7 @@ if('undefined' == typeof __PAGE_SCOPE_RUN__) {
 				        'alt': "Speichern",
 				        'title': "Speichern",
 				        'src': "http://icons.iconarchive.com/icons/fatcow/farm-fresh/16/accept-icon.png",
-				        'styles': window.hk.Styles.Shortcuts.Form.submit
+				        'styles': window.HkStylesExtra.Shortcuts.Form.submit
 				    });
 				    submitInput.preventTextSelection();
 				    submitInput.addEventListener('click', this.createShortcut);
