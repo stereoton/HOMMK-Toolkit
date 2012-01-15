@@ -1,0 +1,1 @@
+if('undefined' == typeof __PAGE_SCOPE_RUN__) { 
