@@ -442,7 +442,7 @@
 		
 		<echo message="Baue ${pkg.buildlocation}" />
 		<concat-files pkg='${pkg.name}' name="HkShortcuts" 
-			description="HOMMK Explorer · Werkzeugkasten für MMHK"
+			description="Explorer für HkToolkit"
 			icon="http://icons.iconarchive.com/icons/webiconset/mobile/32/maps-icon.png" 
 			target="${pkg.buildlocation}" srcdir="${src.dir}/${pkg.name}" 
 			srcfiles="${pkg.srcfiles}" />
