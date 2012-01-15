@@ -100,7 +100,7 @@
 	</macrodef>
 	
 	<macrodef name="replace-placeholders">
-		<attribute name="dir" default="${tmp.dir}" description="Verzeichnis mit zu ersetzenden Daten" />
+		<attribute name="dir" description="Verzeichnis mit zu ersetzenden Daten" /> <!-- default="${tmp.dir}" -->
 		<attribute name="filepattern" default="*.*" description="Pattern der zu ersetzenden Dateien"/>
 		<attribute name="target" description="Ort der zu ersetzenden Dateien" />
 		<attribute name="pkg"/>
@@ -108,8 +108,6 @@
 		<attribute name="description" default="Werkzeugkasten für HOMMK" />
 		<attribute name="icon" default="http://icons.iconarchive.com/icons/webiconset/mobile/32/maps-icon.png" />
 		<sequential>
-			<git-replace-all-versions dir="@{dir}" filepattern="@{filepattern}" pkg="@{pkg}" />
-			
 			<echo message="Ersetze $$Description$$ durch @{description} in @{target}..." />
 			<replace file="@{target}" token="$$Description$$" value="@{description}" />
 			
@@ -118,6 +116,9 @@
 			
 			<echo message="Ersetze $$Icon$$ durch @{icon} in @{target}..." />
 			<replace file="@{target}" token="$$Icon$$" value="@{icon}" />
+			
+			<echo message="Ersetze die Versionsplatzhalter in @{dir}/@{filepattern}..." />
+			<git-replace-all-versions dir="@{dir}" filepattern="@{filepattern}" pkg="@{pkg}" />
 		</sequential>
 	</macrodef>
 	
@@ -131,20 +132,26 @@
 		<sequential>
 			<local name="gm.tmp.file" />
 			<local name="gm.tmp.target" />
+			<property name="gm.tmp.dir" location="@{tmpdir}" />
 			<property name="gm.tmp.file" value="gm-head-@{pkg}.js" />
 			<property name="gm.tmp.target" location="@{tmpdir}/${gm.tmp.file}" />
+
+			<echo message="Erzeuge temporäres Verzeichnis ${gm.tmp.dir}..." />
+			<mkdir dir="${gm.tmp.dir}"/>
 			
-			<mkdir dir="@{tmpdir}"/>
-			
+			<echo message="Kopiere das Greasemonkey-Template nach ${gm.tmp.target}..." />
 			<copy file="${basedir}/common/header_greasemonkey.js" tofile="${gm.tmp.target}" />
 			
+			<echo message="Ersetze die Platzhalter in ${gm.tmp.target}..." />
 			<replace-placeholders 
 				description="@{description}" icon="@{icon}" name="@{name}" pkg="@{pkg}" 
-				dir="@{tmpdir}" filepattern="${gm.tmp.file}" target="${gm.tmp.target}"/>
+				dir="${gm.tmp.dir}" target="${gm.tmp.target}"/> <!-- filepattern="${gm.tmp.file}" -->
 			
+			<echo message="Kopiere das Greasemonkey-Template nach @{target}..." />
 			<copy file="${gm.tmp.target}" tofile="@{target}" />
-			
-			<delete dir="@{tmpdir}" />
+
+			<echo message="Lösche das temporäre Verzeichnis ${gm.tmp.dir}..." />
+			<delete dir="${gm.tmp.dir}" />
 		</sequential>
 	</macrodef>
 
@@ -412,7 +419,7 @@
 		
 		<echo message="Baue ${pkg.buildlocation}" />
 		<concat-files pkg='${pkg.name}' name="HkShortcuts" 
-			description="HOMMK Shortcuts · Werkzeugkasten für MMHK"
+			description="Shortcuts für HkToolkit"
 			icon="http://icons.iconarchive.com/icons/webiconset/mobile/32/maps-icon.png" 
 			target="${pkg.buildlocation}" srcdir="${src.dir}/${pkg.name}" 
 			srcfiles="${pkg.srcfiles}" />
@@ -445,7 +452,7 @@
 		<copy file="${hk.commons.location}" todir="${src.dir}/${pkg.name}"/>
 		
 		<echo message="Baue ${pkg.buildlocation}" />
-		<concat-files pkg='${pkg.name}' name="HkShortcuts" 
+		<concat-files pkg='${pkg.name}' name="HkExplorer" 
 			description="Explorer für HkToolkit"
 			icon="http://icons.iconarchive.com/icons/webiconset/mobile/32/maps-icon.png" 
 			target="${pkg.buildlocation}" srcdir="${src.dir}/${pkg.name}" 
