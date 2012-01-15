@@ -68,7 +68,7 @@
 		<attribute name="pkg"/>
 		<attribute name="srcdir"/>
 		<attribute name="targetdir" default=""/>
-		<attribute name="includes" default="**/*.*"/>
+		<attribute name="includes" default="*.*"/>
 		<attribute name="tmpdir" default="${tmp.dir}/@{pkg}/minify/"/>
 		<element name="include"/>
 		<sequential>
@@ -175,6 +175,9 @@
 			<exec executable="git-currentversion" dir="${basedir}" searchpath="true" 
 				outputproperty="git.version" errorproperty="git.error" resultproperty="git.result" />
 			
+			<echo message="Lege temporäres Verzeichnis @{tmpdir} an..." />
+			<mkdir dir="@{tmpdir}"/>
+			
 			<echo message="Schreibe aktuelle Version von @{pkg} in Properties-Datei: ${git.version}" />
 			<echoproperties destfile="@{tmpdir}/currentversion" prefix="git.version" />
 			
@@ -211,7 +214,7 @@
 			<replace file="@{tmpdir}/${psr_main}" value="__PAGE_SCOPE_${ps.uuid}_RUN__" token="__PAGE_SCOPE_RUN__"  />
 			
 			<echo message="Komprimiere @{tmpdir}/${psr_main}..." />
-			<minify srcdir="@{tmpdir}">
+			<minify pkg="@{pkg}" srcdir="@{tmpdir}">
 				<include name="${psr_main}" />
 			</minify>
 			
@@ -307,7 +310,7 @@
 				dir="${cf.tmp.dir}" filepattern="*.*" target="${cf.tmp.targetlocation}"/>
 			
 			<echo message="Komprimiere ${cf.tmp.targetlocation}..." />
-			<minify srcdir="${cf.tmp.dir}">
+			<minify pkg="@{pkg}" srcdir="${cf.tmp.dir}">
 				<include name="${cf.tmp.file}" />
 			</minify>
 			
@@ -343,7 +346,8 @@
 	<property name="hk.commons.file" value="hommk_commons.js"/>
 	<property name="hk.commons.location" location="${basedir}/build/${hk.commons.file}"/>
 
-	<target name="build-hkcommons" description="Builds HkCommons in build dir" depends="init">
+	<target name="build-hkcommons" description="Builds HkCommons in build dir" 
+		depends="init">
 		<local name="pkg.name"/>
 		<local name="pkg.temp.dir"/>
 		<local name="pkg.srcfiles"/>
@@ -454,13 +458,19 @@
 		<delete file="${pkg.temp.dir}" />
 	</target>
 
-	<target name="deploy-hktoolkit" depends="dist-hktoolkit">
+	<target name="deploy-hkexplorer" depends="dist-hkexplorer">
 		<copy file="${dist.dir}/${hkexplorer.file}" todir="${basedir}" overwrite="true"/>
+	</target>
+	
+	<target name="dist-hkexplorer" depends="build-hkexplorer">
+		<copy file="${build.dir}/${hkexplorer.file}" todir="${dist.dir}" overwrite="true"/>
+	</target>
+
+	<target name="deploy-hktoolkit" depends="clean,dist-hktoolkit,deploy-hkexplorer">
 		<copy file="${dist.dir}/${hkshortcuts.file}" todir="${basedir}" overwrite="true"/>
 	</target>
 	
 	<target name="dist-hktoolkit" depends="build-hkshortcuts,build-hkexplorer">
-		<copy file="${build.dir}/${hkexplorer.file}" todir="${dist.dir}" overwrite="true"/>
 		<copy file="${build.dir}/${hkshortcuts.file}" todir="${dist.dir}" overwrite="true"/>
 	</target>
 
