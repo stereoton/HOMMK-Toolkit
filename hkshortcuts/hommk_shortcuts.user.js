@@ -660,6 +660,11 @@ try {
 					        if(this.options.resizeable) {
 						        this.makeResizeable(id, options, contentNode);
 					        }
+					        if(this.options.scrollable && this.options.autoScroll) {
+						        this.makeScrollable(id, {
+						        	'scroll': contentNode
+						        });
+					        }
 					        this.windows.push(windowNode);
 				        }
 				        this.loadWindowPosition(id, options);
@@ -1416,9 +1421,14 @@ try {
 					    'reduce': $("HkWindowContentHkShortcuts"),
 					    'title': "HkShortcuts"
 					});
+				} catch(ex) {
+					window.console.log('[HkPublic][ERROR]Fehler bei der Finalisierung des Shortcuts-Fensters: ' + ex);
+				}
+				try {
 					window.hk.Windows.makeScrollable("HkShortcuts", {
 					    'scroll': $("HkWindowContentHkShortcuts"),
-					    'title': "HkShortcuts"
+					    'title': "HkShortcuts",
+					    'autoScroll': true
 					});
 					window.hk.Shortcuts.updateDimensions();
 				} catch(ex) {
@@ -1450,7 +1460,7 @@ try {
 				    window.console.log('[HkToolkitLoader][DEBUG]HkToolkit geladen\u2026');
 				    try {
 					    window.HkToolkitLoaderActive = $clear(window.HkToolkitLoaderActive);
-					    delete window.HkToolkitLoader;
+//					    delete window.HkToolkitLoader;
 				    } catch(ex) {
 					    window.console.log('[HkToolkitLoader][Error]Fehler beim Beenden des Loaders: ' + ex);
 				    }
