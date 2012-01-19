@@ -1,66 +1,19 @@
-try {
-	
 	// Master-Switch f. Debug-Ausgabe
-	window.$debug = 0;
-	
-	if("undefined" != typeof AssetLoader) {
-		var AssetLoader = new Class({
-		    initialize: function(js) {
-			    this.completed = [];
-			    this.waiting = [];
-			    if(!!js) this.injectJavascript(js);
-		    },
-		    injectJavascript: function injectJavascript(js) {
-			    this.scriptsToInject = js;
-			    $each(js, function(scriptDef, scriptName) {
-				    this.waiting.push(scriptName);
-			    }, this);
-			    $each(js, function(scriptDef, scriptName) {
-				    if(!$(scriptName)) this.inject(scriptDef, scriptName);
-				    else this.setInjected(scriptName);
-			    }, this);
-		    },
-		    inject: function inject(scriptDef, scriptName) {
-			    if($(scriptName)) $(scriptName).remove();
-			    var url = scriptDef.hasOwnProperty("url") ? scriptDef.url : false;
-			    var conditions = scriptDef.hasOwnProperty("conditions") ? eval(scriptDef.conditions) : true;
-			    if(url && conditions && !$(scriptName)) {
-				    new Asset.javascript(url, {
-					    'id': scriptName
-				    });
-			    }
-			    this.check.delay(200, this, [
-			        scriptDef, scriptName]);
-		    },
-		    check: function check(scriptDef, scriptName) {
-			    var conditions = scriptDef.hasOwnProperty("conditions") ? eval(scriptDef.conditions) : false;
-			    if(conditions) {
-				    this.inject.delay(1000, this, [
-				        scriptDef, scriptName]);
-			    } else {
-				    this.setInjected(scriptName);
-			    }
-		    },
-		    setInjected: function setInjected(scriptName) {
-			    this.completed.push(scriptName);
-			    this.waiting.remove(scriptName);
-		    }
-		});
-	}
+	window.$debug = $Debug$;
 	try {
-		if(!window.hasOwnProperty("assetLoader")) {
-			window.assetLoader = new AssetLoader({
+		if(!window.hasOwnProperty("$Name$AssetLoader")) {
+			window.$Name$AssetLoader = new AssetLoader({
 				'SHA256CryptoJs': {
 					'url': 'http://crypto-js.googlecode.com/files/2.5.3-crypto-sha256.js'
 				}
 			});
 		}
 	} catch(ex) {
-		window.console.log('[AssetLoader][ERROR]' + ex);
+		window.console.log('[$Name$AssetLoader][ERROR]' + ex);
 	}
 	
-	if(!window.hasOwnPropert("hkCreateClasses")) {
-		window.hkCreateClasses = function() {
+	if(!window.hasOwnProperty("$Name$CreateClasses")) {
+		window.$Name$CreateClasses = function() {
 			
 			window.console.log('[HkPublic][DEBUG]Erzeuge Klassen\u2026');
 			
@@ -205,113 +158,6 @@ try {
 			} catch(ex) {
 				window.console.log("[HkDataStorage][ERROR]" + ex);
 			}
-			
-			try {
-				window.Hk = new Class({
-				    idScript: "HkToolkit",
-				    version: "$VersionString$",
-				    Coords: {
-				        lastRegion: {
-				            x: 0,
-				            y: 0
-				        },
-				        lastGoto: {
-				            x: 0,
-				            y: 0
-				        },
-				        regExp: /\(?\s*([0-9]+)\s*[,.\-]\s*([0-9]+)\s*\)?/
-				    },
-				    doNothing: Class.empty,
-				    initialize: function() {
-					    try {
-						    this.HOMMK = window.HOMMK;
-						    this.Player = this.HOMMK.player;
-						    this.PlayerId = this.Player.get('id');
-						    this.UserId = this.Player.get('userId');
-						    this.AllianceId = this.Player.get('allianceId');
-						    this.AllianceName = this.Player.get('allianceName');
-						    this.Map = this.HOMMK.worldMap;
-						    this.WorldSize = this.Map.get('_size');
-						    this.WorldId = this.Player.get('worldId');
-					    } catch(ex) {
-						    window.console.log('[Hk][ERROR]Hk-Initialisierung fehlgeschlagen: ' + ex);
-					    }
-				    },
-				    getRegionName: function getRegionName(x, y) {
-					    if(arguments.length == 1) {
-						    var xy = this.HOMMK.getXYFromRegionNumber();
-						    x = xy.x;
-						    y = xy.y;
-					    }
-					    var region = window.HOMMK.getRegionFromXY(x, y);
-					    var str = "";
-					    if(region.content.hasOwnProperty("cN")) { // Stadt
-						    str += region.content.cN; // Name
-						    if(region.content.hasOwnProperty("pN") && !!region.content.pN) str += ", " + region.content.pN; // Besitzer
-						    if(region.content.hasOwnProperty("iAN") && !!region.content.iAN)
-						      str += " (" + region.content.iAN + ")"; // Allianz
-					    } else if(region.content.hasOwnProperty("rB")) { // Gebietsgebäude
-						    str += region.content.rB.n; // Name
-						    if(region.content.rB.hasOwnProperty("owner") && !!region.content.rB.owner) {
-							    str += "(" + region.content.rB.owner.name + ")"; // Name
-						    }
-					    } else {
-						    str += "Region #" + window.HOMMK.getRegionNumberFromXY(x, y);
-					    }
-					    // window.console.log(region);
-					    // window.console.log(this.HOMMK.worldMap);
-					    return str;
-				    },
-				    fixPosition: function fixPosition(p) {
-					    if(p > this.WorldSize) return p - this.WorldSize;
-					    return p;
-				    },
-				    validatePosition: function validatePosition(p) {
-					    p = new Number(p).round();
-					    if(isNaN(p) || p <= 0 || p > this.WorldSize) return false;
-					    return p;
-				    },
-				    gotoPosition: function gotoPosition(x, y, zoom) {
-					    var p;
-					    // window.console.log(this.HOMMK);
-					    if(!$defined(zoom)) zoom = window.HOMMK.REGION_WORLDMAP_ZOOM_13X13;
-					    p = window.HOMMK.getRegionNumberFromXY(x, y);
-					    if(!this.validatePosition(x) || !this.validatePosition(y)) return false;
-					    window.HOMMK.setCurrentView(zoom, p, x, y);
-					    return true;
-				    },
-				    getCurrentX: function getCurrentX() {
-					    return this.validatePosition(this.Coords.lastRegion.x || window.HOMMK.currentView.regionX);
-				    },
-				    getCurrentY: function getCurrentY() {
-					    return this.validatePosition(this.Coords.lastRegion.y || window.HOMMK.currentView.regionY);
-				    }
-				});
-				// try {
-				// window.Hk.implement(new window.HkLogger());
-				// } catch(ex) {
-				// window.console.log('[Hk][ERROR]Logger-Implementierung fehlgeschlagen: ' + ex);
-				// }
-			} catch(ex) {
-				window.console.log('[Hk][ERROR]' + ex);
-			}
-			var Hk = window.Hk;
-			
-			try {
-				window.hkToolkit = new Hk();
-				window.hk = window.hkToolkit;
-			} catch(ex) {
-				window.console.log('[HkToolkit][ERROR]' + ex);
-			}
-			
-			var hk = window.hk;
-			var HOMMK = hk.HOMMK;
-			var idScript = hk.idScript;
-			var version = hk.version;
-			window.HOMMK_HkToolkit = window.HOMMK_HkToolkit ? window.HOMMK_HkToolkit : {
-				'version': hk.version
-			};
-			window.console.log('[PUBLIC][DEBUG]Starte HkToolkit\u2026');
 			
 			try {
 				/**
@@ -1447,54 +1293,10 @@ try {
 		};
 	}
 	
-	window.console.log('Erzeuge Loader-Objekt\u2026');
-	
-	/**
-	 * Verfügbarkeit der HOMMK-Objekte prüfen
-	 */
-	if(!window.hasOwnPropert("HkToolkitLoader")) {
-		window.HkToolkitLoader = {
-		    loaded: false,
-		    load: function load() {
-			    if(window.HkToolkitLoader.loaded) {
-				    window.console.log('[HkToolkitLoader][DEBUG]HkToolkit geladen\u2026');
-				    try {
-					    window.HkToolkitLoaderActive = $clear(window.HkToolkitLoaderActive);
-//					    delete window.HkToolkitLoader;
-				    } catch(ex) {
-					    window.console.log('[HkToolkitLoader][Error]Fehler beim Beenden des Loaders: ' + ex);
-				    }
-				    return;
-			    }
-			    window.console.log('[HkToolkitLoader][DEBUG]Warte auf Hk\u2026');
-			    if(!!(window.HOMMK && window.HOMMK.worldMap && window.hkCreateClasses && window.assetLoader && window.assetLoader.waiting.length == 0)) {
-				    window.console.log('[HkToolkitLoader][DEBUG]Hk verfügbar, bereite HkToolkit vor\u2026');
-				    try {
-					    window.HkToolkitLoader.loaded = true;
-					    var initFunction = window.hkCreateClasses();
-					    initFunction();
-				    } catch(ex) {
-					    window.console.log('[HkToolkitLoader][ERROR]Fehler beim Erzeugen der Klassen für HkToolkit: ' + ex);
-				    }
-			    } else {
-				    window.console.log('[HkToolkitLoader][DEBUG]HkToolkit wartet auf die Verfügbarkeit von Hk.');
-			    }
-		    }
-		};
-		
-
-	}
-	window.console.log('Starte Loader\u2026');
-	
-	/**
-	 * Alle 1000ms die Verfügbarkeit prüfen.
-	 */
-	try {
-		window.HkToolkitLoaderActive = window.HkToolkitLoader.load.periodical(1000);
-	} catch(ex) {
-		window.console.log('[HkPublic][DEBUG]Fehler beim Laden von HkToolkit: ' + ex);
-	}
-	
-} catch(ex) {
-	window.console.log('[HkPublic][ERROR]Unbekannter Fehler: ' + ex);
-}
+	window.HkShortcutsDependentObjectsAvailable = function() {
+		try {
+			return window.Hk && window.hk && window.Hk.HkWindows && window.hk.Windows;
+		}	catch (ex) {
+			return false;
+		}
+	};
