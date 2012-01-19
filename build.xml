@@ -1,12 +1,9 @@
 <?xml version="1.0"?>
 <project name="yui-compressor-ant-task-hktoolkit" default="dist">
 	<description>HkToolkit ant tasks.</description>
+	<import file="ant.xml" />
 
 	<property file="build.properties" />
-
-	<property name="psr_start" 	value="00_page_scope_runner_start.js"/>
-	<property name="psr_main" 	value="01_page_scope_runner_main.js"/>
-	<property name="psr_end" 		value="02_page_scope_runner_end.js"/>
 
 	<path id="task.classpath">
 		<pathelement location="${yuicompressor.jar}" />
@@ -23,12 +20,15 @@
 		<echo message="***************************************" />
 	</target>
 
-	<target name="check-task-jar-is-present" description="Checks if the required ant task jar exists in the expected dir">
-		<available file="${yuicompressor-ant-task.jar}" property="task.jar.present" />
+	<target name="check-task-jar-is-present"
+	        description="Checks if the required ant task jar exists in the expected dir">
+		<available file="${yuicompressor-ant-task.jar}"
+		           property="task.jar.present" />
 	</target>
 
 	<target name="define-ant-task" if="task.jar.present">
-		<taskdef name="yui-compressor" classname="net.noha.tools.ant.yuicompressor.tasks.YuiCompressorTask">
+		<taskdef name="yui-compressor"
+		         classname="net.noha.tools.ant.yuicompressor.tasks.YuiCompressorTask">
 			<classpath refid="task.classpath" />
 		</taskdef>
 	</target>
@@ -41,13 +41,17 @@
     </fail>
 	</target>
 
-	<target name="init" description="Initializes directory layout and shows banner" depends="check-task-jar-is-present,define-ant-task,fail-build">
+	<target name="init"
+	        description="Initializes directory layout and shows banner"
+	        depends="check-task-jar-is-present,define-ant-task,fail-build">
 		<mkdir dir="${dist.dir}" />
 		<mkdir dir="${build.dir}" />
 		<mkdir dir="${tmp.dir}" />
 	</target>
 
-	<target name="dist" description="Prepares files for distribution" depends="banner,build,copy-and-minify-libs" />
+	<target name="dist"
+	        description="Prepares files for distribution"
+	        depends="banner,build,copy-and-minify-libs" />
 
 	<target name="clean" depends="init" description="Removes all build artefacts">
 		<delete dir="${dist.dir}" />
@@ -65,98 +69,173 @@
 	<target name="pagescope-end" depends="pagescope-uuid" />
 
 	<macrodef name="minify">
-		<attribute name="pkg"/>
-		<attribute name="srcdir"/>
-		<attribute name="targetdir" default=""/>
-		<attribute name="includes" default="*.*"/>
-		<attribute name="tmpdir" default="${tmp.dir}/@{pkg}/minify/"/>
-		<element name="include"/>
+		<attribute name="pkg" />
+		<attribute name="srcdir" />
+		<attribute name="targetdir" default="" />
+		<attribute name="includes" default="*.*" />
+		<attribute name="tmpdir" default="${tmp.dir}/@{pkg}/minify/" />
+		<element name="include" />
 		<sequential>
 			<local name="minify.target.dir" />
 			<local name="minify.target.location" />
-			<condition property="minify.target.dir" value="@{targetdir}" else="@{srcdir}" >
+			<condition property="minify.target.dir"
+			           value="@{targetdir}"
+			           else="@{srcdir}">
 				<length string="@{targetdir}" when="greater" length="0" />
 			</condition>
 			<property name="minify.target.location" location="${minify.target.dir}" />
-			
+
 			<echo message="Lege das temporäre Verzeichnis @{tmpdir} an" />
-			<mkdir dir="@{tmpdir}"/>
-			
+			<mkdir dir="@{tmpdir}" />
+
 			<echo message="Kopiere Daten aus @{srcdir} in das temporäre Verzeichnis @{tmpdir}" />
 			<copy todir="@{tmpdir}">
-				<fileset dir="@{srcdir}" includes="@{includes}"/>
+				<fileset dir="@{srcdir}" includes="@{includes}" />
 			</copy>
-			
+
 			<echo message="Komprimiere Daten von @{tmpdir} nach ${minify.target.location}: @{includes}" />
-			<yui-compressor warn="false" munge="true" 
-				jsSuffix=".js" cssSuffix=".css" preserveAllSemiColons="false" 
-				fromDir="@{tmpdir}" toDir="${minify.target.dir}">
-				<include /><exclude />
+			<yui-compressor warn="false"
+			                munge="true"
+			                jsSuffix=".js"
+			                cssSuffix=".css"
+			                preserveAllSemiColons="false"
+			                fromDir="@{tmpdir}"
+			                toDir="${minify.target.dir}">
+				<include />
+				<exclude />
 			</yui-compressor>
-			
+
 			<echo message="Lösche das temporäre Verzeichnis @{tmpdir}" />
 			<delete dir="@{tmpdir}" />
 		</sequential>
 	</macrodef>
-	
-	<macrodef name="replace-placeholders">
-		<attribute name="dir" description="Verzeichnis mit zu ersetzenden Daten" /> <!-- default="${tmp.dir}" -->
-		<attribute name="filepattern" default="*.*" description="Pattern der zu ersetzenden Dateien"/>
-		<attribute name="target" description="Ort der zu ersetzenden Dateien" />
-		<attribute name="pkg"/>
-		<attribute name="name"/>
-		<attribute name="description" default="Werkzeugkasten für HOMMK" />
-		<attribute name="icon" default="http://icons.iconarchive.com/icons/webiconset/mobile/32/maps-icon.png" />
+
+	<target name="hk.replace.checkGeneric" if="pkg">
+		<echo message="Prüfe Ersetzungs-Parameter für ${pkg} als hk.replace.${pkg}.checkGeneric.checked: ${target}" />
+		<condition property="replace.${pkg}.checkGeneric.checked" value="true">
+			<and>
+				<isset property="replace" />
+				<length string="${replace}" length="0" when="greater" />
+			</and>
+		</condition>
+	</target>
+	<target name="hk.replace.checkTarget" if="pkg">
+		<echo message="Prüfe Ersetzungs-Parameter für ${pkg} als hk.replace.${pkg}.checkTarget.checked: ${target}" />
+		<condition property="replace.${pkg}.checkTarget.checked" value="true">
+			<and>
+				<isset property="target" />
+				<length string="${target}" length="0" when="greater" />
+			</and>
+		</condition>
+	</target>
+	<target name="hk.replace.checkPattern" depends="" if="pkg">
+		<echo message="Prüfe Ersetzungs-Parameter für ${pkg} als hk.replace.${pkg}.checkPattern.checked: ${target}" />
+		<condition property="hk.replace.${pkg}.checkPattern.checked" value="true">
+			<and>
+				<isset property="dir" />
+				<length string="${dir}" length="0" when="greater" />
+				<isset property="filepattern" />
+				<length string="${filepattern}" length="0" when="greater" />
+				<not>
+					<or>
+						<isset property="target" />
+						<length string="${target}" length="0" when="greater" />
+					</or>
+				</not>
+			</and>
+		</condition>
+	</target>
+	<target name="hk.replace.byTarget"
+	        depends="hk.replace.checkTarget"
+	        if="hk.replace.${pkg}.checkTarget.checked"
+	        description="Properties: search, replace, value, dir">
+		<echo message="Ersetze ${search} durch ${replace} in ${dir}/${target}..." />
+		<replace dir="${dir}"
+		         file="${target}"
+		         token="${search}"
+		         value="${replace}" />
+	</target>
+	<target name="hk.replace.byPattern"
+	        depends="hk.replace.checkPattern"
+	        if="replace"
+	        unless="hk.replace.${pkg}.checkPattern.checked"
+	        description="Properties: pkg, dir, file, search, replace">
+		<echo message="${pkg}: Ersetze ${search} durch ${replace} in ${dir}/${filepattern}..." />
+		<replace dir="${dir}"
+		         includes="${filepattern}"
+		         token="${search}"
+		         value="${replace}" />
+	</target>
+	<target name="hk.replace.doReplace"
+	        if="replace"
+	        depends="hk.replace.byTarget,hk.replace.byPattern"
+	        description="Properties: pkg, target, dir, file, search, replace">
+		<echo message="${pkg}: Ersetze ${search} durch ${replace} in ${target} - ${dir}/${filepattern}..." />
+	</target>
+
+	<macrodef name="hk.replace.replaceOne">
+		<attribute name="pkg" />
+		<attribute name="search" />
+		<attribute name="replace" />
+		<attribute name="dir" />
+		<attribute name="target" default="" />
+		<attribute name="filepattern" default="*.*" />
 		<sequential>
-			<echo message="Ersetze $$Description$$ durch @{description} in @{target}..." />
-			<replace file="@{target}" token="$$Description$$" value="@{description}" />
-			
-			<echo message="Ersetze $$Name$$ durch @{name} in @{target}..." />
-			<replace file="@{target}" token="$$Name$$" value="@{name}" />
-			
-			<echo message="Ersetze $$Icon$$ durch @{icon} in @{target}..." />
-			<replace file="@{target}" token="$$Icon$$" value="@{icon}" />
-			
-			<echo message="Ersetze die Versionsplatzhalter in @{dir}/@{filepattern}..." />
-			<git-replace-all-versions dir="@{dir}" filepattern="@{filepattern}" pkg="@{pkg}" />
+			<local name="replace" />
+			<cpprop name="replace" from="@{replace}" />
+			<antcall target="hk.replace.doReplace">
+				<param name="pkg" value="@{pkg}" />
+				<param name="search" value="@{search}" />
+				<param name="replace" value="${replace}" />
+				<param name="target" value="@{target}" />
+				<param name="dir" value="@{dir}" />
+				<param name="filepattern" value="@{filepattern}" />
+			</antcall>
 		</sequential>
 	</macrodef>
-	
-	<macrodef name="gm-header">
-		<attribute name="target"/>
-		<attribute name="pkg"/>
-		<attribute name="name"/>
-		<attribute name="description" default="Werkzeugkasten für MMHK/HOMMK" />
-		<attribute name="icon" default="http://icons.iconarchive.com/icons/webiconset/mobile/32/maps-icon.png" />
-		<attribute name="tmpdir" default="${tmp.dir}/@{pkg}/gm"/>
-		<sequential>
-			<local name="gm.tmp.file" />
-			<local name="gm.tmp.target" />
-			<property name="gm.tmp.dir" location="@{tmpdir}" />
-			<property name="gm.tmp.file" value="gm-head-@{pkg}.js" />
-			<property name="gm.tmp.target" location="@{tmpdir}/${gm.tmp.file}" />
-
-			<echo message="Erzeuge temporäres Verzeichnis ${gm.tmp.dir}..." />
-			<mkdir dir="${gm.tmp.dir}"/>
-			
-			<echo message="Kopiere das Greasemonkey-Template nach ${gm.tmp.target}..." />
-			<copy file="${basedir}/common/header_greasemonkey.js" tofile="${gm.tmp.target}" />
-			
-			<echo message="Ersetze die Platzhalter in ${gm.tmp.target}..." />
-			<replace-placeholders 
-				description="@{description}" icon="@{icon}" name="@{name}" pkg="@{pkg}" 
-				dir="${gm.tmp.dir}" target="${gm.tmp.target}"/> <!-- filepattern="${gm.tmp.file}" -->
-			
-			<echo message="Kopiere das Greasemonkey-Template nach @{target}..." />
-			<copy file="${gm.tmp.target}" tofile="@{target}" />
-
-			<echo message="Lösche das temporäre Verzeichnis ${gm.tmp.dir}..." />
-			<delete dir="${gm.tmp.dir}" />
-		</sequential>
-	</macrodef>
+	<target name="hk.replace.placeholders"
+	        description="Properties: pkg, dir, filepattern, target">
+		<local name="hk.replace.filepattern" />
+		<condition property="hk.replace.filepattern"
+		           value="${filepattern}"
+		           else="*.*">
+			<and>
+				<isset property="filepattern" />
+				<length string="${filepattern}" length="0" when="greater" />
+			</and>
+		</condition>
+		<hk.replace.replaceOne pkg="${pkg}"
+		                       search="$$LoaderConditions$$"
+		                       replace="hk.${pkg}.loader.conditions"
+		                       target="${target}"
+		                       dir="${dir}"
+		                       filepattern="${hk.replace.filepattern}" />
+		<hk.replace.replaceOne pkg="${pkg}"
+		                       search="$$Description$$"
+		                       replace="hk.${pkg}.description"
+		                       target="${target}"
+		                       dir="${dir}"
+		                       filepattern="${hk.replace.filepattern}" />
+		<hk.replace.replaceOne pkg="${pkg}"
+		                       search="$$Name$$"
+		                       replace="hk.${pkg}.name"
+		                       target="${target}"
+		                       dir="${dir}"
+		                       filepattern="${hk.replace.filepattern}" />
+		<hk.replace.replaceOne pkg="${pkg}"
+		                       search="$$Icon$$"
+		                       replace="hk.${pkg}.icon"
+		                       target="${target}"
+		                       dir="${dir}"
+		                       filepattern="${hk.replace.filepattern}" />
+		<echo message="${pkg}: Ersetze die Versionsplatzhalter in ${dir}/${hk.replace.filepattern}..." />
+		<git-replace-all-versions dir="${dir}"
+		                          filepattern="${hk.replace.filepattern}"
+		                          pkg="${pkg}" />
+	</target>
 
 	<macrodef name="git-replace-version">
-		<attribute name="pkg"/>
+		<attribute name="pkg" />
 		<attribute name="currentVersion" />
 		<attribute name="dir" default="${src.dir}" />
 		<attribute name="filePattern" default="*.*" />
@@ -164,326 +243,414 @@
 		<sequential>
 			<echo message="Ersetze @{versionPattern} durch @{currentVersion} in @{dir}..." />
 			<replace dir="@{dir}" token="@{versionPattern}" value="@{currentVersion}">
-				<include name="@{filePattern}"/>
+				<include name="@{filePattern}" />
 			</replace>
 		</sequential>
 	</macrodef>
-	
 	<macrodef name="git-replace-all-versions">
-		<attribute name="pkg"/>
+		<attribute name="pkg" />
 		<attribute name="dir" default="${src.dir}" />
 		<attribute name="filePattern" default="*.*" />
 		<attribute name="tmpdir" default="${tmp.dir}/@{pkg}/git" />
 		<sequential>
 			<echo message="Rufe aktuelle Version von @{pkg} ab" />
-			<local name="git.version"/>
-			<local name="git.error"/>
-			<local name="git.result"/>
-			<exec executable="git-currentversion" dir="${basedir}" searchpath="true" 
-				outputproperty="git.version" errorproperty="git.error" resultproperty="git.result" />
-			
+			<local name="git.version" />
+			<local name="git.error" />
+			<local name="git.result" />
+			<exec executable="git-currentversion"
+			      dir="${basedir}"
+			      searchpath="true"
+			      outputproperty="git.version"
+			      errorproperty="git.error"
+			      resultproperty="git.result" />
+
 			<echo message="Lege temporäres Verzeichnis @{tmpdir} an..." />
-			<mkdir dir="@{tmpdir}"/>
-			
+			<mkdir dir="@{tmpdir}" />
+
 			<echo message="Schreibe aktuelle Version von @{pkg} in Properties-Datei: ${git.version}" />
-			<echoproperties destfile="@{tmpdir}/currentversion" prefix="git.version" />
-			
+			<echoproperties destfile="@{tmpdir}/currentversion"
+			                prefix="git.version" />
+
 			<echo message="Ersetze $$Version$$ für @{pkg} in @{dir}/@{filepattern}: ${git.version}" />
-			<git-replace-version pkg="@{pkg}" dir="@{dir}" filepattern="@{filepattern}" versionpattern="$$Version$$" currentversion="@@version ${git.version}" />
-			
+			<git-replace-version pkg="@{pkg}"
+			                     dir="@{dir}"
+			                     filepattern="@{filepattern}"
+			                     versionpattern="$$Version$$"
+			                     currentversion="@@version ${git.version}" />
+
 			<echo message="Ersetze $$VersionString$$ für @{pkg} in @{dir}/@{filepattern}: ${git.version}" />
-			<git-replace-version pkg="@{pkg}" dir="@{dir}" filepattern="@{filepattern}" versionpattern="$$VersionString$$" currentversion="${git.version}" />
-			
+			<git-replace-version pkg="@{pkg}"
+			                     dir="@{dir}"
+			                     filepattern="@{filepattern}"
+			                     versionpattern="$$VersionString$$"
+			                     currentversion="${git.version}" />
+
 			<delete dir="@{tmpdir}" />
 		</sequential>
 	</macrodef>
-	
-	<macrodef name="ps-runner">
-		<attribute name="location" />
-		<attribute name="pkg" />
-		<attribute name="tmpdir" default="${tmp.dir}/@{pkg}/pstmp" />
+
+	<target name="gm.check" if="pkg">
+		<echo message="Prüfe Greasemonkey-Parameter für ${pkg} als gm.${pkg}.checked: ${target}, $${hk.${pkg}.gm.enabled}" />
+		<local name="testVal" />
+		<cpprop name="testVal" from="hk.${pkg}.gm.enabled" />
+		<condition property="gm.${pkg}.checked" value="true">
+			<and>
+				<isset property="target" />
+				<length string="${target}" length="0" when="greater" />
+				<istrue value="${testVal}" />
+			</and>
+		</condition>
+	</target>
+	<target name="gm.insert" depends="gm.check" if="gm.${pkg}.checked">
+		<echo message="Ergänze Greasemonkey-Kopf in ${target}..." />
+		<local name="gm.tmp.dir" />
+		<local name="gm.tmp.file" />
+		<local name="gm.tmp.target" />
+		<property name="gm.tmp.dir" location="${tmp.dir}/${pkg}/gm" />
+		<property name="gm.tmp.file" value="gm-head-${pkg}.js" />
+		<property name="gm.tmp.target" location="${gm.tmp.dir}/${gm.tmp.file}" />
+		<local name="nameVal" />
+		<cpprop name="nameVal" from="hk.${pkg}.name" />
+		<condition property="hk.${pkg}.name" value="${nameVal}" else="${pkg}">
+			<and>
+				<isset property="hk.${pkg}.name" />
+				<length string="${nameVal}" length="0" when="greater" />
+			</and>
+		</condition>
+		<echo message="Erzeuge temporäres Verzeichnis ${gm.tmp.dir}..." />
+		<mkdir dir="${gm.tmp.dir}" />
+		<echo message="Kopiere das Greasemonkey-Template nach ${gm.tmp.target}..." />
+		<copy file="${gm.location}" tofile="${gm.tmp.target}" />
+		<echo message="Ersetze die Platzhalter in ${gm.tmp.target}..." />
+		<!-- 
+		Properties: 
+		rpl.pkg, rpl.name, rpl.description, rpl.icon, rpl.dir, 
+		rpl.loaderConditions, rpl.filepattern, rpl.target 
+		-->
+		<antcall target="hk.replace.placeholders">
+			<param name="pkg" value="${pkg}" />
+			<param name="dir" value="${gm.tmp.dir}" />
+			<param name="filepattern" value="${gm.tmp.file}" />
+			<param name="target" value="${gm.tmp.target}" />
+		</antcall>
+		<echo message="Kopiere das Greasemonkey-Template nach ${target}..." />
+		<copy file="${gm.tmp.target}" tofile="${target}" />
+		<echo message="Lösche das temporäre Verzeichnis ${gm.tmp.dir}..." />
+		<delete dir="${gm.tmp.dir}" />
+	</target>
+
+	<target name="ps.check" if="pkg">
+		<echo message="Prüfe PageScopeRunner-Parameter für ${pkg}..." />
+		<local name="ps.enabled" />
+		<cpprop name="ps.enabled" from="hk.${pkg}.ps.enabled" />
+		<condition property="ps.${pkg}.checked">
+			<and>
+				<isset property="hk.${pkg}.ps.enabled" />
+				<istrue value="${ps.enabled}" />
+			</and>
+		</condition>
+	</target>
+	<target name="ps.insert" depends="ps.check" if="ps.${pkg}.checked">
+		<echo message="Ergänze PageScopeRunner in ${ps.target}..." />
+		<local name="ps.tmp.dir" />
+		<local name="ps.location" />
+		<local name="ps.uuid" />
+		<local name="ps.error" />
+		<property name="ps.tmp.dir" location="${tmp.dir}/${pkg}/pstmp" />
+		<property name="ps.location" location="${target}" />
+		<exec executable="uuidvargen"
+		      errorproperty="ps.error"
+		      outputproperty="ps.uuid" />
+		<echo level="verbose" message="Erzeuge PageScopeRunner ${ps.uuid}" />
+		<echo level="debug"
+		      message="Verwendet PageScopeRunner-Templates in ${ps.dir}..." />
+		<echo level="info"
+		      message="Lege das temporäre Verzeichnis ${ps.tmp.dir} an" />
+		<mkdir dir="${ps.tmp.dir}" />
+		<echo level="info"
+		      message="Kopiere ${psr_main} in das temporäre Verzeichnis ${ps.tmp.dir}..." />
+		<copy todir="${ps.tmp.dir}" file="${ps.dir}/${psr_main}" />
+		<echo level="debug"
+		      message="Ersetze __PAGE_SCOPE_RUN__ durch __PAGE_SCOPE_${ps.uuid}_RUN__ in ${ps.tmp.dir}" />
+		<replace file="${ps.tmp.dir}/${psr_main}"
+		         value="__PAGE_SCOPE_${ps.uuid}_RUN__"
+		         token="__PAGE_SCOPE_RUN__" />
+		<echo level="info" message="Komprimiere ${ps.tmp.dir}/${psr_main}..." />
+		<minify pkg="${ps.pkg}" srcdir="${ps.tmp.dir}">
+			<include name="${psr_main}" />
+		</minify>
+		<echo level="info"
+		      message="Kopiere ${psr_start} in das temporäre Verzeichnis ${ps.tmp.dir}..." />
+		<copy todir="${ps.tmp.dir}" file="${ps.dir}/${psr_start}" />
+		<echo level="debug"
+		      message="Ersetze __PAGE_SCOPE_RUN__ durch __PAGE_SCOPE_${ps.uuid}_RUN__ in ${ps.tmp.dir}" />
+		<replace file="${ps.tmp.dir}/${psr_start}"
+		         value="__PAGE_SCOPE_${ps.uuid}_RUN__"
+		         token="__PAGE_SCOPE_RUN__" />
+		<echo level="info"
+		      message="Kopiere ${psr_end} in das temporäre Verzeichnis ${ps.tmp.dir}..." />
+		<copy todir="${ps.tmp.dir}" file="${ps.dir}/${psr_end}" />
+		<echo level="info" message="Schreibe PageScopeRunner nach ${ps.location}" />
+		<concat destfile="${ps.location}" append="false" force="true">
+			<fileset dir="${ps.tmp.dir}" includes="*_page_scope_runner*.js" />
+		</concat>
+		<echo level="info"
+		      message="Entferne das temporäre Verzeichnis ${ps.tmp.dir}..." />
+		<delete dir="${ps.tmp.dir}" />
+	</target>
+
+	<target name="yui.check" if="pkg">
+		<echo message="Prüfe YUI Compressor-Parameter für ${pkg}..." />
+		<local name="yui.enabled" />
+		<cpprop name="yui.enabled" from="hk.${pkg}.yui.enabled" />
+		<condition property="yui.${pkg}.checked">
+			<and>
+				<or>
+					<isset property="location" />
+					<and>
+						<isset property="srcdir" />
+						<isset property="includes" />
+					</and>
+				</or>
+				<istrue value="${yui.enabled}" />
+			</and>
+		</condition>
+	</target>
+	<target name="yui.compress"
+	        depends="yui.check"
+	        if="yui.${pkg}.checked"
+	        description="Parameters: pkg,destdir,(srcdir,includes|location)">
+		<local name="yui.tmp.dir" />
+		<local name="yui.target.dir" />
+		<local name="yui.target.location" />
+		<local name="yui.src.includes" />
+		<property name="yui.tmp.dir" value="${tmp.dir}/${pkg}/minify/" />
+		<condition property="yui.target.dir" value="${destdir}" else="${srcdir}">
+			<and>
+				<isset property="target" />
+				<length string="${destdir}" when="greater" length="0" />
+			</and>
+		</condition>
+		<property name="yui.target.location" location="${yui.target.dir}" />
+		<condition property="yui.src.includes" value="${includes}" else="*.*">
+			<length string="${includes}" when="greater" length="0" />
+		</condition>
+		<echo message="Komprimiere ${srcdir}:${yui.src.includes} nach ${yui.target.location}" />
+
+		<echo message="Lege das temporäre Verzeichnis ${yui.tmp.dir} an" />
+		<mkdir dir="${yui.tmp.dir}" />
+
+		<echo message="Kopiere Daten aus ${srcdir} in das temporäre Verzeichnis ${yui.tmp.dir}" />
+		<copy todir="${yui.tmp.dir}">
+			<fileset dir="${srcdir}" includes="${yui.src.includes}" />
+		</copy>
+
+		<echo message="Komprimiere Daten von ${yui.tmp.dir} nach ${yui.target.location}: ${yui.src.includes}" />
+		<yui-compressor warn="false"
+		                munge="true"
+		                jsSuffix=".js"
+		                cssSuffix=".css"
+		                includes="${yui.src.includes}"
+		                preserveAllSemiColons="false"
+		                fromDir="${yui.tmp.dir}"
+		                toDir="${yui.target.location}">
+			<!--<fileset dir="${yui.tmp.dir}" includes="${yui.src.includes}" />-->
+		</yui-compressor>
+		<echo message="Lösche das temporäre Verzeichnis ${yui.tmp.dir}" />
+		<delete dir="${yui.tmp.dir}" />
+	</target>
+
+	<!-- ld.check - Prüft die Einbindung des Loaders -->
+	<target name="ld.check" if="pkg">
+		<echo message="Prüfe Loader-Parameter für ${pkg}..." />
+		<local name="isEnabled" />
+		<cpprop name="isEnabled" from="hk.${pkg}.loader.enabled" />
+		<condition property="ld.${pkg}.checked">
+			<and>
+				<isset property="target" />
+				<istrue value="${isEnabled}" />
+			</and>
+		</condition>
+	</target>
+
+	<!-- ld.insert - Bindet den Loader ein -->
+	<target name="ld.insert" depends="ld.check" if="ld.${pkg}.checked">
+		<echo message="Ergänze ${ld.file} aus ${ld.dir} zu ${target}..." />
+		<concat destfile="${ld.target}" append="true" force="true">
+			<filelist dir="${ld.dir}" files="${ld.file}" />
+		</concat>
+	</target>
+
+	<!-- hk.buildparts - Baut die Teile einer Komponente -->
+	<macrodef name="hk.buildparts">
+		<attribute name="pkg" description="Build package name" />
 		<sequential>
-			<local name="ps.uuid"/>
-			<local name="ps.error"/>
-			<local name="ps.dir"/>
-			<property name="ps.dir" location="${basedir}/pagescoperunner"/>
-			<exec executable="uuidvargen" errorproperty="ps.error" outputproperty="ps.uuid" />
-			
-			<echo message="Erzeuge PageScopeRunner ${ps.uuid}" />
-			<echo message="Verwendet PageScopeRunner-Templates in ${ps.dir}..." />
-			<echo message="Lege das temporäre Verzeichnis @{tmpdir} an" />
-			<mkdir dir="@{tmpdir}"/>
-			
-			<echo message="Kopiere ${psr_main} in das temporäre Verzeichnis @{tmpdir}..." />
-			<copy todir="@{tmpdir}" file="${ps.dir}/${psr_main}"/>
-			
-			<echo message="Ersetze __PAGE_SCOPE_RUN__ durch __PAGE_SCOPE_${ps.uuid}_RUN__ in @{tmpdir}" />
-			<replace file="@{tmpdir}/${psr_main}" value="__PAGE_SCOPE_${ps.uuid}_RUN__" token="__PAGE_SCOPE_RUN__"  />
-			
-			<echo message="Komprimiere @{tmpdir}/${psr_main}..." />
-			<minify pkg="@{pkg}" srcdir="@{tmpdir}">
-				<include name="${psr_main}" />
-			</minify>
-			
-			<echo message="Kopiere ${psr_start} in das temporäre Verzeichnis @{tmpdir}..." />
-			<copy todir="@{tmpdir}" file="${ps.dir}/${psr_start}"/>
-			
-			<echo message="Ersetze __PAGE_SCOPE_RUN__ durch __PAGE_SCOPE_${ps.uuid}_RUN__ in @{tmpdir}" />
-			<replace file="@{tmpdir}/${psr_start}" value="__PAGE_SCOPE_${ps.uuid}_RUN__" token="__PAGE_SCOPE_RUN__" />
-			
-			<echo message="Kopiere ${psr_end} in das temporäre Verzeichnis @{tmpdir}..." />
-			<copy todir="@{tmpdir}" file="${ps.dir}/${psr_end}"/>
-			
-			<echo message="Schreibe PageScopeRunner nach @{location}" />
-			<concat destfile="@{location}" append="false" force="true">
-				<fileset dir="@{tmpdir}" includes="*_page_scope_runner*.js" />
+			<local name="hk.buildparts.tmp.file" />
+			<local name="hk.buildparts.tmp.dir" />
+			<local name="hk.buildparts.tmp.location" />
+			<property name="hk.buildparts.tmp.file" value="@{pkg}_temp_content.js" />
+			<echo message="@{pkg}: Speichere in Datei ${hk.buildparts.tmp.file}.." />
+			<property name="hk.buildparts.tmp.dir"
+			          value="${hk.@{pkg}.tmp.dir}/hk.buildparts" />
+			<echo message="Erzeuge temporäres Verzeichnis ${hk.buildparts.tmp.dir}.." />
+			<mkdir dir="${hk.buildparts.tmp.dir}" />
+			<property name="hk.buildparts.tmp.location"
+			          location="${hk.buildparts.tmp.dir}/${hk.buildparts.tmp.file}" />
+			<echo message="@{pkg}: Speichere als ${hk.buildparts.tmp.location}.." />
+			<echo message="@{pkg}: Verbinde ${hk.@{pkg}.src.files} aus ${hk.@{pkg}.src.dir} zu ${hk.buildparts.tmp.location}..." />
+			<concat destfile="${hk.buildparts.tmp.location}"
+			        append="false"
+			        force="true">
+				<filelist dir="${hk.@{pkg}.src.dir}" files="${hk.@{pkg}.src.files}" />
 			</concat>
-			
-			<echo message="Entferne das temporäre Verzeichnis @{tmpdir}..." />
-			<delete dir="@{tmpdir}"/>
-		</sequential>
-	</macrodef>
-	
-	<macrodef name="concat-commons">
-		<attribute name="name" />
-			<attribute name="pkg" />
-			<attribute name="description" />
-			<attribute name="icon" />
-			<attribute name="target" />
-			<attribute name="srcdir" default="${basedir}/common" />
-			<attribute name="srcfiles" />
-			<attribute name="tmpdir" default="${tmp.dir}/@{pkg}/concat_files" />
-			<sequential>
-				<local name="cf.tmp.file" />
-				<local name="cf.tmp.dir" />
-				<local name="cf.tmp.targetlocation" />
-				<local name="cf.src.dir" />
-				<property name="cf.tmp.file" value="@{pkg}_temp_content.js"/>
-				<property name="cf.tmp.dir" value="@{tmpdir}"/>
-				<property name="cf.tmp.targetlocation" location="${cf.tmp.dir}/${cf.tmp.file}"/>
-				<property name="cf.src.dir" location="@{srcdir}"/>
-				
-				<echo message="Erzeuge temporäres Verzeichnis ${cf.tmp.dir}.." />
-				<mkdir dir="${cf.tmp.dir}"/>
-				
-				<echo message="Verbinde @{srcfiles} in ${cf.src.dir} zu ${cf.tmp.targetlocation}..." />
-				<concat destfile="${cf.tmp.targetlocation}" append="false" force="yes">
-					<filelist dir="${cf.src.dir}" files="@{srcfiles}" />
-				</concat>
-				
-				<echo message="Ersetze die Platzhalter in ${cf.tmp.targetlocation}..." />
-				<replace-placeholders 
-					description="@{desription}" icon="@{icon}" name="@{name}" pkg="@{pkg}" 
-					dir="${cf.tmp.dir}" filepattern="*.*" target="${cf.tmp.targetlocation}"/>
-				
-				<echo message="Kopiere ${cf.tmp.targetlocation} nach @{target}" />
-				<copy file="${cf.tmp.targetlocation}" tofile="@{target}"/>
-
-				<echo message="Lösche Arbeitsdateien aus ${cf.tmp.dir}..." />
-				<delete dir="${cf.tmp.dir}" />
-			</sequential>
-	</macrodef>
-
-	<macrodef name="concat-files">
-		<attribute name="name" />
-		<attribute name="pkg" />
-		<attribute name="description" />
-		<attribute name="icon" />
-		<attribute name="target" />
-		<attribute name="srcdir" />
-		<attribute name="srcfiles" />
-		<attribute name="tmpdir" default="${tmp.dir}/@{pkg}/concat_files" />
-		<sequential>
-			<local name="cf.tmp.file" />
-			<local name="cf.tmp.dir" />
-			<local name="cf.tmp.targetlocation" />
-			<local name="cf.src.dir" />
-			<property name="cf.tmp.file" value="@{pkg}_temp_content.js"/>
-			<property name="cf.tmp.dir" value="@{tmpdir}"/>
-			<property name="cf.tmp.targetlocation" location="${cf.tmp.dir}/${cf.tmp.file}"/>
-			<property name="cf.src.dir" location="@{srcdir}"/>
-			
-			<echo message="Erzeuge temporäres Verzeichnis ${cf.tmp.dir}.." />
-			<mkdir dir="${cf.tmp.dir}"/>
-			
-			<echo message="Verbinde @{srcfiles} aus ${cf.src.dir} zu ${cf.tmp.targetlocation}..." />
-			<concat destfile="${cf.tmp.targetlocation}" append="false" force="true">
-				<filelist dir="${cf.src.dir}" files="@{srcfiles}" />
+			<echo message="Ergänze Loader aus ${hk.@{pkg}.src.dir} zu ${hk.buildparts.tmp.location}..." />
+			<antcall target="ld.insert">
+				<param name="pkg" value="@{pkg}" />
+				<param name="target" value="${hk.buildparts.tmp.location}" />
+			</antcall>
+			<echo message="@{pkg}: Ersetze die Platzhalter in ${hk.buildparts.tmp.location}..." />
+			<!-- 
+			Properties: 
+			rpl.pkg, rpl.name, rpl.description, rpl.icon, rpl.dir, 
+			rpl.loaderConditions, rpl.filepattern, rpl.target 
+			-->
+			<antcall target="hk.replace.placeholders">
+				<param name="pkg" value="@{pkg}" />
+				<param name="dir" value="${hk.buildparts.tmp.dir}" />
+				<param name="filepattern" value="*.*" />
+				<param name="target" value="${hk.buildparts.tmp.location}" />
+			</antcall>
+			<echo message="Komprimiere ${hk.buildparts.tmp.location}..." />
+			<antcall target="yui.compress">
+				<!-- yui.pgk, yui.src.dir,yui.target,yui.includes -->
+				<param name="pkg" value="@{pkg}" />
+				<param name="srcdir" value="${hk.buildparts.tmp.dir}" />
+				<param name="includes" value="${hk.buildparts.tmp.file}" />
+				<!--<param name="yui.enabled" value="@{yui.enabled}" />-->
+			</antcall>
+			<echo message="Rufe ps.insert auf für @{pkg}..." />
+			<local name="ps.target" />
+			<property name="ps.target"
+			          location="${hk.buildparts.tmp.dir}/@{pkg}_pagescope.user.js" />
+			<antcall target="ps.insert">
+				<param name="pkg" value="@{pkg}" />
+				<param name="file" value="@{pkg}_pagescope.user.js" />
+				<param name="target" value="${ps.target}" />
+				<!--<param name="ps.enabled" value="@{ps.enabled}" />-->
+				<param name="result"
+				       value="${hk.buildparts.tmp.dir}/${hk.buildparts.tmp.file}" />
+			</antcall>
+			<echo message="Rufe gm.insert auf für @{pkg}..." />
+			<local name="gm.target" />
+			<property name="gm.target"
+			          location="${hk.buildparts.tmp.dir}/@{pkg}_gm.header" />
+			<antcall target="gm.insert">
+				<param name="pkg" value="@{pkg}" />
+				<param name="file" value="@{pkg}_gm.header" />
+				<param name="target" value="${gm.target}" />
+				<param name="gm.result" value="${hk.buildparts.tmp.location}" />
+			</antcall>
+			<echo message="Füge Dateien zusammen nach ${hk.@{pkg}.build.location}: ${gm.target},${ps.target},${hk.buildparts.tmp.location}" />
+			<concat destfile="${hk.@{pkg}.build.location}" append="false" force="yes">
+				<filelist files="${gm.target},${ps.target},${hk.buildparts.tmp.location}" />
 			</concat>
-			
-			<echo message="Ersetze die Platzhalter in ${cf.tmp.targetlocation}..." />
-			<replace-placeholders 
-				description="@{desription}" icon="@{icon}" name="@{name}" pkg="@{pkg}" 
-				dir="${cf.tmp.dir}" filepattern="*.*" target="${cf.tmp.targetlocation}"/>
-			
-			<echo message="Komprimiere ${cf.tmp.targetlocation}..." />
-			<minify pkg="@{pkg}" srcdir="${cf.tmp.dir}">
-				<include name="${cf.tmp.file}" />
-			</minify>
-			
-			<echo message="Ergänze PageScopeRunner (in ${ps.targetlocation})..." />
-			<local name="ps.file"/>
-			<local name="ps.targetlocation"/>
-			<property name="ps.file" value="@{pkg}_pagescope.user.js"/>
-			<property name="ps.targetlocation" location="${cf.tmp.dir}/${ps.file}"/>
-			<ps-runner pkg="@{pkg}" location="${ps.targetlocation}" />
-			
-			<echo message="Ergänze GM-Header..." />
-			<local name="gm.header" />
-			<local name="gm.file" />
-			<property name="gm.file" value="@{pkg}_gm.header"/>
-			<property name="gm.location" location="${cf.tmp.dir}/${gm.file}"/>
-			<gm-header pkg="@{pkg}" name="@{name}" icon="@{icon}" 
-				description="@{description}" target="${gm.location}" />
-			
-			<echo message="Füge Dateien zusammen nach @{target}: ${gm.location},${ps.targetlocation},${cf.tmp.targetlocation}" />
-			<concat destfile="@{target}" append="false" force="yes">
-				<filelist files="${gm.location},${ps.targetlocation},${cf.tmp.targetlocation}" />
-			</concat>
-
 			<echo message="Lösche übrig gebliebene Dateien..." />
-			<delete file="${gm.location}" />
-			<delete file="${ps.targetlocation}" />
-			
-			<echo message="Lösche Arbeitsdateien aus ${cf.tmp.dir}..." />
-			<delete dir="${cf.tmp.dir}" />
+			<delete file="${gm.target}" />
+			<delete file="${ps.target}" />
+			<echo message="Lösche Arbeitsdateien aus ${hk.buildparts.tmp.dir}..." />
+			<delete dir="${hk.buildparts.tmp.dir}" />
 		</sequential>
 	</macrodef>
 
-	<property name="hk.commons.file" value="hommk_commons.js"/>
-	<property name="hk.commons.location" location="${basedir}/build/${hk.commons.file}"/>
+	<!-- hk.build.component - Regeln zum Build einer einzelner Komponente -->
+	<macrodef name="hk.build.component"
+	          description="Regeln zum Build einer einzelner Komponente">
+		<attribute name="pkg" />
+		<sequential>
+			<local name="tmpdir" />
+			<local name="file" />
+			<local name="location" />
+			<property name="tmpdir" location="${hk.@{pkg}.tmp.dir}" />
+			<property name="file" value="${hk.@{pkg}.file}" />
+			<property name="location" location="${src.dir}/@{pkg}" />
+			<echo message="@{pkg}: Erzeuge temporäres Verzeichnis ${tmpdir}..." />
+			<mkdir dir="${tmpdir}" />
+			<echo message="@{pkg}: Baue ${location}" />
+			<hk.buildparts pkg="@{pkg}" />
+			<echo message="@{pkg}: Lösche ${file}" />
+			<delete file="${src.dir}/@{pkg}/${file}" />
+			<echo message="@{pkg}: Lösche ${tmpdir}" />
+			<delete dir="${tmpdir}" />
+		</sequential>
+	</macrodef>
 
-	<target name="build-hkcommons" description="Builds HkCommons in build dir" 
-		depends="init">
-		<local name="pkg.name"/>
-		<local name="pkg.temp.dir"/>
-		<local name="pkg.srcfiles"/>
-		<property name="pkg.name"	value="common" />
-		<property name="pkg.temp.dir"	value="${tmp.dir}/${pkg.name}" />
-		<property name="pkg.srcfiles" value="hommk_localstorage.js,hommk_logger.js,hommk_finder.js,hommk_styles.js,mootools_element_selectors.js,mootools_scroller.js,hommk_prototypes.js,hommk_styles_extra.js" />
-		
-		<echo message="Erzeuge temporäres Verzeichnis ${pkg.temp.dir}..."/>
-		<mkdir dir="${pkg.temp.dir}"/>
-		
-		<echo message="Baue ${hk.commons.file}" />
-		<concat-commons pkg='${pkg.name}' name="HkCommons" 
-			description="Commons · Werkzeugkasten für MMHK"
-			icon="http://icons.iconarchive.com/icons/webiconset/mobile/32/maps-icon.png" 
-			target="${hk.commons.location}" srcfiles="${pkg.srcfiles}" />
-		
-		<echo message="Lösche ${pkg.temp.dir}"/>
-		<delete dir="${pkg.temp.dir}" />
+	<target name="build-hkshortcuts"
+	        description="Builds HkShortcuts in build dir"
+	        depends="init,build-hkcommons">
+		<hk.build.component pkg="hkshortcuts" />
 	</target>
 
-	<target name="build-hktoolkit" description="Builds HkToolkit in build dir" 
-		depends="init">
-		<local name="pkg.name"/>
-		<local name="pkg.temp.dir"/>
-		<local name="pkg.file"/>
-		<local name="pkg.buildlocation"/>
-		<property name="pkg.name"	value="hktoolkit" />
-		<property name="pkg.temp.dir"	value="${tmp.dir}/${pkg.name}" />
-		<property name="pkg.file" value="hommk_toolkit.user.js"/>
-		<property name="pkg.buildlocation" location="${build.dir}/${pkg.file}"/>
-		
-		<echo message="Erzeuge temporäres Verzeichnis ${pkg.temp.dir}..."/>
-		<mkdir dir="${pkg.temp.dir}"/>
-		
-		<echo message="Baue ${pkg.buildlocation}" />
-		<concat-files pkg='${pkg.name}' name="HkToolkit" 
-			description="Werkzeugkasten für MMHK"
-			icon="http://icons.iconarchive.com/icons/webiconset/mobile/32/maps-icon.png" 
-			target="${pkg.buildlocation}" srcdir="${src.dir}/${pkg.name}" 
-			srcfiles="hommk_localstorage.js,hommk_logger.js,hommk_finder.js,hommk_styles.js,mootools_element_selectors.js,mootools_scroller.js,hommk_prototypes.js,hommk_styles_extra.js" />
+	<target name="build-hkexplorer"
+	        description="Builds HkExplorer in build dir"
+	        depends="init,build-hkcommons">
+		<hk.build.component pkg="hkexplorer" />
 	</target>
 
-	<property name="hkshortcuts.file" value="hommk_shortcuts.user.js" />
-	<target name="build-hkshortcuts" description="Builds HkShortcuts in build dir" 
-		depends="init,build-hkcommons">
-		<local name="pkg.name"/>
-		<local name="pkg.temp.dir"/>
-		<local name="pkg.file"/>
-		<local name="pkg.buildlocation"/>
-		<local name="pkg.srcfiles"/>
-		<property name="pkg.name"	value="hkshortcuts" />
-		<property name="pkg.temp.dir"	location="${tmp.dir}/${pkg.name}" />
-		<property name="pkg.file" value="${hkshortcuts.file}"/>
-		<property name="pkg.buildlocation" location="${build.dir}/${pkg.file}"/>
-		<property name="pkg.srcfiles" value="${hk.commons.file},${pkg.file}"/>
-		
-		<echo message="Erzeuge temporäres Verzeichnis ${pkg.temp.dir}..."/>
-		<mkdir dir="${pkg.temp.dir}"/>
-		
-		<echo message="Kopiere commons nach ${src.dir}/${pkg.name}..." />
-		<copy file="${hk.commons.location}" todir="${src.dir}/${pkg.name}"/>
-		
-		<echo message="Baue ${pkg.buildlocation}" />
-		<concat-files pkg='${pkg.name}' name="HkShortcuts" 
-			description="Shortcuts für HkToolkit"
-			icon="http://icons.iconarchive.com/icons/webiconset/mobile/32/maps-icon.png" 
-			target="${pkg.buildlocation}" srcdir="${src.dir}/${pkg.name}" 
-			srcfiles="${pkg.srcfiles}" />
-		
-		<echo message="Lösche ${hk.commons.file}"/>
-		<delete file="${src.dir}/${pkg.name}/${hk.commons.file}" />
-		
-		<echo message="Lösche ${pkg.temp.dir}"/>
-		<delete file="${pkg.temp.dir}" />
-	</target>
-
-	<property name="hkexplorer.file" value="hommk_explorer.user.js" />
-	<target name="build-hkexplorer" description="Builds HkExplorer in build dir" 
-		depends="init,build-hkcommons">
-		<local name="pkg.name"/>
-		<local name="pkg.temp.dir"/>
-		<local name="pkg.file"/>
-		<local name="pkg.buildlocation"/>
-		<local name="pkg.srcfiles"/>
-		<property name="pkg.name"	value="hkexplorer" />
-		<property name="pkg.temp.dir"	location="${tmp.dir}/${pkg.name}" />
-		<property name="pkg.file" value="${hkexplorer.file}"/>
-		<property name="pkg.buildlocation" location="${build.dir}/${pkg.file}"/>
-		<property name="pkg.srcfiles" value="${hk.commons.file},${pkg.file}"/>
-		
-		<echo message="Erzeuge temporäres Verzeichnis ${pkg.temp.dir}..."/>
-		<mkdir dir="${pkg.temp.dir}"/>
-		
-		<echo message="Kopiere commons nach ${src.dir}/${pkg.name}..." />
-		<copy file="${hk.commons.location}" todir="${src.dir}/${pkg.name}"/>
-		
-		<echo message="Baue ${pkg.buildlocation}" />
-		<concat-files pkg='${pkg.name}' name="HkExplorer" 
-			description="Explorer für HkToolkit"
-			icon="http://icons.iconarchive.com/icons/webiconset/mobile/32/maps-icon.png" 
-			target="${pkg.buildlocation}" srcdir="${src.dir}/${pkg.name}" 
-			srcfiles="${pkg.srcfiles}" />
-		
-		<echo message="Lösche ${hk.commons.file}"/>
-		<delete file="${src.dir}/${pkg.name}/${hk.commons.file}" />
-		
-		<echo message="Lösche ${pkg.temp.dir}"/>
-		<delete file="${pkg.temp.dir}" />
+	<target name="build-hkcommons"
+	        description="Builds HkCommons in build dir"
+	        depends="init">
+		<local name="pkg" />
+		<local name="tmpdir" />
+		<local name="file" />
+		<local name="location" />
+		<property name="pkg" value="commons" />
+		<echo message="${pkg}: Baue ${pkg}" />
+		<cpploc name="tmpdir" from="hk.${pkg}.tmp.dir" />
+		<echo message="${pkg}: Erzeuge temporäres Verzeichnis ${tmpdir}..." />
+		<mkdir dir="${tmpdir}" />
+		<cpprop name="file" from="hk.${pkg}.file" />
+		<property name="location" location="${src.dir}/${pkg}" />
+		<echo message="${pkg}: Baue ${pkg} in ${location}" />
+		<hk.buildparts pkg="${pkg}" />
+		<echo message="${pkg}: Lösche ${file}" />
+		<delete file="${src.dir}/${pkg}/${file}" />
+		<echo message="${pkg}: Lösche ${tmpdir}" />
+		<delete dir="${tmpdir}" />
 	</target>
 
 	<target name="deploy-hkexplorer" depends="dist-hkexplorer">
-		<copy file="${dist.dir}/${hkexplorer.file}" todir="${basedir}" overwrite="true"/>
-	</target>
-	
-	<target name="dist-hkexplorer" depends="build-hkexplorer">
-		<copy file="${build.dir}/${hkexplorer.file}" todir="${dist.dir}" overwrite="true"/>
+		<copy file="${dist.dir}/${hkexplorer.file}"
+		      todir="${basedir}"
+		      overwrite="true" />
 	</target>
 
-	<target name="deploy-hktoolkit" depends="clean,dist-hktoolkit,deploy-hkexplorer">
-		<copy file="${dist.dir}/${hkshortcuts.file}" todir="${basedir}" overwrite="true"/>
+	<target name="deploy-hkshortcuts" depends="dist-hkshortcuts">
+		<copy file="${dist.dir}/${hkshortcuts.file}"
+		      todir="${basedir}"
+		      overwrite="true" />
 	</target>
-	
-	<target name="dist-hktoolkit" depends="build-hkshortcuts,build-hkexplorer">
-		<copy file="${build.dir}/${hkshortcuts.file}" todir="${dist.dir}" overwrite="true"/>
+
+	<target name="dist-hkexplorer" depends="build-hkexplorer">
+		<copy file="${build.dir}/${hkexplorer.file}"
+		      todir="${dist.dir}"
+		      overwrite="true" />
+	</target>
+
+	<target name="dist-hkshortcuts" depends="build-hkshortcuts">
+		<copy file="${build.dir}/${hkshortcuts.file}"
+		      todir="${dist.dir}"
+		      overwrite="true" />
+	</target>
+
+	<target name="deploy-hktoolkit"
+	        depends="clean,deploy-hkshortcuts,deploy-hkexplorer">
+	</target>
+
+	<target name="dist-hktoolkit" depends="dist-hkshortcuts,dist-hkexplorer">
 	</target>
 
 	<target name="build" depends="init" description="Builds files to build dir">
 		<property name="result.file" location="${build.dir}/result.js" />
-
 		<echo message="Building ${result.file}" />
 		<concat destfile="${result.file}" force="no">
 			<!-- Order in which these files are concatenated _IS_ IMPORTANT! -->
@@ -493,8 +660,16 @@
 		</concat>
 	</target>
 
-	<target name="copy-and-minify-libs" depends="init" description="Minifies all JS files">
-		<yui-compressor warn="false" munge="true" jsSuffix=".js" cssSuffix=".css" preserveAllSemiColons="false" fromDir="${build.dir}" toDir="${dist.dir}">
+	<target name="copy-and-minify-libs"
+	        depends="init"
+	        description="Minifies all JS files">
+		<yui-compressor warn="false"
+		                munge="true"
+		                jsSuffix=".js"
+		                cssSuffix=".css"
+		                preserveAllSemiColons="false"
+		                fromDir="${build.dir}"
+		                toDir="${dist.dir}">
 			<include name="*.js" />
 		</yui-compressor>
 	</target>

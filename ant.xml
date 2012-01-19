@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+	<macrodef name="cpprop">
+	  <attribute name="name"/>
+	  <attribute name="from"/>
+	  <sequential>
+	    <property name="@{name}" value="${@{from}}"/>
+	  </sequential>
+	</macrodef>
+	<macrodef name="cpploc">
+	  <attribute name="name"/>
+	  <attribute name="from"/>
+	  <sequential>
+	    <property name="@{name}" location="${@{from}}"/>
+	  </sequential>
+	</macrodef>
+</project>
