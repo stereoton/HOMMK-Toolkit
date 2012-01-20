@@ -682,7 +682,7 @@
 	</target>
 
 	<target name="deploy-hktoolkit"
-	        depends="clean,deploy-hkshortcuts,deploy-hkexplorer">
+	        depends="clean,init,deploy-hkshortcuts,deploy-hkexplorer">
 	</target>
 
 	<target name="dist-hkcore" depends="dist-core">
