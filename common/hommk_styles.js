@@ -24,18 +24,18 @@ if("undefined" == typeof window.HkStylesGeneric) {
 				    if("undefined" == typeof selection.length) selection = [selection];
 				    selection = $A(selection);
 				    selection.each(function(elem, idx) {
-//					    window.console.log("[$Name$][DEBUG]Weise Stile zu\u2026");
-//					    window.console.log(elem);
-//					    window.console.log(style.styles);
+					    // window.console.log("[$Name$][DEBUG]Weise Stile zu\u2026");
+					    // window.console.log(elem);
+					    // window.console.log(style.styles);
 					    $each(style.styles, function(val, prop) {
-//						    window.console.log("[$Name$][DEBUG]Weise Wert '" + val + "' zu für Stil " + prop);
+						    // window.console.log("[$Name$][DEBUG]Weise Wert '" + val + "' zu für Stil " + prop);
 						    if(elem.style[prop] != "" && !style.force) {
-//							    window.console.log("[$Name$][DEBUG]Wert existiert bereits, Zuweisung nicht erzwungen\u2026");
+							    // window.console.log("[$Name$][DEBUG]Wert existiert bereits, Zuweisung nicht erzwungen\u2026");
 							    return;
 						    } else {
-//							    window.console.log("[$Name$][DEBUG]Wert existiert bereits, Zuweisung erzwungen\u2026");
+							    // window.console.log("[$Name$][DEBUG]Wert existiert bereits, Zuweisung erzwungen\u2026");
 						    }
-//						    window.console.log("[$Name$][DEBUG]Alter Wert: " + elem.style[prop]);
+						    // window.console.log("[$Name$][DEBUG]Alter Wert: " + elem.style[prop]);
 						    elem.style[prop] = val;
 					    });
 				    });
@@ -93,6 +93,44 @@ if("undefined" == typeof window.HkStylesGeneric) {
 	            'selector': '.HkButton',
 	            'styles': {
 		            'border': 'none'
+	            }
+	        }, {
+	            'force': true,
+	            'selector': '.HkList',
+	            'styles': {
+	                'border': 'none',
+	                'paddingTop': '2px',
+	                'paddingBottom': '2px',
+	                'marginLeft': '0px',
+	                'marginRight': '0px',
+	                'marginTop': '0px',
+	                'marginBottom': '0px',
+	                'clear': 'both',
+	                'float': 'none',
+	                'backgroundColor': '#0e0e0e',
+	                'height': 'auto',
+	                'maxHeight': window.getHeight() / 2 + 'px',
+	                'width': 'auto',
+	                'maxWidth': window.getWidth() / 3 + 'px'
+	            }
+	        }, {
+	            'force': true,
+	            'selector': '.HkListItem',
+	            'styles': {
+	                'padding': '2px 0px',
+	                'borderTop': '1px solid #303030',
+	                'clear': 'both'
+	            }
+	        }, {
+	            'force': true,
+	            'selector': '.HkListText',
+	            'styles': {
+	                'cursor': 'pointer',
+	                'width': 'auto',
+	                'marginLeft': '2px',
+	                'marginRight': '20px',
+	                'paddingTop': '3px',
+	                'paddingBottom': '3px'
 	            }
 	        }]
 	});

@@ -61,15 +61,13 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 			    window.console.log(contentNode);
 			    contentNode.setStyle('paddingTop', '0px');
 			    this.updateExplorer(contentNode);
-			    contentNode.accordionElements = contentNode.getElements(".ExplMenu"); 
+			    contentNode.accordionElements = contentNode.getElements(".ExplMenu");
 			    window.console.log('[$Name$][DEBUG]Explorer Menu Elements: ');
 			    window.console.log(contentNode.accordionElements);
 			    contentNode.accordionTogglers = contentNode.getElements(".ExplView");
 			    window.console.log('[$Name$][DEBUG]Explorer Menu Views: ');
 			    window.console.log(contentNode.accordionTogglers);
-			    contentNode.accordionMenu = new Accordion(
-			    		contentNode.accordionElements, 
-			    		contentNode.accordionTogglers, {
+			    contentNode.accordionMenu = new Accordion(contentNode.accordionElements, contentNode.accordionTogglers, {
 				    'alwaysHide': true
 			    });
 		    },
@@ -108,8 +106,12 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 			    window.console.log('[$Name$][DEBUG]Update der Ruinenliste: ');
 			    window.console.log(eE);
 			    var rM = new Element("div", {
-				    "class": "ExplMenu"
+			        "class": "ExplMenu MenuList",
+			        'styles': {
+				        'cursor': 'pointer'
+			        }
 			    });
+			    rM.preventTextSelection();
 			    rM.setText("Ruinen");
 			    eE.adopt(rM);
 			    var rV = new Element("div", {
@@ -118,58 +120,82 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 			    eE.adopt(rV);
 			    var xhr, xhrs = [];
 			    for( var i = 1; i < 10; i++) {
-				    xhr = new XHR({
-			        'method': 'get',
-			        'onRequest': function() {
-						    window.console.log('[$Name$][DEBUG]Starte XHR-Request:');
-						    window.console.log(arguments);
-			        },
-			        'onStateChange': function() {
-						    window.console.log('[$Name$][DEBUG]XHR-Statusänderung:');
-						    window.console.log(arguments);
-			        },
-			        'onFailure': function() {
-						    window.console.log('[$Name$][DEBUG]XHR-Fehler:');
-						    window.console.log(arguments);
-			        },
-			        'onSuccess': function() {
-						    window.console.log('[$Name$][DEBUG]XHR-Antwort:');
-				        window.console.log(this.response);
-				        var ruins = this.response['object'];
-				        $each(ruins, function(r) {
-							    window.console.log('[$Name$][DEBUG]Gefundene Ruine:');
-					        window.console.log(r);
-					        var rD = r.getLast();
-					        var rI = String(rD).match(/([^\(]+)\(([^\)]+)\)(.*)/);
-					        if(rI.length != 4) {
-								    window.console.log('[$Name$][DEBUG]Ruine wird nicht verarbeitet:');
-						        window.console.log(rI);
-						        return;
-					        }
-					        var rP = String(rI[3]).split(",");
-					        if(rP.length != 2) {
-						        window.console.log(rP);
-					        }
-					        var rE = new Element('div', {
-						        'class': "ExplRuin"
-					        });
-					        rE.rX = String(rP[0]).trim();
-					        rE.rY = String(rP[1]).trim();
-					        rE.rN = String(rI[1]).trim();
-					        rE.rO = String(rI[2]).trim();
-					        rE.setText(rE.rN + " - " + rE.rO + " (" + rE.rX + "," + rE.rY + ")");
-					        rE.addEvent('click', function(evt) {
-						        var rE = evt.target;
-						        window.hk.gotoPosition(rE.rX, rE.rY);
-					        });
-					        rE.preventTextSelection();
-					        rV.adopt(rE);
+				    xhr = new Ajax(
+				        'http://mightandmagicheroeskingdoms.ubi.com/ajaxRequest/ruinsRegionNumberAutocompletion?start=' + i, {
+				            'method': 'get',
+				            'evalResponse': true,
+				            'onRequest': function() {
+					            window.console.log('[$Name$][DEBUG]Starte XHR-Request:');
+					            window.console.log(arguments);
+				            },
+				            'onStateChange': function() {
+					            window.console.log('[$Name$][DEBUG]XHR-Statusänderung:');
+					            window.console.log(arguments);
+				            },
+				            'onFailure': function() {
+					            window.console.log('[$Name$][DEBUG]XHR-Fehler:');
+					            window.console.log(arguments);
+				            },
+				            'onSuccess': function() {
+					            window.console.log('[$Name$][DEBUG]XHR-Anfrage erfolgreich::');
+					            window.console.log(arguments);
+				            },
+				            'onComplete': function() {
+					            window.console.log('[$Name$][DEBUG]XHR-Anfrage komplett:');
+					            window.console.log(this.response);
+					            var ruins = JSON.parse(this.response['text']);
+					            $each(ruins, function(r) {
+						            window.console.log('[$Name$][DEBUG]Gefundene Ruine:');
+						            window.console.log(r);
+						            var rD = r.getLast();
+						            var rI = String(rD).match(/([^\(]+)\(([^\)]+)\)(.*)/);
+						            if(rI.length != 4) {
+							            window.console.log('[$Name$][DEBUG]Ruine wird nicht verarbeitet:');
+							            window.console.log(rI);
+							            return;
+						            }
+						            var rP = String(rI[3]).split(",");
+						            if(rP.length != 2) {
+							            window.console.log('[$Name$][DEBUG]Ruine wird nicht verarbeitet:');
+							            window.console.log(rP);
+						            }
+						            var rE = new Element('div', {
+						                'class': "ExplRuin HkListEntry",
+						                'styles': {
+							                'cursor': 'pointer'
+						                }
+						            });
+						            rE.preventTextSelection();
+						            var rT = new Element('p', {
+						                'class': "HkListText",
+						                'styles': {
+							                'cursor': 'pointer'
+						                }
+						            });
+						            rT.preventTextSelection();
+						            rE.adopt(rT);
+						            rE.rX = String(rP[0]).trim();
+						            rE.rY = String(rP[1]).trim();
+						            rE.rN = String(rI[1]).trim();
+						            rE.rO = String(rI[2]).trim();
+						            rT.setText(rE.rN + " - " + rE.rO + " (" + rE.rX + "," + rE.rY + ")");
+						            rT.onclick = function(evt) {
+							            window.console.log("[$Name$][DEBUG]Click Event an Ruineneintrag: ");
+							            window.console.log(evt);
+							            window.console.log(evt.target);
+							            evt.preventDefault();
+							            var cR = rE || evt.target;
+							            window.console.log("[$Name$][DEBUG]Gehe zur Ruine " + cR.rX + "," + cR.rY);
+							            window.hk.gotoPosition(cR.rX, cR.rY);
+						            };
+						            rV.adopt(rE);
+					            });
+				            }
 				        });
-			        }
-			    });
 				    window.console.log('[$Name$][DEBUG]XHR-Request #' + i + ': ');
 				    window.console.log(xhr);
-				    xhrs.push(xhr.send('http://mightandmagicheroesheroeskindoms.ubi.com/ajaxRequest/ruinsRegionNumberAutocompletion', 'start=1'));				    
+				    xhrs.push(xhr);
+				    xhr.request.delay(250, xhr);
 			    }
 		    },
 		    updateCities: function updateCities(eE) {

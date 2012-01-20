@@ -4,6 +4,43 @@
  * @todo Core und Shortcuts trennen - Ergänzungen warten auf Core und "docken" sich an...
  */
 window.HkStylesExtra = {
+    'Generic': {
+        'itemList': {
+            'paddingTop': '2px',
+            'paddingBottom': '2px',
+            'marginLeft': '0px',
+            'marginRight': '0px',
+            'marginTop': '0px',
+            'marginBottom': '0px',
+            'clear': 'both',
+            'float': 'none',
+            'backgroundColor': '#0e0e0e',
+            'height': 'auto',
+            'maxHeight': '800px',
+            'width': 'auto',
+            'maxWidth': '1200px'
+        },
+        'listItem': {
+            'deleteButton': {
+                'cursor': 'pointer',
+                'float': 'right',
+                'paddingTop': '3px'
+            },
+            'text': {
+                'cursor': 'pointer',
+                'width': 'auto',
+                'marginLeft': '2px',
+                'marginRight': '20px',
+                'paddingTop': '3px',
+                'paddingBottom': '3px'
+            },
+            'item': {
+                'padding': '2px 0px',
+                'borderTop': '1px solid #303030',
+                'clear': 'both'
+            }
+        }
+    },
     'Shortcuts': {
         'list': {
             'paddingTop': '2px',
