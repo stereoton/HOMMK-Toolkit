@@ -24,9 +24,9 @@ if("undefined" == typeof window.HkStylesGeneric) {
 				    if("undefined" == typeof selection.length) selection = [selection];
 				    selection = $A(selection);
 				    selection.each(function(elem, idx) {
-					    window.console.log("[$Name$][DEBUG]Weise Stile zu\u2026");
-					    window.console.log(elem);
-					    window.console.log(style.styles);
+//					    window.console.log("[$Name$][DEBUG]Weise Stile zu\u2026");
+//					    window.console.log(elem);
+//					    window.console.log(style.styles);
 					    $each(style.styles, function(val, prop) {
 //						    window.console.log("[$Name$][DEBUG]Weise Wert '" + val + "' zu für Stil " + prop);
 						    if(elem.style[prop] != "" && !style.force) {
