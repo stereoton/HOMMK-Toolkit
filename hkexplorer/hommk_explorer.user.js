@@ -60,18 +60,47 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 			    var contentNode = this.$hkWin.getElement(".HkContent");
 			    contentNode.setStyle('paddingTop', '0px');
 			    var cities = this.getCities();
+			    if(cities.length > 0) {
+			    	cities.each(function(c) {
+			    		var cE = new Element("div", {
+			    			
+			    		});
+			    		cE.setText(Json.toString(c));
+			    		contentNode.adopt(cE);
+			    	});
+			    }
 			    window.console.log(cities);
-			    window.console.log(window.HOMMK.player);
-			    window.console.log(window.HOMMK);
+			    var regions = this.getRegions();
+			    if(regions.length > 0) {
+			    	regions.each(function(r) {
+			    		var rE = new Element("div", {
+			    			
+			    		});
+			    		rE.setText(Json.toString(r));
+			    		contentNode.adopt(rE);
+			    	});
+			    }
+			    window.console.log(regions);
+			    window.console.log(window.Hk.Map);
 		    },
 		    getCities: function getCities() {
-			    if($chk(window.HOMMK.worldMap.regionList)) {
-				    var regs = window.HOMMK.worldMap.regionList.elementList;
+			    if($chk(window.hk.Map.content.attachedRegionList)) {
+				    var regs = window.hk.Map.content.attachedRegionList;
 				    var cities = $A(regs).filter(function(reg, idx) {
 					    if(reg && "undefined" != typeof reg.contents) { return reg.contents.hasOwnProperty('cN'); }
 					    return false;
 				    });
-				    window.console.log(cities);
+				    return cities;
+			    }
+		    },
+		    getRegions: function getRegions() {
+			    if($chk(window.hk.Map.content.attachedRegionList)) {
+				    var regs = window.hk.Map.content.attachedRegionList;
+//				    var sel = $A(regs).filter(function(reg, idx) {
+//					    if(reg && "undefined" != typeof reg.contents) { return reg.contents.hasOwnProperty('cN'); }
+//					    return false;
+//				    });
+				    return regs;
 			    }
 		    },
 		    updateExplorer: function updateExplorer() {
@@ -110,7 +139,7 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 				});
 				window.hk.Explorer.updateDimensions();
 			} catch(ex) {
-				window.hk.Explorer.log('[$Name$][ERROR]Fehler bei der Finalisierung des $Name$-Fensters: ' + ex);
+				window.console.log('[$Name$][ERROR]Fehler bei der Finalisierung des $Name$-Fensters: ' + ex);
 			}
 			if("undefined" == typeof window.hkStylesGeneric) {
 				try {

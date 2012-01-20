@@ -24,18 +24,18 @@ if("undefined" == typeof window.HkStylesGeneric) {
 				    if("undefined" == typeof selection.length) selection = [selection];
 				    selection = $A(selection);
 				    selection.each(function(elem, idx) {
-					    window.console.log("Weise Stile zu\u2026");
+					    window.console.log("[$Name$][DEBUG]Weise Stile zu\u2026");
 					    window.console.log(elem);
 					    window.console.log(style.styles);
 					    $each(style.styles, function(val, prop) {
-						    window.console.log("Weise Wert '" + val + "' zu für Stil " + prop);
+//						    window.console.log("[$Name$][DEBUG]Weise Wert '" + val + "' zu für Stil " + prop);
 						    if(elem.style[prop] != "" && !style.force) {
-							    window.console.log("Wert existiert bereits, Zuweisung nicht erzwungen\u2026");
+//							    window.console.log("[$Name$][DEBUG]Wert existiert bereits, Zuweisung nicht erzwungen\u2026");
 							    return;
 						    } else {
-							    window.console.log("Wert existiert bereits, Zuweisung erzwungen\u2026");
+//							    window.console.log("[$Name$][DEBUG]Wert existiert bereits, Zuweisung erzwungen\u2026");
 						    }
-						    window.console.log("Alter Wert: " + elem.style[prop]);
+//						    window.console.log("[$Name$][DEBUG]Alter Wert: " + elem.style[prop]);
 						    elem.style[prop] = val;
 					    });
 				    });
@@ -98,5 +98,5 @@ if("undefined" == typeof window.HkStylesGeneric) {
 	});
 	var HkStylesGeneric = window.HkStylesGeneric;
 } else {
-	window.console.log("[HkStylesGeneric][WARN]Klasse existiert bereits: " + Json.toString(window.HkStylesGeneric));
+	window.console.log("[$Name$][WARN]Klasse existiert bereits: " + Json.toString(window.HkStylesGeneric));
 }
