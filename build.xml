@@ -384,7 +384,7 @@
 			<param name="includes" value="${psr_main}" />
 			<!--<param name="includes" />-->
 		</antcall>
-			
+
 		<!--<minify pkg="${ps.pkg}" srcdir="${ps.tmp.dir}">
 			<include name="${psr_main}" />
 		</minify>-->
@@ -487,7 +487,7 @@
 	<!-- ld.insert - Bindet den Loader ein -->
 	<target name="ld.insert" depends="ld.check" if="ld.${pkg}.checked">
 		<echo message="Ergänze ${ld.file} aus ${ld.dir} zu ${target}..." />
-		<concat destfile="${ld.target}" append="true" force="true">
+		<concat destfile="${target}" append="true" force="true">
 			<filelist dir="${ld.dir}" files="${ld.file}" />
 		</concat>
 	</target>
@@ -596,16 +596,37 @@
 
 	<target name="build-hkshortcuts"
 	        description="Builds HkShortcuts in build dir"
-	        depends="init,build-hkcommons">
-		<copy file="${build.dir}/${hk.commons.file}" todir="${src.dir}/${hk.hkshortcuts.src.name}" />
+	        depends="init,dist-core"><!-- build-hkcommons -->
+		<!--<copy file="${build.dir}/${hk.commons.file}"
+		      todir="${src.dir}/${hk.hkshortcuts.src.name}" />-->
+		<copy file="${build.dir}/${hk.file}"
+		      todir="${src.dir}/${hk.hkshortcuts.src.name}" />
 		<hk.build.component pkg="hkshortcuts" />
-		<delete file="${src.dir}/${hk.hkshortcuts.src.name}/${hk.commons.file}" />
+		<!--<delete file="${src.dir}/${hk.hkshortcuts.src.name}/${hk.commons.file}" />-->
+		<delete file="${src.dir}/${hk.hkshortcuts.src.name}/${hk.file}" />
 	</target>
 
 	<target name="build-hkexplorer"
 	        description="Builds HkExplorer in build dir"
 	        depends="init,build-hkcommons">
 		<hk.build.component pkg="hkexplorer" />
+	</target>
+
+	<target name="dist-core" depends="build-core">
+		<echo message="core: Erstelle ${build.dir}/${hk.file} aus ${hk.commons.file}, ${hk.hktoolkit.file}, ${hk.hkstorage.file}, ${hk.hkreducer.file}, ${hk.hkwindows.file}..." />
+		<concat destfile="${build.dir}/${hk.file}" append="false" force="yes">
+			<filelist dir="${build.dir}" 
+				files="${hk.commons.file},${hk.hktoolkit.file},${hk.hkstorage.file},${hk.hkreducer.file},${hk.hkwindows.file}" />
+		</concat>
+	</target>
+
+	<target name="build-core"
+	        description="Builds HkToolkit's core in build dir"
+	        depends="init,build-hkcommons">
+		<hk.build.component pkg="hktoolkit" />
+		<hk.build.component pkg="hkstorage" />
+		<hk.build.component pkg="hkreducer" />
+		<hk.build.component pkg="hkwindows" />
 	</target>
 
 	<target name="build-hkcommons"
@@ -656,6 +677,9 @@
 
 	<target name="deploy-hktoolkit"
 	        depends="clean,deploy-hkshortcuts,deploy-hkexplorer">
+	</target>
+
+	<target name="dist-hkcore" depends="dist-core">
 	</target>
 
 	<target name="dist-hktoolkit" depends="dist-hkshortcuts,dist-hkexplorer">
