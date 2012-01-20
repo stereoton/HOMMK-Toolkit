@@ -155,22 +155,22 @@
 		         token="${search}"
 		         value="${replace}" />
 	</target>
+	<!-- pkg, dir, file, search, replace -->
 	<target name="hk.replace.byPattern"
 	        depends="hk.replace.checkPattern"
 	        if="replace"
-	        unless="hk.replace.${pkg}.checkPattern.checked"
-	        description="Properties: pkg, dir, file, search, replace">
-		<echo message="${pkg}: Ersetze ${search} durch ${replace} in ${dir}/${filepattern}..." />
+	        unless="hk.replace.${pkg}.checkPattern.checked">
+		<!--<echo message="${pkg}: Ersetze ${search} durch ${replace} in ${dir}/${filepattern}..." />-->
 		<replace dir="${dir}"
 		         includes="${filepattern}"
 		         token="${search}"
 		         value="${replace}" />
 	</target>
+	<!-- pkg, target, dir, file, search, replace -->
 	<target name="hk.replace.doReplace"
 	        if="replace"
-	        depends="hk.replace.byTarget,hk.replace.byPattern"
-	        description="Properties: pkg, target, dir, file, search, replace">
-		<echo message="${pkg}: Ersetze ${search} durch ${replace} in ${target} - ${dir}/${filepattern}..." />
+	        depends="hk.replace.byTarget,hk.replace.byPattern">
+		<!--<echo message="${pkg}: Ersetze ${search} durch ${replace} in ${target} - ${dir}/${filepattern}..." />-->
 	</target>
 
 	<macrodef name="hk.replace.replaceOne">
@@ -350,8 +350,9 @@
 			</and>
 		</condition>
 	</target>
+	<!-- pkg, file, target, result -->
 	<target name="ps.insert" depends="ps.check" if="ps.${pkg}.checked">
-		<echo message="Ergänze PageScopeRunner in ${ps.target}..." />
+		<echo message="Ergänze PageScopeRunner in ${target}..." />
 		<local name="ps.tmp.dir" />
 		<local name="ps.location" />
 		<local name="ps.uuid" />
@@ -376,9 +377,17 @@
 		         value="__PAGE_SCOPE_${ps.uuid}_RUN__"
 		         token="__PAGE_SCOPE_RUN__" />
 		<echo level="info" message="Komprimiere ${ps.tmp.dir}/${psr_main}..." />
-		<minify pkg="${ps.pkg}" srcdir="${ps.tmp.dir}">
+		<!-- pkg,destdir,(srcdir,includes|location) -->
+		<antcall target="yui.compress">
+			<param name="pkg" value="${pkg}" />
+			<param name="srcdir" value="${ps.tmp.dir}" />
+			<param name="includes" value="${psr_main}" />
+			<!--<param name="includes" />-->
+		</antcall>
+			
+		<!--<minify pkg="${ps.pkg}" srcdir="${ps.tmp.dir}">
 			<include name="${psr_main}" />
-		</minify>
+		</minify>-->
 		<echo level="info"
 		      message="Kopiere ${psr_start} in das temporäre Verzeichnis ${ps.tmp.dir}..." />
 		<copy todir="${ps.tmp.dir}" file="${ps.dir}/${psr_start}" />
@@ -421,20 +430,22 @@
 	        if="yui.${pkg}.checked"
 	        description="Parameters: pkg,destdir,(srcdir,includes|location)">
 		<local name="yui.tmp.dir" />
-		<local name="yui.target.dir" />
 		<local name="yui.target.location" />
 		<local name="yui.src.includes" />
-		<property name="yui.tmp.dir" value="${tmp.dir}/${pkg}/minify/" />
-		<condition property="yui.target.dir" value="${destdir}" else="${srcdir}">
-			<and>
-				<isset property="target" />
-				<length string="${destdir}" when="greater" length="0" />
-			</and>
-		</condition>
-		<property name="yui.target.location" location="${yui.target.dir}" />
 		<condition property="yui.src.includes" value="${includes}" else="*.*">
 			<length string="${includes}" when="greater" length="0" />
 		</condition>
+		<property name="yui.tmp.dir" value="${tmp.dir}/${pkg}/minify/" />
+		<local name="yui.target.dir" />
+		<condition property="yui.target.dir" value="${destdir}" else="${srcdir}">
+			<and>
+				<isset property="target" />
+				<isset property="destdir" />
+				<length string="${destdir}" when="greater" length="0" />
+			</and>
+		</condition>
+		<echo message="${pkg}: yui.target.dir=${yui.target.dir},destdir=${destdir},srcdir=${srcdir},includes=${yui.src.includes}" />
+		<property name="yui.target.location" location="${yui.target.dir}" />
 		<echo message="Komprimiere ${srcdir}:${yui.src.includes} nach ${yui.target.location}" />
 
 		<echo message="Lege das temporäre Verzeichnis ${yui.tmp.dir} an" />
@@ -522,7 +533,7 @@
 			</antcall>
 			<echo message="Komprimiere ${hk.buildparts.tmp.location}..." />
 			<antcall target="yui.compress">
-				<!-- yui.pgk, yui.src.dir,yui.target,yui.includes -->
+				<!-- pgk, srcdir,target,includes -->
 				<param name="pkg" value="@{pkg}" />
 				<param name="srcdir" value="${hk.buildparts.tmp.dir}" />
 				<param name="includes" value="${hk.buildparts.tmp.file}" />
@@ -543,7 +554,7 @@
 			<echo message="Rufe gm.insert auf für @{pkg}..." />
 			<local name="gm.target" />
 			<property name="gm.target"
-			          location="${hk.buildparts.tmp.dir}/@{pkg}_gm.header" />
+			          location="${hk.buildparts.tmp.dir}/@{pkg}-gm-header.js" />
 			<antcall target="gm.insert">
 				<param name="pkg" value="@{pkg}" />
 				<param name="file" value="@{pkg}_gm.header" />
@@ -578,7 +589,7 @@
 			<echo message="@{pkg}: Baue ${location}" />
 			<hk.buildparts pkg="@{pkg}" />
 			<echo message="@{pkg}: Lösche ${file}" />
-			<delete file="${src.dir}/@{pkg}/${file}" />
+			<delete file="${tmpdir}/@{pkg}/${file}" />
 			<echo message="@{pkg}: Lösche ${tmpdir}" />
 			<delete dir="${tmpdir}" />
 		</sequential>
@@ -637,7 +648,7 @@
 	</target>
 
 	<target name="dist-hkshortcuts" depends="build-hkshortcuts">
-		<copy file="${build.dir}/${hkshortcuts.file}"
+		<copy file="${build.dir}/${hk.hkshortcuts.file}"
 		      todir="${dist.dir}"
 		      overwrite="true" />
 	</target>
