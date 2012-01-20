@@ -7,7 +7,6 @@
 /hommk_styles.css
 /hommk_styles.user.js
 /hommk_styles_extra.user.js
-/hommk_shortcuts.user.js
 /.project
 /.settings
 /.settings/
@@ -20,5 +19,5 @@
 /build
 /.externalToolBuilders
 /dist
-/hktoolkit
 /backup.xml
+/.classpath
