@@ -123,6 +123,14 @@ if("undefined" == typeof window.HkStylesGeneric) {
 	            }
 	        }, {
 	            'force': true,
+	            'selector': '.HkListCategory',
+	            'styles': {
+	                'padding': '4px 0px',
+	                'borderTop': '2px solid #505050',
+	                'clear': 'both'
+	            }
+	        }, {
+	            'force': true,
 	            'selector': '.HkListText',
 	            'styles': {
 	                'cursor': 'pointer',

@@ -106,7 +106,7 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 			    window.console.log('[$Name$][DEBUG]Update der Ruinenliste: ');
 			    window.console.log(eE);
 			    var rM = new Element("div", {
-			        "class": "ExplMenu MenuList",
+			        "class": "ExplMenu HkListCategory",
 			        'styles': {
 				        'cursor': 'pointer'
 			        }
@@ -115,7 +115,7 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 			    rM.setText("Ruinen");
 			    eE.adopt(rM);
 			    var rV = new Element("div", {
-				    "class": "ExplView"
+				    "class": "ExplView HkList"
 			    });
 			    eE.adopt(rV);
 			    var xhr, xhrs = [];
@@ -200,20 +200,25 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 		    },
 		    updateCities: function updateCities(eE) {
 			    var cM = new Element("div", {
-				    "class": "ExplMenu"
+				    "class": "ExplMenu HkListCategory"
 			    });
 			    cM.setText("Städte");
 			    eE.adopt(cM);
 			    var cV = new Element("div", {
-				    "class": "ExplView"
+				    "class": "ExplView HkList"
 			    });
 			    var cities = this.getCities();
 			    if(cities.length > 0) {
 				    cities.each(function(c) {
+					    window.console.log(c);
 					    var cE = new Element("div", {
-						    "class": "ExplEntry ExplCity"
+						    "class": "ExplEntry ExplCity HkListEntry"
 					    });
-					    cE.setText(c.cN + " - " + c.pN + ", " + c.iAN + "(" + c.x + "," + c.y + ")");
+					    var cT = new Element("p", {
+						    "class": "ExplText HkListText"
+					    });
+					    cT.setText(c.cN + " - " + c.pN + ", " + c.iAN + "(" + c.x + "," + c.y + ")");
+					    cE.adopt(cT);
 					    cV.adopt(cE);
 				    });
 			    }
