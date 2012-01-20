@@ -281,7 +281,6 @@
 				window.Hk.HkStorage.implement(new Events, new Options);
 			} catch(ex) {
 				window.console.log('[HkStorage][ERROR]' + ex);
-				throw new Exception(ex);
 			}
 			
 			try {
@@ -290,7 +289,6 @@
 				};
 			} catch(ex) {
 				window.console.log('[HkStorage.Common][ERROR]' + ex);
-				throw new Exception(ex);
 			}
 			
 			Hk.HkReducer = new Class({

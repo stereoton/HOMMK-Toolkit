@@ -1,1 +1,1 @@
-if('undefined' == typeof __PAGE_SCOPE_RUN__) { 
+if('undefined' == typeof __PAGE_SCOPE__RUN__) { 

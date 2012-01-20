@@ -4,7 +4,7 @@ if(!window.hasOwnProperty("HkStorageCreateClasses")) {
 	window.HkStorageCreateClasses = function() {
 		
 		try {
-			if(window.hasOwnProperty("Hk") && !windowOwnProperty("HkStorage")) {
+			if(window.hasOwnProperty("Hk") && !window.hasOwnProperty("HkStorage")) {
 				/**
 				 * Events: onStorageUpdate
 				 * 
@@ -127,7 +127,6 @@ if(!window.hasOwnProperty("HkStorageCreateClasses")) {
 			}
 		} catch(ex) {
 			window.console.log('[HkStorage][ERROR]' + ex);
-			throw new Exception(ex);
 		}
 		var initHkStorage = function() {
 			try {
@@ -138,7 +137,6 @@ if(!window.hasOwnProperty("HkStorageCreateClasses")) {
 				}
 			} catch(ex) {
 				window.console.log('[HkStorage.Common][ERROR]' + ex);
-				throw new Exception(ex);
 			}
 		};
 		return initHkStorage;
