@@ -59,29 +59,10 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 		    createContent: function createContent() {
 			    var contentNode = this.$hkWin.getElement(".HkContent");
 			    contentNode.setStyle('paddingTop', '0px');
-			    var cities = this.getCities();
-			    if(cities.length > 0) {
-			    	cities.each(function(c) {
-			    		var cE = new Element("div", {
-			    			
-			    		});
-			    		cE.setText(Json.toString(c));
-			    		contentNode.adopt(cE);
-			    	});
-			    }
-			    window.console.log(cities);
-			    var regions = this.getRegions();
-			    if(regions.length > 0) {
-			    	regions.each(function(r) {
-			    		var rE = new Element("div", {
-			    			
-			    		});
-			    		rE.setText(Json.toString(r));
-			    		contentNode.adopt(rE);
-			    	});
-			    }
-			    window.console.log(regions);
-			    window.console.log(window.Hk.Map);
+			    this.updateExplorer(contentNode);
+			    contentNode.accordionMenu = new Accordion(contentNode.getElements("div.ExplMenu"), contentNode.getElements("div.ExplView"), {
+			    	'alwaysHide': true
+			    });
 		    },
 		    getCities: function getCities() {
 			    if($chk(window.hk.Map.content.attachedRegionList)) {
@@ -103,8 +84,93 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 				    return regs;
 			    }
 		    },
-		    updateExplorer: function updateExplorer() {
-
+		    updateRuins: function updateRuins(eE) {
+		    	var rM = new Element("div", {
+		    		"class": "ExplMenu"
+		    	});
+		    	rM.setText("Ruinen");
+			    eE.adopt(rM);
+		    	var rV = new Element("div", {
+		    		"class": "ExplView"
+		    	});
+		    	eE.adopt(rV);
+		    	var xhrs = [];
+		    	for(var i=1; i < 10; i++) {
+		    		xhrs.push(new XHR({
+			    		'method': 'get',
+			    		'onSuccess': function() {
+			    			window.console.log(this.response);
+			    			var ruins = this.response['object'];
+			    			$each(ruins, function(r) {
+			    				var rD = r.getLast();
+			    				var rI = String(rD).match(/([^\(]+)\(([^\)]+)\)(.*)/);
+			    				if(rI.length != 4) {
+			    					window.console.log(rI);
+			    					return;
+			    				}
+			    				var rP = String(rI[3]).split(",");
+			    				if(rP.length != 2) {
+			    					window.console.log(rP);
+			    				}
+				    			var rE = new Element('div', {
+				    				'class': "ExplRuin"
+				    			});
+				    			rE.rX = String(rP[0]).trim();
+				    			rE.rY = String(rP[1]).trim();
+			    				rE.rN = String(rI[1]).trim();
+			    				rE.rO = String(rI[2]).trim();
+				    			rE.setText(rE.rN + " - " + rE.rO + " (" + rE.rX + "," + rE.rY + ")");
+				    			rE.addEvent('click', function(evt) {
+				    				var rE = evt.target;
+				    				window.hk.gotoPosition(rE.rX, rE.rY);
+				    			});
+				    			rE.preventTextSelection();
+				    			rV.adopt(rE);
+			    			});
+			    		}
+			    	}).send('http://mightandmagicheroesheroeskindoms.ubi.com/ajaxRequest/ruinsRegionNumberAutocompletion', 'start=1'));
+		    		
+		    	}
+		    },
+		    updateCities: function updateCities(eE) {
+		    	var cM = new Element("div", {
+		    		"class": "ExplCityMenu"
+		    	});
+		    	cM.setText("Städte");
+			    eE.adopt(cM);
+		    	var cV = new Element("div", {
+		    		"class": "ExplCityView"
+		    	});
+			    var cities = this.getCities();
+			    if(cities.length > 0) {
+			    	cities.each(function(c) {
+			    		var cE = new Element("div", {
+			    			"class": "ExplCity"
+			    		});
+			    		cE.setText(c.cN + " - " + c.pN + ", " + c.iAN + "(" + c.x + "," + c.y + ")");
+			    		cV.adopt(cE);
+			    	});
+			    }
+			    eE.adopt(cV);
+			    window.console.log(cities);		    	
+		    },
+		    updateExplorer: function updateExplorer(eE) {
+		    	this.updateCities(eE);
+		    	this.updateRuins(eE);
+			    /*
+			    var regions = this.getRegions();
+			    if(regions.length > 0) {
+			    	regions.each(function(r) {
+			    		var rE = new Element("div", {
+			    			
+			    		});
+			    		rE.setText(Json.toString(r));
+			    		contentNode.adopt(rE);
+			    	});
+			    }
+			    window.console.log(regions);
+			    window.console.log(window.Hk.Map);
+			    */
 		    },
 		    updateDimensions: function updateDimensions() {
 
