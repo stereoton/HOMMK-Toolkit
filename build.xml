@@ -537,7 +537,6 @@
 				<param name="pkg" value="@{pkg}" />
 				<param name="srcdir" value="${hk.buildparts.tmp.dir}" />
 				<param name="includes" value="${hk.buildparts.tmp.file}" />
-				<!--<param name="yui.enabled" value="@{yui.enabled}" />-->
 			</antcall>
 			<echo message="Rufe ps.insert auf für @{pkg}..." />
 			<local name="ps.target" />
@@ -598,7 +597,9 @@
 	<target name="build-hkshortcuts"
 	        description="Builds HkShortcuts in build dir"
 	        depends="init,build-hkcommons">
+		<copy file="${build.dir}/${hk.commons.file}" todir="${src.dir}/${hk.hkshortcuts.src.name}" />
 		<hk.build.component pkg="hkshortcuts" />
+		<delete file="${src.dir}/${hk.hkshortcuts.src.name}/${hk.commons.file}" />
 	</target>
 
 	<target name="build-hkexplorer"
@@ -635,8 +636,8 @@
 		      overwrite="true" />
 	</target>
 
-	<target name="deploy-hkshortcuts" depends="dist-hkshortcuts">
-		<copy file="${dist.dir}/${hkshortcuts.file}"
+	<target name="deploy-hkshortcuts" depends="clean,init,dist-hkshortcuts">
+		<copy file="${dist.dir}/${hk.hkshortcuts.file}"
 		      todir="${basedir}"
 		      overwrite="true" />
 	</target>
