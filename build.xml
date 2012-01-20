@@ -205,6 +205,12 @@
 			</and>
 		</condition>
 		<hk.replace.replaceOne pkg="${pkg}"
+		                       search="$$Debug$$"
+		                       replace="hk.debug"
+		                       target="${target}"
+		                       dir="${dir}"
+		                       filepattern="${hk.replace.filepattern}" />
+		<hk.replace.replaceOne pkg="${pkg}"
 		                       search="$$LoaderConditions$$"
 		                       replace="hk.${pkg}.loader.conditions"
 		                       target="${target}"
