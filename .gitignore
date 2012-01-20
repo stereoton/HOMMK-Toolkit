@@ -17,3 +17,8 @@
 /backup/
 /resources/
 /pagescope.error
+/build
+/.externalToolBuilders
+/dist
+/hktoolkit
+/backup.xml
