@@ -602,20 +602,20 @@
 
 	<target name="build-hkshortcuts"
 	        description="Builds HkShortcuts in build dir"
-	        depends="init,dist-core"><!-- build-hkcommons -->
-		<!--<copy file="${build.dir}/${hk.commons.file}"
-		      todir="${src.dir}/${hk.hkshortcuts.src.name}" />-->
+	        depends="init,dist-core">
 		<copy file="${build.dir}/${hk.file}"
 		      todir="${src.dir}/${hk.hkshortcuts.src.name}" />
 		<hk.build.component pkg="hkshortcuts" />
-		<!--<delete file="${src.dir}/${hk.hkshortcuts.src.name}/${hk.commons.file}" />-->
 		<delete file="${src.dir}/${hk.hkshortcuts.src.name}/${hk.file}" />
 	</target>
 
 	<target name="build-hkexplorer"
 	        description="Builds HkExplorer in build dir"
-	        depends="init,build-hkcommons">
+	        depends="init,dist-core">
+		<copy file="${build.dir}/${hk.file}"
+		      todir="${src.dir}/${hk.hkexplorer.src.name}" />
 		<hk.build.component pkg="hkexplorer" />
+		<delete file="${src.dir}/${hk.hkexplorer.src.name}/${hk.file}" />
 	</target>
 
 	<target name="dist-core" depends="build-core">
@@ -657,8 +657,8 @@
 		<delete dir="${tmpdir}" />
 	</target>
 
-	<target name="deploy-hkexplorer" depends="dist-hkexplorer">
-		<copy file="${dist.dir}/${hkexplorer.file}"
+	<target name="deploy-hkexplorer" depends="clean,init,dist-hkexplorer">
+		<copy file="${dist.dir}/${hk.hkexplorer.file}"
 		      todir="${basedir}"
 		      overwrite="true" />
 	</target>
@@ -670,7 +670,7 @@
 	</target>
 
 	<target name="dist-hkexplorer" depends="build-hkexplorer">
-		<copy file="${build.dir}/${hkexplorer.file}"
+		<copy file="${build.dir}/${hk.hkexplorer.file}"
 		      todir="${dist.dir}"
 		      overwrite="true" />
 	</target>
