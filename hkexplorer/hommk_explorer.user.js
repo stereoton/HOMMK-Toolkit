@@ -145,18 +145,31 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 					            window.console.log(this.response);
 					            var ruins = JSON.parse(this.response['text']);
 					            $each(ruins, function(r) {
+					            	// "r" enthält genau 3 einträge: region, kurzer text mit region & bündnis und text mit region, x,y und bündnis
 						            window.console.log('[$Name$][DEBUG]Gefundene Ruine:');
 						            window.console.log(r);
 						            var rD = r.getLast();
+						            // rD sollte ein string sein im format: "regnr (x, y) bnd"
+						            // der string davor im array enthält dann: "regnr - bnd"
 						            var rI = String(rD).match(/([^\(]+)\(([^\)]+)\)(.*)/);
-						            if(rI.length != 4) {
-							            window.console.log('[$Name$][DEBUG]Ruine wird nicht verarbeitet:');
+						            /* rI sollte sein: 
+						             * 0. der gesamte treffer, also alles
+						             * 1. alles vor dem runden "klammerauf"
+						             * 2. alles innerhalb der runden klammern, also "x, y"
+						             * 3. alles hiner dem runden "klammerzu"
+						             */
+						            if(rI.length > 4) {
+							            window.console.log('[$Name$][DEBUG]Ruinen-Info passt nicht zum regulären Ausdruck:');
 							            window.console.log(rI);
 							            return;
 						            }
-						            var rP = String(rI[3]).split(",");
+						            var rP = String(rI[2]).split(",");
+						            /* rP sollte sein:
+						             * 0. X-Koord.
+						             * 1. Y-Koord.
+						             */
 						            if(rP.length != 2) {
-							            window.console.log('[$Name$][DEBUG]Ruine wird nicht verarbeitet:');
+							            window.console.log('[$Name$][DEBUG]Ruinentext passt nicht zum Schema:');
 							            window.console.log(rP);
 						            }
 						            var rE = new Element('div', {
@@ -176,8 +189,8 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 						            rE.adopt(rT);
 						            rE.rX = String(rP[0]).trim();
 						            rE.rY = String(rP[1]).trim();
-						            rE.rN = String(rI[1]).trim();
-						            rE.rO = String(rI[2]).trim();
+						            rE.rN = String(rI[1]).trim(); // alles vor "klammerauf" 
+						            rE.rO = String(rI[3]).trim(); // alles nach "klammerzu"
 						            rT.setText(rE.rN + " - " + rE.rO + " (" + rE.rX + "," + rE.rY + ")");
 						            rT.onclick = function(evt) {
 							            window.console.log("[$Name$][DEBUG]Click Event an Ruineneintrag: ");
