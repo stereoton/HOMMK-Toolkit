@@ -340,8 +340,9 @@ if(!window.hasOwnProperty("HkWindowsCreateClasses")) {
 				        this.setOptions(options);
 				        if(!this.options.scroll || !this.options.autoScroll) { return; }
 				        var scroll = $(this.options.scroll);
-				        this.options.scroller = new Scroller(scroll);
-				        this.options.scroller.start();
+				        var wid = this.getWindowId(id, options);
+				        $(wid).autoScroller = new Scroller(scroll);
+				        $(wid).autoScroller.start();
 			        },
 			        createReduceButton: function createReduceButton(id, options) {
 				        this.setOptions(options);

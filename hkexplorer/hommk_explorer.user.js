@@ -60,8 +60,9 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 			    window.console.log('[$Name$][DEBUG]Content-Element: ');
 			    window.console.log(contentNode);
 			    contentNode.setStyle('paddingTop', '0px');
-			    window.console.log('[$Name$][DEBUG]Aktualisiere Content-Node: ');
-			    this.updateExplorer(contentNode);
+			    window.console.log('[$Name$][DEBUG]Initialisiere Content-Node: ');
+			    this.createCitiesSection(contentNode);
+			    this.createRuinsSection(contentNode);
 			    window.console.log('[$Name$][DEBUG]Erzeuge Accordion: ');
 			    contentNode.accordionElements = contentNode.getElements(".HkListCategory");
 			    window.console.log('[$Name$][DEBUG]Explorer Menu Elements: ');
@@ -72,19 +73,14 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 			    new Accordion(contentNode.accordionElements, contentNode.accordionTogglers, {
 			        'alwaysHide': false,
 			        'show': 1,
-			        'display': 1
+			        'display': 1,
+			        'opacity': false,
+			        'fixedHeight': parseInt(window.getHeight()) / 6 + "px"
 			    });
 		    },
 		    updateExplorer: function updateExplorer(eE) {
 			    this.updateCities(eE);
 			    this.updateRuins(eE);
-			    /*
-					 * var regions = this.getRegions(); if(regions.length > 0) { regions.each(function(r) { var rE = new
-					 * Element("div", {
-					 * 
-					 * }); rE.setText(Json.toString(r)); contentNode.adopt(rE); }); } window.console.log(regions);
-					 * window.console.log(window.Hk.Map);
-					 */
 		    },
 		    getCities: function getCities() {
 			    if($chk(window.hk.Map.content.attachedRegionList)) {
@@ -99,30 +95,43 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 		    getRegions: function getRegions() {
 			    if($chk(window.hk.Map.content.attachedRegionList)) {
 				    var regs = window.hk.Map.content.attachedRegionList;
-				    // var sel = $A(regs).filter(function(reg, idx) {
-				    // if(reg && "undefined" != typeof reg.contents) { return reg.contents.hasOwnProperty('cN'); }
-				    // return false;
-				    // });
+				    var sel = $A(regs).filter(function(reg, idx) {
+				    	if(reg && "undefined" != typeof reg.contents) { return reg.contents.hasOwnProperty('cN'); }
+				    	return false;
+				    });
 				    return regs;
 			    }
 		    },
-		    updateRuins: function updateRuins(eE) {
-			    window.console.log('[$Name$][DEBUG]Update der Ruinenliste: ');
+		    createRuinsSection: function createRuinsSection(eE) {
+			    window.console.log('[$Name$][DEBUG]Erzeuge Bereich der Ruinen: ');
 			    window.console.log(eE);
+			    var rC = new Element("div", {
+			    	'id': 'HkExplorerRuins',
+			    });
 			    var rM = new Element("div", {
-			        "class": "HkListCategory",
-			        'styles': {
-				        'cursor': 'pointer'
-			        }
+		    		"id": "HkExplorerRuinsCategory",
+		        "class": "HkListCategory",
+		        'styles': {
+			        'cursor': 'pointer'
+		        }
 			    });
 			    rM.preventTextSelection();
 			    rM.setText("Ruinen");
 			    var rV = new Element("div", {
-			        "id": "HkRuins",
-			        "class": "HkList"
+		        "id": "HkExplorerRuinsList",
+		        "class": "HkList"
 			    });
-			    eE.adopt(rM);
-			    eE.adopt(rV);
+			    rC.adopt(rM);
+			    rC.adopt(rV);
+			    eE.adopt(rC);
+			    this.updateRuins(eE);
+			    rC.autoScroller = new Scroller($("HkExplorerRuinsList"));
+			    rC.autoScroller.start();
+		    },
+		    updateRuins: function updateRuins(eE) {
+			    window.console.log('[$Name$][DEBUG]Update der Ruinenliste: ');
+			    window.console.log($("HkExplorerRuinsList"));
+			    $("HkExplorerRuinsList").empty();
 			    var xhr, xhrs = [];
 			    for( var i = 1; i < 10; i++) {
 				    xhr = new Ajax(
@@ -213,7 +222,7 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 							            window.console.log("[$Name$][DEBUG]Gehe zur Ruine " + cR.rX + "," + cR.rY);
 							            window.hk.gotoPosition(cR.rX, cR.rY);
 						            };
-						            $("HkRuins").adopt(rE);
+						            $("HkExplorerRuinsList").adopt(rE);
 					            });
 				            }
 				        });
@@ -223,35 +232,53 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 				    xhr.request.delay(250, xhr);
 			    }
 		    },
-		    updateCities: function updateCities(eE) {
+		    createCitiesSection: function createCitiesSection(eE) {
+			    window.console.log('[$Name$][DEBUG]Erzeuge Bereich der Städte: ');
+			    window.console.log(eE);
+			    var cC = new Element("div", {
+			    	'id': 'HkExplorerCities',
+			    });
 			    var cM = new Element("div", {
-				    "class": "ExplMenu HkListCategory"
+		    		"id": "HkExplorerCitiesCategory",
+		        "class": "HkListCategory",
+		        'styles': {
+			        'cursor': 'pointer'
+		        }
 			    });
+			    cM.preventTextSelection();
 			    cM.setText("Städte");
-			    eE.adopt(cM);
 			    var cV = new Element("div", {
-				    "class": "ExplView HkList"
+		        "id": "HkExplorerCitiesList",
+		        "class": "HkList"
 			    });
+			    cC.adopt(cM);
+			    cC.adopt(cV);
+			    eE.adopt(cC);
+			    this.updateCities(eE);
+			    cC.autoScroller = new Scroller($("HkExplorerCitiesList"));
+			    cC.autoScroller.start();
+		    },
+		    updateCities: function updateCities(eE) {
+			    $("HkExplorerCitiesList").empty();
 			    var cities = this.getCities();
 			    if(cities.length > 0) {
 				    cities.each(function(c) {
 					    window.console.log(c);
 					    var cE = new Element("div", {
-						    "class": "ExplEntry ExplCity HkListEntry"
+						    "class": "HkListEntry"
 					    });
 					    var cT = new Element("p", {
-						    "class": "ExplText HkListText"
+						    "class": "HkListText"
 					    });
 					    cT.setText(c.cN + " - " + c.pN + ", " + c.iAN + "(" + c.x + "," + c.y + ")");
 					    cE.adopt(cT);
-					    cV.adopt(cE);
+					    $("HkExplorerCitiesList").adopt(cE);
 				    });
 			    }
-			    eE.adopt(cV);
 			    window.console.log(cities);
 		    },
 		    updateDimensions: function updateDimensions() {
-
+		    	
 		    }
 		});
 		Hk.HkExplorer.implement(new Events, new Options);

@@ -238,7 +238,7 @@
 				    var divs = $("ShortcutList").getElementsByTagName("div");
 				    $each(divs, function(aDiv) {
 					    var divHeight = $(aDiv).getStyle('height');
-					    if($chk(divHeight) && divHeight.toInt() <= 0) {
+					    if($chk(divHeight) && parseInt(divHeight) <= 0) {
 						    aDiv.setStyle('height', 'auto');
 					    }
 				    });
@@ -282,6 +282,7 @@
 					    entry = entry.getParent();
 					    window.console.log('[HkShortcutsWindow][DEBUG]Shortcut-Eintrag: ' + entry);
 				    }
+				    if("undefined" == entry) return;
 				    var shortcutName = entry.getProperty("name");
 				    window.console.log('[HkShortcutsWindow][DEBUG]Entferne Eintrag ' + shortcutName + '\u2026');
 				    var shortcut = window.hk.Storage.Shortcuts.drop(shortcutName);
