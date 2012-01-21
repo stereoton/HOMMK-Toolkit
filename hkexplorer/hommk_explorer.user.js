@@ -55,27 +55,21 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 				    window.console.log('[$Name$][DEBUG]Fehler bei der Initialisierung: ' + ex);
 			    }
 		    },
-		    createContent: function createContent(windowNode) {
-			    var contentNode = windowNode.getElement(".HkContent");
-			    window.console.log('[$Name$][DEBUG]Content-Element: ');
-			    window.console.log(contentNode);
-			    contentNode.preventTextSelection();
-			    contentNode.setStyle('paddingTop', '0px');
-			    window.console.log('[$Name$][DEBUG]Initialisiere Content-Node: ');
-			    this.createCitiesSection(contentNode);
-			    this.createRuinsSection(contentNode);
+		    createAccordion: function createAccordion() {
+		    	var cN = $("HkWindowContentHkExplorer");
 			    window.console.log('[$Name$][DEBUG]Erzeuge Accordion: ');
-			    contentNode.accordionElements = contentNode.getElements(".HkList");
-			    window.console.log('[$Name$][DEBUG]Explorer Menu Elements: ');
-			    window.console.log(contentNode.accordionElements);
-			    contentNode.accordionTogglers = contentNode.getElements(".HkListCategory");
+			    cN.accordionElements = cN.getElements(".HkList");
 			    window.console.log('[$Name$][DEBUG]Explorer Menu Views: ');
-			    window.console.log(contentNode.accordionTogglers);
-			    new Accordion(contentNode.accordionElements, contentNode.accordionTogglers, {
-			        'alwaysHide': false,
-			        'show': 0,
+			    window.console.log(cN.accordionElements);
+			    cN.accordionTogglers = cN.getElements(".HkListCategory");
+			    window.console.log('[$Name$][DEBUG]Explorer Menu Elements: ');
+			    window.console.log(cN.accordionTogglers);
+			    new Accordion(cN.accordionElements, cN.accordionTogglers, {
+			        'alwaysHide': true,
+			        'show': 1,
 			        'display': 1,
-			        'opacity': false,
+			        'opacity': true,
+			        'height': true,
 			        'fixedHeight': parseInt(window.getHeight()) / 5 + "px",
 			        'onBackground': function(evt) {
 				        window.console.log('[$Name$][DEBUG]Explorer onBackground Event: ');
@@ -89,6 +83,7 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 						        return;
 					        }
 				        }
+				        bg = bg.getElement(".HkList");
 				        bg.autoScroller.stop();
 			        },
 			        'onActive': function(evt) {
@@ -103,15 +98,25 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 						        return;
 					        }
 				        }
+				        bg = bg.getElement('.HkList');
 				        bg.autoScroller.start();
 			        }
 			    });
 		    },
+		    createContent: function createContent(windowNode) {
+			    var contentNode = windowNode.getElement(".HkContent");
+			    window.console.log('[$Name$][DEBUG]Content-Element: ');
+			    window.console.log(contentNode);
+			    contentNode.preventTextSelection();
+			    contentNode.setStyle('paddingTop', '0px');
+			    window.console.log('[$Name$][DEBUG]Initialisiere Content-Node: ');
+			    this.createCitiesSection();
+			    this.createRuinsSection();
+		    },
 		    updateExplorer: function updateExplorer() {
 			    window.console.log('[$Name$][DEBUG]Explorer-Update...');
-			    var eE = $("HkWindowContentHkExplorer");
-			    this.updateCities(eE);
-			    this.updateRuins(eE);
+			    this.updateCities();
+			    this.updateRuins();
 		    },
 		    getCities: function getCities() {
 			    window.console.log('[$Name$][DEBUG]Rufe Städte ab...');
@@ -135,7 +140,8 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 				    return regs;
 			    }
 		    },
-		    createRuinsSection: function createRuinsSection(eE) {
+		    createRuinsSection: function createRuinsSection() {
+		    	var eE = $("HkWindowContentHkExplorer");
 			    window.console.log('[$Name$][DEBUG]Erzeuge Bereich der Ruinen: ');
 			    window.console.log(eE);
 			    var rC = new Element("div", {
@@ -161,8 +167,10 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 			    rV.preventTextSelection();
 			    rC.adopt(rV);
 			    rC.autoScroller = new Scroller($("HkExplorerRuinsList"));
+			    rC.autoScroller.start();
 		    },
-		    updateRuins: function updateRuins(eE) {
+		    updateRuins: function updateRuins() {
+		    	var eE = $("HkWindowContentHkExplorer");
 			    window.console.log('[$Name$][DEBUG]Update der Ruinenliste: ');
 			    window.console.log($("HkExplorerRuinsList"));
 			    $("HkExplorerRuinsList").getElements(".HkListEntry").remove();
@@ -254,7 +262,8 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 				    xhr.request.delay(250, xhr);
 			    }
 		    },
-		    createCitiesSection: function createCitiesSection(eE) {
+		    createCitiesSection: function createCitiesSection() {
+		    	var eE = $("HkWindowContentHkExplorer");
 			    window.console.log('[$Name$][DEBUG]Erzeuge Bereich der Städte: ');
 			    window.console.log(eE);
 			    var cC = new Element("div", {
@@ -279,10 +288,11 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 			    });
 			    cV.preventTextSelection();
 			    cC.adopt(cV);
-			    cC.autoScroller = new Scroller($("HkExplorerCitiesList"));
-			    cC.autoScroller.start();
+			    cV.autoScroller = new Scroller($("HkExplorerCitiesList"));
+			    cV.autoScroller.start();
 		    },
-		    updateCities: function updateCities(eE) {
+		    updateCities: function updateCities() {
+		    	var eE = $("HkWindowContentHkExplorer");
 			    window.console.log('[$Name$][DEBUG]Update der Städteliste: ');
 			    window.console.log($("HkExplorerCitiesList"));
 			    $("HkExplorerCitiesList").getElements(".HkListEntry").remove();
@@ -335,14 +345,19 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 			} catch(ex) {
 				window.console.log('[$Name$][ERROR]Fehler bei der Finalisierung des $Name$-Fensters: ' + ex);
 			}
+//			try {
+//				window.hk.Windows.makeScrollable("HkExplorer", {
+//				    'scroll': $("HkWindowContentHkExplorer"),
+//				    'title': "HkExplorer",
+//				    'autoScroll': true
+//				}).start();
+//			} catch(ex) {
+//				window.console.log('[$Name$][ERROR]Fehler bei der Finalisierung des $Name$-Fensters: ' + ex);
+//			}
 			try {
-				window.hk.Windows.makeScrollable("HkExplorer", {
-				    'scroll': $("HkWindowContentHkExplorer"),
-				    'title': "HkExplorer",
-				    'autoScroll': true
-				}).start();
+				window.hk.Windows.createAccordion();
 			} catch(ex) {
-				window.console.log('[$Name$][ERROR]Fehler bei der Finalisierung des $Name$-Fensters: ' + ex);
+				window.console.log('[$Name$][ERROR]Fehler beim Erzeugen des Accordions für $Name$: ' + ex);
 			}
 			if("undefined" == typeof window.hkStylesGeneric) {
 				try {
