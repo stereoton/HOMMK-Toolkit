@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name HkShortcuts
-// @version 2012.01.21.02.00.270000
+// @version 2012.01.21.02.18.240000
 // @description Shortcuts für HkToolkit :: Werkzeugkasten für MMHK/HOMMK
 // @author Gelgamek <gelgamek@arcor.de>
 // @copyright Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
