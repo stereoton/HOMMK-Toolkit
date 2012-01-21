@@ -60,15 +60,18 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 			    window.console.log('[$Name$][DEBUG]Content-Element: ');
 			    window.console.log(contentNode);
 			    contentNode.setStyle('paddingTop', '0px');
+			    window.console.log('[$Name$][DEBUG]Aktualisiere Content-Node: ');
 			    this.updateExplorer(contentNode);
-			    contentNode.accordionElements = contentNode.getElements(".ExplMenu");
+			    window.console.log('[$Name$][DEBUG]Erzeuge Accordion: ');
+			    contentNode.accordionElements = contentNode.getElements(".HkListCategory");
 			    window.console.log('[$Name$][DEBUG]Explorer Menu Elements: ');
 			    window.console.log(contentNode.accordionElements);
-			    contentNode.accordionTogglers = contentNode.getElements(".ExplView");
+			    contentNode.accordionTogglers = contentNode.getElements(".HkList");
 			    window.console.log('[$Name$][DEBUG]Explorer Menu Views: ');
 			    window.console.log(contentNode.accordionTogglers);
 			    contentNode.accordionMenu = new Accordion(contentNode.accordionElements, contentNode.accordionTogglers, {
-				    'alwaysHide': true
+				    'alwaysHide': false,
+				    'show': 1
 			    });
 		    },
 		    updateExplorer: function updateExplorer(eE) {
