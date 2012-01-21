@@ -96,42 +96,62 @@ if("undefined" == typeof window.HkStylesGeneric) {
 	            }
 	        }, {
 	            'force': true,
+	            'selector': '#HkWindowHkExplorer',
+	            'styles': {
+	                'height': 'auto',
+//	                'maxHeight': parseInt(window.getHeight()) + 'px',
+//	                'maxWidth': parseInt(window.getWidth()) + 'px'
+	            }
+	        }, {
+//	            'selector': '#HkWindowContentHkExplorer',
+//	            'styles': {
+//	                'minHeight': '300px',
+//	                'height': '300px',
+//	                'overflow': 'hidden',
+//	                'height': 'auto',
+//	                'maxHeight': parseInt(window.getHeight()) + 'px',
+//	                'maxWidth': parseInt(window.getWidth()) + 'px'
+//	            }
+//	        }, {
+//	            'force': true,
+//	            'selector': '.HkListContainer',
+//	            'styles': {
+//	                'border': 'none',
+//	                'padding': '0',
+//	                'margin': 'auto',
+//	                'clear': 'none',
+//	                'overflow': 'hidden',
+//	                'height': 'auto'
+//	            }
+//	        }, {
 	            'selector': '.HkList',
 	            'styles': {
 	                'border': 'none',
-	                'padding': '2px 0px',
-	                'margin': '0px',
-	                'clear': 'both',
-	                'float': 'none',
-	                'backgroundColor': '#0e0e0e',
-	                'height': 'auto',
-	                'maxHeight': parseInt(window.getHeight()) / 2 + 'px',
-	                'width': 'auto',
-	                'maxWidth': parseInt(window.getWidth()) / 3 + 'px'
+	                'padding': '0px',
+//	                'clear': 'both',
+//	                'height': 'auto',
+	                'backgroundColor': '#0e0e0e'
 	            }
 	        }, {
-	            'force': true,
 	            'selector': '.HkListItem',
 	            'styles': {
 	                'padding': '2px 0px',
 	                'borderBottom': '1px solid #202020',
-	                'clear': 'both'
+//	                'clear': 'both'
 	            }
 	        }, {
-	            'force': true,
 	            'selector': '.HkListCategory',
 	            'styles': {
 	                'padding': '4px 0px',
-	                'borderTop': '2px solid #252525',
+	                'borderTop': '1px solid #252525',
 	                'borderBottom': '2px solid #505050',
-	                'clear': 'both'
+//	                'clear': 'both'
 	            }
 	        }, {
-	            'force': true,
 	            'selector': '.HkListText',
 	            'styles': {
 	                'cursor': 'pointer',
-	                'width': 'auto',
+//	                'width': 'auto',
 	                'padding': '3px 20px 3px 2px',
 	            }
 	        }]

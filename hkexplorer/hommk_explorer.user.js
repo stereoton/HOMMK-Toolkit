@@ -55,55 +55,33 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 				    window.console.log('[$Name$][DEBUG]Fehler bei der Initialisierung: ' + ex);
 			    }
 		    },
-		    createAccordion: function createAccordion() {
-		    	var cN = $("HkWindowContentHkExplorer");
+//		    foregroundSection: function(toggle, section) {
+//	        window.console.log('[$Name$][DEBUG]Explorer onActive Event: ');
+//	        window.console.log(toggle);
+//	        window.console.log(section);
+//	        window.console.log('[$Name$][DEBUG]Starte AutoScroller an ' + section);
+//	        if(toggle.hasOwnProperty('autoScroller')) toggle.autoScroller.stop();
+//		    },
+//		    backgroundSection: function(toggle, section) {
+//	        window.console.log('[$Name$][DEBUG]Explorer onBackground Event: ');
+//	        window.console.log(toggle);
+//	        window.console.log(section);
+//	        window.console.log('[$Name$][DEBUG]Stoppe AutoScroller an ' + section);
+//	        if(toggle.hasOwnProperty('autoScroller')) toggle.autoScroller.start();
+//		    },
+		    createAccordion: function createAccordion(cN) {
 			    window.console.log('[$Name$][DEBUG]Erzeuge Accordion: ');
-			    cN.accordionElements = cN.getElements(".HkList");
-			    window.console.log('[$Name$][DEBUG]Explorer Menu Views: ');
-			    window.console.log(cN.accordionElements);
-			    cN.accordionTogglers = cN.getElements(".HkListCategory");
-			    window.console.log('[$Name$][DEBUG]Explorer Menu Elements: ');
-			    window.console.log(cN.accordionTogglers);
-			    new Accordion(cN.accordionElements, cN.accordionTogglers, {
-			        'alwaysHide': true,
-			        'show': 1,
+		    	cN.accordionMenu = new Fx.Accordion($$(".HkListCategory"), $$(".HkList"), {
+			        'alwaysHide': false,
+			        'show': false,
 			        'display': 1,
-			        'opacity': true,
+			        'opacity': false,
 			        'height': true,
-			        'fixedHeight': parseInt(window.getHeight()) / 5 + "px",
-			        'onBackground': function(evt) {
-				        window.console.log('[$Name$][DEBUG]Explorer onBackground Event: ');
-				        window.console.log(evt);
-				        window.console.log('[$Name$][DEBUG]Suche HkListContainer...');
-				        var bg = evt.target;
-				        while(!bg.hasClass("HkListContainer")) {
-					        bg = bg.getParent();
-					        if("undefined" == typeof bg) {
-						        window.console.log('[$Name$][WARN]Kein HkListContainer gefunden, Abbruch...');
-						        return;
-					        }
-				        }
-				        bg = bg.getElement(".HkList");
-				        window.console.log('[$Name$][DEBUG]Stoppe AutoScroller an ' + bg);
-				        bg.autoScroller.stop();
-			        },
-			        'onActive': function(evt) {
-				        window.console.log('[$Name$][DEBUG]Explorer onActive Event: ');
-				        window.console.log(evt);
-				        window.console.log('[$Name$][DEBUG]Suche HkListContainer...');
-				        var bg = evt.target;
-				        while(!bg.hasClass("HkListContainer")) {
-					        bg = bg.getParent();
-					        if("undefined" == typeof bg) {
-						        window.console.log('[$Name$][WARN]Kein HkListContainer gefunden, Abbruch...');
-						        return;
-					        }
-				        }
-				        bg = bg.getElement('.HkList');
-				        window.console.log('[$Name$][DEBUG]Starte AutoScroller an ' + bg);
-				        bg.autoScroller.start();
-			        }
+			        'returnHeightToAuto': false
 			    });
+//			    cN.accordionMenu.addEvent('onActive', this.foregroundSection.bind(cN.accordionMenu));
+//			    cN.accordionMenu.addEvent('onBackground', this.backgroundSection.bind(cN.accordionMenu));
+		    	cN.accordionMenu.showThisHideOpen();
 		    },
 		    createContent: function createContent(windowNode) {
 			    var contentNode = windowNode.getElement(".HkContent");
@@ -112,8 +90,10 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 			    contentNode.preventTextSelection();
 			    contentNode.setStyle('paddingTop', '0px');
 			    window.console.log('[$Name$][DEBUG]Initialisiere Content-Node: ');
-			    this.createCitiesSection();
 			    this.createRuinsSection();
+			    this.createCitiesSection();
+			    this.updateExplorer();
+			    this.createAccordion(contentNode);
 		    },
 		    updateExplorer: function updateExplorer() {
 			    window.console.log('[$Name$][DEBUG]Explorer-Update...');
@@ -160,7 +140,7 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 			        }
 			    });
 			    rM.setHTML("<p><strong>Ruinen</strong></p>");
-			    rM.preventTextSelection();
+//			    rM.preventTextSelection();
 			    rM.injectInside(rC);
 			    var rV = new Element("div", {
 			        "id": "HkExplorerRuinsList",
@@ -169,8 +149,8 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 			    rV.preventTextSelection();
 			    rV.injectInside(rC);
 			    window.console.log('[$Name$][DEBUG]Erzeuge AutoScroller für Ruinen');
-			    rV.autoScroller = new Scroller($("HkExplorerRuinsList"));
-			    rV.autoScroller.start();
+			    rM.autoScroller = new Scroller(rV);
+			    rM.autoScroller.start();
 		    },
 		    updateRuins: function updateRuins() {
 		    	var eE = $("HkWindowContentHkExplorer");
@@ -182,26 +162,10 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 				    var xhr = new Ajax('http://mightandmagicheroeskingdoms.ubi.com/ajaxRequest/ruinsRegionNumberAutocompletion?start='
 				        + i, {
 				        'method': 'get',
-				        'evalResponse': true,
-				        'onRequest': function() {
-					        window.console.log('[$Name$][DEBUG]Starte XHR-Request:');
-					        window.console.log(arguments);
-				        },
-				        'onStateChange': function() {
-					        window.console.log('[$Name$][DEBUG]XHR-Statusänderung:');
-					        window.console.log(arguments);
-				        },
-				        'onFailure': function() {
-					        window.console.log('[$Name$][DEBUG]XHR-Fehler:');
-					        window.console.log(arguments);
-				        },
-				        'onSuccess': function() {
-					        window.console.log('[$Name$][DEBUG]XHR-Anfrage erfolgreich::');
-					        window.console.log(arguments);
-				        },
+				        'evalResponse': false,
 				        'onComplete': function() {
-					        window.console.log('[$Name$][DEBUG]XHR-Anfrage komplett:');
-					        window.console.log(this.response);
+//					        window.console.log('[$Name$][DEBUG]XHR-Anfrage komplett:');
+//					        window.console.log(this.response);
 					        var ruins = JSON.parse(this.response['text']);
 					        $each(ruins, function(r) {
 						        // "r" enthält genau 3 einträge: region, kurzer text mit region & bündnis und text mit region,
@@ -214,8 +178,8 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 						        // rD sollte ein string sein im format: "regnr (x, y) bnd"
 						        // der string davor im array enthält dann: "regnr - bnd"
 						        var rI = rD.match(/([^\(]+)\(([^\)]+)\)(.*)/);
-						        window.console.log('[$Name$][DEBUG]Auswertung:');
-						        window.console.log(rI);
+//						        window.console.log('[$Name$][DEBUG]Auswertung:');
+//						        window.console.log(rI);
 						        /*
 										 * rI sollte sein: 0. der gesamte treffer, also alles 1. alles vor dem runden "klammerauf" 2. alles
 										 * innerhalb der runden klammern, also "x, y" 3. alles hiner dem runden "klammerzu"
@@ -225,8 +189,6 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 							        window.console.log(rI);
 						        }
 						        var rP = String(rI[2]).split(",");
-						        window.console.log('[$Name$][DEBUG]Koordinaten:');
-						        window.console.log(rP);
 						        /*
 										 * rP sollte sein: 0. X-Koord. 1. Y-Koord.
 										 */
@@ -246,23 +208,18 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 						        rE.rO = rI[3].trim(); // alles nach "klammerzu"
 						        var rTx = "" + rE.rN + " - " + rE.rO + " (" + rE.rX + "," + rE.rY + ")";
 						        window.console.log("Verwende Text: " + rTx);
-						        rE.setHTML("<p class='HkListText'>" + rTx + "</p>");
+						        rE.innerHTML = "<p class='HkListText'>" + rTx + "</p>";
 						        rE.preventTextSelection();
 						        rE.addEvent('click', function(evt) {
 							        window.console.log("[$Name$][DEBUG]Click Event an Ruineneintrag: ");
-							        window.console.log(evt);
-							        window.console.log(evt.target);
 							        var cR = rE || evt.target;
-							        window.console.log("[$Name$][DEBUG]Event-Target: ");
-							        window.console.log(cR);
-							        window.console.log("[$Name$][DEBUG]Gehe zur Ruine " + cR.rX + "," + cR.rY);
 							        window.hk.gotoPosition(cR.rX, cR.rY);
 						        });
 						        rE.injectInside($("HkExplorerRuinsList"));
 					        });
 				        }
 				    });
-				    xhr.request.delay(250, xhr);
+				    xhr.request.delay(1000, xhr);
 			    }
 		    },
 		    createCitiesSection: function createCitiesSection() {
@@ -282,8 +239,8 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 				        'cursor': 'pointer'
 			        }
 			    });
-			    cM.setHTML("<p><strong>Städte</strong></p>");
-			    cM.preventTextSelection();
+			    cM.innerHTML = "<p><strong>Städte</strong></p>";
+//			    cM.preventTextSelection();
 			    cM.injectInside(cC);
 			    var cV = new Element("div", {
 			        "id": "HkExplorerCitiesList",
@@ -291,8 +248,9 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 			    });
 			    cV.preventTextSelection();
 			    cV.injectInside(cC);
-			    cV.autoScroller = new Scroller($("HkExplorerCitiesList"));
-			    cV.autoScroller.start();
+			    window.console.log('[$Name$][DEBUG]Erzeuge AutoScroller für Städte');
+			    cM.autoScroller = new Scroller(cV);
+			    cM.autoScroller.start();
 		    },
 		    updateCities: function updateCities() {
 		    	var eE = $("HkWindowContentHkExplorer");
@@ -319,14 +277,13 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 			    window.console.log(cities);
 		    },
 		    updateDimensions: function updateDimensions() {
-		    	var eE = $("HkWindowContentHkExplorer");
-		    	eE.setStyles({
+		    	var eEs = $$("HkWindowContentHkExplorer", "HkWindowHkExplorer");
+		    	eEs.setStyles({
 		    		'maxHeight': (parseInt(window.getHeight()) / 2) + "px"
 		    	});
 		    }
 		});
 		Hk.HkExplorer.implement(new Events, new Options);
-		// window.hk.hkExplorer = new window.Hk.HkExplorer();
 		
 		/**
 		 * Erzeugt Explorer-Fenster
@@ -334,14 +291,9 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 		var init$Name$ = function() {
 			try {
 				window.console.log('[$Name$][DEBUG]Erzeuge $Name$-Fenster');
-				window.hk.Explorer = window.hk.hkExplorer || new window.Hk.HkExplorer();
+				window.hk.Explorer = new window.Hk.HkExplorer();
 			} catch(ex) {
 				window.console.log('[$Name$][ERROR]Fehler beim Erzeugen des $Name$-Fensters: ' + ex);
-			}
-			try {
-				window.hk.Explorer.updateExplorer();
-			} catch(ex) {
-				window.console.log('[$Name$][ERROR]Fehler beim Aktualisieren des $Name$-Fensters: ' + ex);
 			}
 			try {
 				window.hk.Explorer.updateDimensions();
@@ -352,19 +304,13 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 			} catch(ex) {
 				window.console.log('[$Name$][ERROR]Fehler bei der Finalisierung des $Name$-Fensters: ' + ex);
 			}
-//			try {
-//				window.hk.Windows.makeScrollable("HkExplorer", {
-//				    'scroll': $("HkWindowContentHkExplorer"),
-//				    'title': "HkExplorer",
-//				    'autoScroll': true
-//				}).start();
-//			} catch(ex) {
-//				window.console.log('[$Name$][ERROR]Fehler bei der Finalisierung des $Name$-Fensters: ' + ex);
-//			}
 			try {
-				window.hk.Windows.createAccordion();
+				window.hk.Windows.makeScrollable("HkExplorer", {
+					'scroll': $("HkWindowContentHkExplorer"),
+					'autoScroll': true
+				}).start();
 			} catch(ex) {
-				window.console.log('[$Name$][ERROR]Fehler beim Erzeugen des Accordions für $Name$: ' + ex);
+				window.console.log('[$Name$][ERROR]Fehler bei der Finalisierung des $Name$-Fensters: ' + ex);
 			}
 			if("undefined" == typeof window.hkStylesGeneric) {
 				try {
