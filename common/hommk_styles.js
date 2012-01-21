@@ -109,9 +109,9 @@ if("undefined" == typeof window.HkStylesGeneric) {
 	                'float': 'none',
 	                'backgroundColor': '#0e0e0e',
 	                'height': 'auto',
-	                'maxHeight': window.getHeight() / 2 + 'px',
+	                'maxHeight': parseInt(window.getHeight()) / 2 + 'px',
 	                'width': 'auto',
-	                'maxWidth': window.getWidth() / 3 + 'px'
+	                'maxWidth': parseInt(window.getWidth()) / 3 + 'px'
 	            }
 	        }, {
 	            'force': true,
