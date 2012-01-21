@@ -426,6 +426,10 @@ if(!window.hasOwnProperty("HkWindowsCreateClasses")) {
 				                },
 				                onStart: function(evt) {
 					                window.console.log('[HkWindow][Event]Resize Start Event an ' + this.options.hkWindowId);
+					                var reduceable = this.hkResize || evt.getParent();
+					                reduceable.setStyles({
+					                	'maxHeight': (parseInt(window.getHeight())) / 2 + "px" 
+				                	});
 				                },
 				                onDrag: function(evt) {
 					                window.console.log('[HkWindow][Event]Resize Event an ' + this.options.hkWindowId);
@@ -433,20 +437,20 @@ if(!window.hasOwnProperty("HkWindowsCreateClasses")) {
 				                onComplete: function(evt) {
 					                window.console.log('[HkWindow][Event]Resize Complete Event an ' + this.options.hkWindowId);
 					                if(this.options.hkWindow.options.reduceable) {
-						                window.console.log('[HkWindow][DEBUG]Löse Höhenfestlegung durch Reduceable für '
-						                    + this.options.hkWindowId);
+						                window.console.log('[HkWindow][DEBUG]Löse Höhenfestlegung durch Reduceable für ' + this.options.hkWindowId);
 						                var reduceable = evt.getParent();
 						                // window.console.log('[HkWindow][DEBUG]Reduceable-Stile: ' +
 						                // JSON.toString(evt.getStyles()));
 						                if(reduceable.getStyle('overflow') == 'hidden' && reduceable.getStyle('height') != 'auto') {
-							                reduceable.setStyle('height', 'auto');
+							                reduceable.setStyles({
+							                	'height': 'auto',
+							                	'maxHeight': (parseInt(window.getHeight())) / 2 + "px" 
+						                	});
 						                }
 					                }
 					                if(!this.options.hkWindow.saveWindowSize(this.options.hkWindowId,
 					                    this.options.hkWindow.options)) {
-						                window.console
-						                    .log('[HkWindow][WARN]Resize Event Handler saveWindowSize fehlgeschlagen für '
-						                        + this.options.hkWindowId);
+						                window.console.log('[HkWindow][WARN]Resize Event Handler saveWindowSize fehlgeschlagen für ' + this.options.hkWindowId);
 					                }
 				                }
 				            });

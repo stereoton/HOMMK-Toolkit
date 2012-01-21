@@ -84,6 +84,7 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 					        }
 				        }
 				        bg = bg.getElement(".HkList");
+				        window.console.log('[$Name$][DEBUG]Stoppe AutoScroller an ' + bg);
 				        bg.autoScroller.stop();
 			        },
 			        'onActive': function(evt) {
@@ -99,6 +100,7 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 					        }
 				        }
 				        bg = bg.getElement('.HkList');
+				        window.console.log('[$Name$][DEBUG]Starte AutoScroller an ' + bg);
 				        bg.autoScroller.start();
 			        }
 			    });
