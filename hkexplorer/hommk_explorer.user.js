@@ -70,9 +70,9 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 			    window.console.log('[$Name$][DEBUG]Explorer Menu Views: ');
 			    window.console.log(contentNode.accordionTogglers);
 			    new Accordion(contentNode.accordionElements, contentNode.accordionTogglers, {
-				    'alwaysHide': false,
-				    'show': 1,
-				    'display': 1
+			        'alwaysHide': false,
+			        'show': 1,
+			        'display': 1
 			    });
 		    },
 		    updateExplorer: function updateExplorer(eE) {
@@ -118,8 +118,8 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 			    rM.preventTextSelection();
 			    rM.setText("Ruinen");
 			    var rV = new Element("div", {
-			    	"id": "HkRuins",
-				    "class": "HkList"
+			        "id": "HkRuins",
+			        "class": "HkList"
 			    });
 			    eE.adopt(rM);
 			    eE.adopt(rV);
@@ -150,7 +150,8 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 					            window.console.log(this.response);
 					            var ruins = JSON.parse(this.response['text']);
 					            $each(ruins, function(r) {
-					            	// "r" enthält genau 3 einträge: region, kurzer text mit region & bündnis und text mit region, x,y und bündnis
+						            // "r" enthält genau 3 einträge: region, kurzer text mit region & bündnis und text mit region,
+						            // x,y und bündnis
 						            window.console.log('[$Name$][DEBUG]Gefundene Ruine:');
 						            window.console.log(r);
 						            var rD = r.getLast();
@@ -161,12 +162,10 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 						            var rI = rD.match(/([^\(]+)\(([^\)]+)\)(.*)/);
 						            window.console.log('[$Name$][DEBUG]Auswertung:');
 						            window.console.log(rI);
-						            /* rI sollte sein: 
-						             * 0. der gesamte treffer, also alles
-						             * 1. alles vor dem runden "klammerauf"
-						             * 2. alles innerhalb der runden klammern, also "x, y"
-						             * 3. alles hiner dem runden "klammerzu"
-						             */
+						            /*
+												 * rI sollte sein: 0. der gesamte treffer, also alles 1. alles vor dem runden "klammerauf" 2.
+												 * alles innerhalb der runden klammern, also "x, y" 3. alles hiner dem runden "klammerzu"
+												 */
 						            if(rI.length > 4) {
 							            window.console.log('[$Name$][DEBUG]Ruinen-Info passt nicht zum regulären Ausdruck:');
 							            window.console.log(rI);
@@ -174,10 +173,9 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 						            var rP = String(rI[2]).split(",");
 						            window.console.log('[$Name$][DEBUG]Koordinaten:');
 						            window.console.log(rP);
-						            /* rP sollte sein:
-						             * 0. X-Koord.
-						             * 1. Y-Koord.
-						             */
+						            /*
+												 * rP sollte sein: 0. X-Koord. 1. Y-Koord.
+												 */
 						            if(rP.length != 2) {
 							            window.console.log('[$Name$][DEBUG]Ruinentext passt nicht zum Schema:');
 							            window.console.log(rP);
@@ -198,9 +196,10 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 						            rT.preventTextSelection();
 						            rE.rX = rP[0].trim();
 						            rE.rY = rP[1].trim();
-						            rE.rN = rI[1].trim(); // alles vor "klammerauf" 
+						            rE.rN = rI[1].trim(); // alles vor "klammerauf"
 						            rE.rO = rI[3].trim(); // alles nach "klammerzu"
-						            window.console.log("Verwende Text: " + rE.rN + " - " + rE.rO + " (" + rE.rX + "," + rE.rY + ")");
+						            window.console
+						                .log("Verwende Text: " + rE.rN + " - " + rE.rO + " (" + rE.rX + "," + rE.rY + ")");
 						            rT.setText(rE.rN + " - " + rE.rO + " (" + rE.rX + "," + rE.rY + ")");
 						            rE.adopt(rT);
 						            rE.onclick = function(evt) {
@@ -274,15 +273,16 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 				window.console.log('[$Name$][ERROR]Fehler beim Aktualisieren des $Name$-Fensters: ' + ex);
 			}
 			try {
+				window.hk.Explorer.updateDimensions();
 				window.hk.Windows.makeReduceable("HkExplorer", {
 				    'reduce': $("HkWindowContentHkExplorer"),
 				    'title': "HkExplorer"
 				});
 				window.hk.Windows.makeScrollable("HkExplorer", {
 				    'scroll': $("HkWindowContentHkExplorer"),
-				    'title': "HkExplorer"
+				    'title': "HkExplorer",
+				    'autoScroll': true
 				});
-				window.hk.Explorer.updateDimensions();
 			} catch(ex) {
 				window.console.log('[$Name$][ERROR]Fehler bei der Finalisierung des $Name$-Fensters: ' + ex);
 			}

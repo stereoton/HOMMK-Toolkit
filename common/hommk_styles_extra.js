@@ -4,58 +4,15 @@
  * @todo Core und Shortcuts trennen - Ergänzungen warten auf Core und "docken" sich an...
  */
 window.HkStylesExtra = {
-    'Generic': {
-        'itemList': {
-            'paddingTop': '2px',
-            'paddingBottom': '2px',
-            'marginLeft': '0px',
-            'marginRight': '0px',
-            'marginTop': '0px',
-            'marginBottom': '0px',
-            'clear': 'both',
-            'float': 'none',
-            'backgroundColor': '#0e0e0e',
-            'height': 'auto',
-            'maxHeight': '800px',
-            'width': 'auto',
-            'maxWidth': '1200px'
-        },
-        'listItem': {
-            'deleteButton': {
-                'cursor': 'pointer',
-                'float': 'right',
-                'paddingTop': '3px'
-            },
-            'text': {
-                'cursor': 'pointer',
-                'width': 'auto',
-                'marginLeft': '2px',
-                'marginRight': '20px',
-                'paddingTop': '3px',
-                'paddingBottom': '3px'
-            },
-            'item': {
-                'padding': '2px 0px',
-                'borderTop': '1px solid #303030',
-                'clear': 'both'
-            }
-        }
-    },
     'Shortcuts': {
         'list': {
-            'paddingTop': '2px',
-            'paddingBottom': '2px',
-            'marginLeft': '0px',
-            'marginRight': '0px',
-            'marginTop': '0px',
-            'marginBottom': '0px',
+            'padding': '2px 0px',
+            'margin': '0px',
             'clear': 'both',
             'float': 'none',
             'backgroundColor': '#0e0e0e',
             'height': 'auto',
-            'maxHeight': '800px',
-            'width': 'auto',
-            'maxWidth': '1200px'
+            'width': 'auto'
         },
         'Form': {
             'inputX': {
@@ -132,12 +89,8 @@ window.HkStylesExtra = {
     'footer': {
         'clear': 'both',
         'float': 'none',
-        'marginTop': '0px',
-        'paddingTop': '3px',
-        'paddingBottom': '0px',
-        'marginBottom': '0px',
-        'marginLeft': '0px',
-        'marginRight': '0px',
+        'margin': '0px',
+        'paddingTop': '3px 0px 0px 0px',
         'height': 'auto',
         'width': '100%',
         'backgroundColor': '#1a1a1a'
@@ -159,37 +112,28 @@ window.HkStylesExtra = {
     },
     'content': {
         'margin': '0px',
-        'marginBottom': '0px',
-        'paddingTop': '2px',
-        'paddingBottom': '2px',
+        'padding': '2px 0px',
         'overflow': 'hidden',
-        'height': '48px',
+//        'height': '48px',
+//        'width': '160px',
         'minHeight': '32px',
-        'maxHeight': '800px',
-        'width': '160px',
         'minWidth': '120px',
-        'maxWidth': '1200px'
+        'maxHeight': parseInt(window.getHeight()) / 2 + 'px',
+        'maxWidth': parseInt(window.getWidth()) / 3 + 'px'
     },
     'header': {
         'zIndex': '96000',
-        'marginTop': '0px',
-        'marginBottom': '5px',
-        'paddingTop': '1px',
-        'paddingBottom': '1px',
-        'paddingLeft': '5px',
-        'paddingRight': '5px',
+        'marginTop': '0px 0px 5px 0px',
+        'padding': '1px 5px',
         'borderTopLeftRadius': '10px',
         'borderTopRightRadius': '10px',
         'backgroundColor': '#1a1a1a'
     },
     'title': {
         'fontSize': "0.8em",
-        'paddingLeft': '3px',
+        'padding': '0px 0px 2px 3px',
         'backgroundColor': 'transparent',
-        'paddingBottom': '2px',
-        'marginTop': '4px',
-        'marginBottom': '2px',
-        'marginRight': 'auto',
+        'margin': '4px auto 2px',
         'width': 'auto'
     },
     'reduceButton': {

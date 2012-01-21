@@ -99,12 +99,8 @@ if("undefined" == typeof window.HkStylesGeneric) {
 	            'selector': '.HkList',
 	            'styles': {
 	                'border': 'none',
-	                'paddingTop': '2px',
-	                'paddingBottom': '2px',
-	                'marginLeft': '0px',
-	                'marginRight': '0px',
-	                'marginTop': '0px',
-	                'marginBottom': '0px',
+	                'padding': '2px 0px',
+	                'margin': '0px',
 	                'clear': 'both',
 	                'float': 'none',
 	                'backgroundColor': '#0e0e0e',
@@ -118,7 +114,7 @@ if("undefined" == typeof window.HkStylesGeneric) {
 	            'selector': '.HkListItem',
 	            'styles': {
 	                'padding': '2px 0px',
-	                'borderTop': '1px solid #303030',
+	                'borderBottom': '1px solid #202020',
 	                'clear': 'both'
 	            }
 	        }, {
@@ -126,7 +122,8 @@ if("undefined" == typeof window.HkStylesGeneric) {
 	            'selector': '.HkListCategory',
 	            'styles': {
 	                'padding': '4px 0px',
-	                'borderTop': '2px solid #505050',
+	                'borderTop': '2px solid #252525',
+	                'borderBottom': '2px solid #505050',
 	                'clear': 'both'
 	            }
 	        }, {
@@ -135,10 +132,7 @@ if("undefined" == typeof window.HkStylesGeneric) {
 	            'styles': {
 	                'cursor': 'pointer',
 	                'width': 'auto',
-	                'marginLeft': '2px',
-	                'marginRight': '20px',
-	                'paddingTop': '3px',
-	                'paddingBottom': '3px'
+	                'padding': '3px 20px 3px 2px',
 	            }
 	        }]
 	});
