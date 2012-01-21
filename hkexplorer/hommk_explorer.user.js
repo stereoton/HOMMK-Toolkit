@@ -1,4 +1,4 @@
-window.$debug = window.$debug || 0;
+window.$debug = window.$debug || $Debug$;
 
 if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 	window.HkExplorerCreateClasses = function() {
