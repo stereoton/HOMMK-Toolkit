@@ -397,12 +397,16 @@
 					window.console.log('[HkPublic][ERROR]Fehler bei der Finalisierung des Shortcuts-Fensters: ' + ex);
 				}
 				try {
+					window.hk.Shortcuts.updateDimensions();
+				}	catch(ex) {
+					window.console.log('[HkPublic][WARN]Update der Abmessungen des Shortcuts-Fensters fehlgeschlagen: ' + ex);
+				}
+				try {
 					window.hk.Windows.makeScrollable("HkShortcuts", {
 					    'scroll': $("HkWindowContentHkShortcuts"),
 					    'title': "HkShortcuts",
 					    'autoScroll': true
-					});
-					window.hk.Shortcuts.updateDimensions();
+					}).start();
 				} catch(ex) {
 					window.console.log('[HkPublic][ERROR]Fehler bei der Finalisierung des Shortcuts-Fensters: ' + ex);
 				}

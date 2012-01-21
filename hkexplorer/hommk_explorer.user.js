@@ -59,15 +59,16 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 			    var contentNode = windowNode.getElement(".HkContent");
 			    window.console.log('[$Name$][DEBUG]Content-Element: ');
 			    window.console.log(contentNode);
+			    contentNode.preventTextSelection();
 			    contentNode.setStyle('paddingTop', '0px');
 			    window.console.log('[$Name$][DEBUG]Initialisiere Content-Node: ');
 			    this.createCitiesSection(contentNode);
 			    this.createRuinsSection(contentNode);
 			    window.console.log('[$Name$][DEBUG]Erzeuge Accordion: ');
-			    contentNode.accordionElements = contentNode.getElements(".HkListCategory");
+			    contentNode.accordionElements = contentNode.getElements(".HkList");
 			    window.console.log('[$Name$][DEBUG]Explorer Menu Elements: ');
 			    window.console.log(contentNode.accordionElements);
-			    contentNode.accordionTogglers = contentNode.getElements(".HkList");
+			    contentNode.accordionTogglers = contentNode.getElements(".HkListCategory");
 			    window.console.log('[$Name$][DEBUG]Explorer Menu Views: ');
 			    window.console.log(contentNode.accordionTogglers);
 			    new Accordion(contentNode.accordionElements, contentNode.accordionTogglers, {
@@ -76,29 +77,44 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 			        'display': 1,
 			        'opacity': false,
 			        'fixedHeight': parseInt(window.getHeight()) / 5 + "px",
-			        'onBackground': function() {
+			        'onBackground': function(evt) {
+			        	window.console.log('[$Name$][DEBUG]Explorer onBackground Event: ');
+			        	window.console.log(evt);
+			        	window.console.log('[$Name$][DEBUG]Suche HkListContainer...');
 			        	var bg = evt.target;
 			        	while(!bg.hasClass("HkListContainer")) {
 			        		bg = bg.getParent();
-			        		if("undefined" == typeof bg) return;
+			        		if("undefined" == typeof bg) {
+			        			window.console.log('[$Name$][WARN]Kein HkListContainer gefunden, Abbruch...');
+			        			return;
+			        		}
 			        	}
 			        	bg.autoScroller.stop();
 			        },
-			        'onActive': function() {
+			        'onActive': function(evt) {
+			        	window.console.log('[$Name$][DEBUG]Explorer onActive Event: ');
+			        	window.console.log(evt);
+			        	window.console.log('[$Name$][DEBUG]Suche HkListContainer...');
 			        	var bg = evt.target;
 			        	while(!bg.hasClass("HkListContainer")) {
 			        		bg = bg.getParent();
-			        		if("undefined" == typeof bg) return;
+			        		if("undefined" == typeof bg) {
+			        			window.console.log('[$Name$][WARN]Kein HkListContainer gefunden, Abbruch...');
+			        			return;
+			        		}
 			        	}
 			        	bg.autoScroller.start();
 			        }
 			    });
 		    },
-		    updateExplorer: function updateExplorer(eE) {
+		    updateExplorer: function updateExplorer() {
+        	window.console.log('[$Name$][DEBUG]Explorer-Update...');
+        	var eE = $("HkWindowContentHkExplorer");
 			    this.updateCities(eE);
 			    this.updateRuins(eE);
 		    },
 		    getCities: function getCities() {
+        	window.console.log('[$Name$][DEBUG]Rufe Städte ab...');
 			    if($chk(window.hk.Map.content.attachedRegionList)) {
 				    var regs = window.hk.Map.content.attachedRegionList;
 				    var cities = $A(regs).filter(function(reg, idx) {
@@ -109,6 +125,7 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 			    }
 		    },
 		    getRegions: function getRegions() {
+        	window.console.log('[$Name$][DEBUG]Rufe Regionen ab...');
 			    if($chk(window.hk.Map.content.attachedRegionList)) {
 				    var regs = window.hk.Map.content.attachedRegionList;
 				    var sel = $A(regs).filter(function(reg, idx) {
@@ -125,6 +142,7 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 			    	'id': 'HkExplorerRuins',
 			    	'class': 'HkListContainer'
 			    });
+			    rC.preventTextSelection();
 			    var rM = new Element("div", {
 		    		"id": "HkExplorerRuinsCategory",
 		        "class": "HkListCategory",
@@ -138,10 +156,10 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 		        "id": "HkExplorerRuinsList",
 		        "class": "HkList"
 			    });
+			    rV.preventTextSelection();
 			    rC.adopt(rM);
 			    rC.adopt(rV);
 			    eE.adopt(rC);
-			    this.updateRuins(eE);
 			    rC.autoScroller = new Scroller($("HkExplorerRuinsList"));
 		    },
 		    updateRuins: function updateRuins(eE) {
@@ -255,6 +273,7 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 			    	'id': 'HkExplorerCities',
 			    	'class': 'HkListContainer'
 			    });
+			    cC.preventTextSelection();
 			    var cM = new Element("div", {
 		    		"id": "HkExplorerCitiesCategory",
 		        "class": "HkListCategory",
@@ -268,13 +287,15 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 		        "id": "HkExplorerCitiesList",
 		        "class": "HkList"
 			    });
+			    cV.preventTextSelection();
 			    cC.adopt(cM);
 			    cC.adopt(cV);
 			    eE.adopt(cC);
-			    this.updateCities(eE);
 			    cC.autoScroller = new Scroller($("HkExplorerCitiesList"));
 		    },
 		    updateCities: function updateCities(eE) {
+			    window.console.log('[$Name$][DEBUG]Update der Städteliste: ');
+			    window.console.log($("HkExplorerCitiesList"));
 			    $("HkExplorerCitiesList").empty();
 			    var cities = this.getCities();
 			    if(cities.length > 0) {
@@ -283,10 +304,12 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 					    var cE = new Element("div", {
 						    "class": "HkListEntry"
 					    });
+					    cE.preventTextSelection();
 					    var cT = new Element("p", {
 						    "class": "HkListText"
 					    });
 					    cT.setText(c.cN + " - " + c.pN + ", " + c.iAN + "(" + c.x + "," + c.y + ")");
+					    cT.preventTextSelection();
 					    cE.adopt(cT);
 					    $("HkExplorerCitiesList").adopt(cE);
 				    });
@@ -325,8 +348,7 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 				    'scroll': $("HkWindowContentHkExplorer"),
 				    'title': "HkExplorer",
 				    'autoScroll': true
-				});
-				
+				}).start();
 			} catch(ex) {
 				window.console.log('[$Name$][ERROR]Fehler bei der Finalisierung des $Name$-Fensters: ' + ex);
 			}
