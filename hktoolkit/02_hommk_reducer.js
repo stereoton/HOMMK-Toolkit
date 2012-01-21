@@ -77,33 +77,31 @@ if(!window.hasOwnProperty("HkReducerCreateClasses")) {
 				    }
 			    },
 			    updateDimensions: function updateDimensions(target) {
-				    window.console.log("[HkReducer][DEBUG]Passe die Größen an\u2026");
+				    window.console.log("[HkReducer][DEBUG]Passe die Größen für " + target + " an\u2026");
 				    var divs = target.getElementsByTagName("div");
 				    $each(divs, function(aDiv) {
 					    var divHeight = $(aDiv).getStyle('height');
 					    var divId = aDiv.id || "N/A";
-					    window.console.log("[HkReducer][DEBUG]Passe die Höhe des Containers #" + divId + " an (" + divHeight
-					        + ")\u2026");
+//					    window.console.log("[HkReducer][DEBUG]Passe die Höhe des Containers #" + divId + " an (" + divHeight  + ")\u2026");
 					    if($chk(divHeight) && divHeight.toInt() <= 0 && divHeight != 'auto') {
-						    window.console.log("[HkReducer][DEBUG]Setze Höhe des Containers #" + divId + ": " + divHeight
-						        + " \u2192 auto\u2026");
+//						    window.console.log("[HkReducer][DEBUG]Setze Höhe des Containers #" + divId + ": " + divHeight + " \u2192 auto\u2026");
 						    aDiv.setStyle('height', 'auto');
-					    } else {
-						    window.console.log("[HkReducer][DEBUG]Lasse die Höhe des Containers #" + divId + " unverändert ("
-						        + divHeight + ")\u2026");
+//					    } else {
+//						    window.console.log("[HkReducer][DEBUG]Lasse die Höhe des Containers #" + divId + " unverändert ("  + divHeight + ")\u2026");
 					    }
 				    });
 				    var targetId = target.id || "N/A";
 				    var targetHeight = $(target).getStyle('height');
-				    window.console.log("[HkReducer][DEBUG]Setze Höhe des Hauptelements #" + targetId + ": " + targetHeight
-				        + " \u2192 auto\u2026");
-				    // $$(target, target.getParent()).setStyle('height', 'auto');
+//				    window.console.log("[HkReducer][DEBUG]Setze Höhe des Hauptelements #" + targetId + ": " + targetHeight  + " \u2192 auto\u2026");
+//				    $$(target, target.getParent()).setStyle('height', 'auto');
 				    target.setStyle('height', 'auto');
-				    var parentHeight = $(target.getParent).getStyle('height');
-				    var realParentHeight = target.getParent().getCoordinates().height + "px";
-				    window.console.log("[HkReducer][DEBUG]Setze Höhe des Slide-Elements: " + parentHeight + " \u2192 "
-				        + realParentHeight + "\u2026");
-				    target.getParent().setStyle('height', realParentHeight);
+				    var tP = $(target).getParent();
+				    if($defined(tP)) {
+				    	var parentHeight = tP.getStyle('height');
+				    	var realParentHeight = tP.getCoordinates().height + "px";
+					    window.console.log("[HkReducer][DEBUG]Setze Höhe des Slide-Elements: " + parentHeight + " \u2192 " + realParentHeight + "\u2026");
+					    tP.setStyle('height', realParentHeight);
+				    }
 			    }
 			});
 			Hk.HkReducer.implement(new Events, new Options);
