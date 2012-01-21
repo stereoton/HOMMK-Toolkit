@@ -78,43 +78,43 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 			        'opacity': false,
 			        'fixedHeight': parseInt(window.getHeight()) / 5 + "px",
 			        'onBackground': function(evt) {
-			        	window.console.log('[$Name$][DEBUG]Explorer onBackground Event: ');
-			        	window.console.log(evt);
-			        	window.console.log('[$Name$][DEBUG]Suche HkListContainer...');
-			        	var bg = evt.target;
-			        	while(!bg.hasClass("HkListContainer")) {
-			        		bg = bg.getParent();
-			        		if("undefined" == typeof bg) {
-			        			window.console.log('[$Name$][WARN]Kein HkListContainer gefunden, Abbruch...');
-			        			return;
-			        		}
-			        	}
-			        	bg.autoScroller.stop();
+				        window.console.log('[$Name$][DEBUG]Explorer onBackground Event: ');
+				        window.console.log(evt);
+				        window.console.log('[$Name$][DEBUG]Suche HkListContainer...');
+				        var bg = evt.target;
+				        while(!bg.hasClass("HkListContainer")) {
+					        bg = bg.getParent();
+					        if("undefined" == typeof bg) {
+						        window.console.log('[$Name$][WARN]Kein HkListContainer gefunden, Abbruch...');
+						        return;
+					        }
+				        }
+				        bg.autoScroller.stop();
 			        },
 			        'onActive': function(evt) {
-			        	window.console.log('[$Name$][DEBUG]Explorer onActive Event: ');
-			        	window.console.log(evt);
-			        	window.console.log('[$Name$][DEBUG]Suche HkListContainer...');
-			        	var bg = evt.target;
-			        	while(!bg.hasClass("HkListContainer")) {
-			        		bg = bg.getParent();
-			        		if("undefined" == typeof bg) {
-			        			window.console.log('[$Name$][WARN]Kein HkListContainer gefunden, Abbruch...');
-			        			return;
-			        		}
-			        	}
-			        	bg.autoScroller.start();
+				        window.console.log('[$Name$][DEBUG]Explorer onActive Event: ');
+				        window.console.log(evt);
+				        window.console.log('[$Name$][DEBUG]Suche HkListContainer...');
+				        var bg = evt.target;
+				        while(!bg.hasClass("HkListContainer")) {
+					        bg = bg.getParent();
+					        if("undefined" == typeof bg) {
+						        window.console.log('[$Name$][WARN]Kein HkListContainer gefunden, Abbruch...');
+						        return;
+					        }
+				        }
+				        bg.autoScroller.start();
 			        }
 			    });
 		    },
 		    updateExplorer: function updateExplorer() {
-        	window.console.log('[$Name$][DEBUG]Explorer-Update...');
-        	var eE = $("HkWindowContentHkExplorer");
+			    window.console.log('[$Name$][DEBUG]Explorer-Update...');
+			    var eE = $("HkWindowContentHkExplorer");
 			    this.updateCities(eE);
 			    this.updateRuins(eE);
 		    },
 		    getCities: function getCities() {
-        	window.console.log('[$Name$][DEBUG]Rufe Städte ab...');
+			    window.console.log('[$Name$][DEBUG]Rufe Städte ab...');
 			    if($chk(window.hk.Map.content.attachedRegionList)) {
 				    var regs = window.hk.Map.content.attachedRegionList;
 				    var cities = $A(regs).filter(function(reg, idx) {
@@ -125,12 +125,12 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 			    }
 		    },
 		    getRegions: function getRegions() {
-        	window.console.log('[$Name$][DEBUG]Rufe Regionen ab...');
+			    window.console.log('[$Name$][DEBUG]Rufe Regionen ab...');
 			    if($chk(window.hk.Map.content.attachedRegionList)) {
 				    var regs = window.hk.Map.content.attachedRegionList;
 				    var sel = $A(regs).filter(function(reg, idx) {
-				    	if(reg && "undefined" != typeof reg.contents) { return reg.contents.hasOwnProperty('cN'); }
-				    	return false;
+					    if(reg && "undefined" != typeof reg.contents) { return reg.contents.hasOwnProperty('cN'); }
+					    return false;
 				    });
 				    return regs;
 			    }
@@ -139,159 +139,147 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 			    window.console.log('[$Name$][DEBUG]Erzeuge Bereich der Ruinen: ');
 			    window.console.log(eE);
 			    var rC = new Element("div", {
-			    	'id': 'HkExplorerRuins',
-			    	'class': 'HkListContainer'
+			        'id': 'HkExplorerRuins',
+			        'class': 'HkListContainer'
 			    });
 			    rC.preventTextSelection();
+			    eE.adopt(rC);
 			    var rM = new Element("div", {
-		    		"id": "HkExplorerRuinsCategory",
-		        "class": "HkListCategory",
-		        'styles': {
-			        'cursor': 'pointer'
-		        }
+			        "id": "HkExplorerRuinsCategory",
+			        "class": "HkListCategory",
+			        'styles': {
+				        'cursor': 'pointer'
+			        }
 			    });
-			    rM.preventTextSelection();
 			    rM.setText("Ruinen");
+			    rM.preventTextSelection();
+			    rC.adopt(rM);
 			    var rV = new Element("div", {
-		        "id": "HkExplorerRuinsList",
-		        "class": "HkList"
+			        "id": "HkExplorerRuinsList",
+			        "class": "HkList"
 			    });
 			    rV.preventTextSelection();
-			    rC.adopt(rM);
 			    rC.adopt(rV);
-			    eE.adopt(rC);
 			    rC.autoScroller = new Scroller($("HkExplorerRuinsList"));
 		    },
 		    updateRuins: function updateRuins(eE) {
 			    window.console.log('[$Name$][DEBUG]Update der Ruinenliste: ');
 			    window.console.log($("HkExplorerRuinsList"));
 			    $("HkExplorerRuinsList").empty();
-			    var xhr, xhrs = [];
 			    for( var i = 1; i < 10; i++) {
-				    xhr = new Ajax(
-				        'http://mightandmagicheroeskingdoms.ubi.com/ajaxRequest/ruinsRegionNumberAutocompletion?start=' + i, {
-				            'method': 'get',
-				            'evalResponse': true,
-				            'onRequest': function() {
-					            window.console.log('[$Name$][DEBUG]Starte XHR-Request:');
-					            window.console.log(arguments);
-				            },
-				            'onStateChange': function() {
-					            window.console.log('[$Name$][DEBUG]XHR-Statusänderung:');
-					            window.console.log(arguments);
-				            },
-				            'onFailure': function() {
-					            window.console.log('[$Name$][DEBUG]XHR-Fehler:');
-					            window.console.log(arguments);
-				            },
-				            'onSuccess': function() {
-					            window.console.log('[$Name$][DEBUG]XHR-Anfrage erfolgreich::');
-					            window.console.log(arguments);
-				            },
-				            'onComplete': function() {
-					            window.console.log('[$Name$][DEBUG]XHR-Anfrage komplett:');
-					            window.console.log(this.response);
-					            var ruins = JSON.parse(this.response['text']);
-					            $each(ruins, function(r) {
-						            // "r" enthält genau 3 einträge: region, kurzer text mit region & bündnis und text mit region,
-						            // x,y und bündnis
-						            window.console.log('[$Name$][DEBUG]Gefundene Ruine:');
-						            window.console.log(r);
-						            var rD = r.getLast();
-						            window.console.log('[$Name$][DEBUG]Verwendeter Eintrag:');
-						            window.console.log(rD);
-						            // rD sollte ein string sein im format: "regnr (x, y) bnd"
-						            // der string davor im array enthält dann: "regnr - bnd"
-						            var rI = rD.match(/([^\(]+)\(([^\)]+)\)(.*)/);
-						            window.console.log('[$Name$][DEBUG]Auswertung:');
-						            window.console.log(rI);
-						            /*
-												 * rI sollte sein: 0. der gesamte treffer, also alles 1. alles vor dem runden "klammerauf" 2.
-												 * alles innerhalb der runden klammern, also "x, y" 3. alles hiner dem runden "klammerzu"
-												 */
-						            if(rI.length > 4) {
-							            window.console.log('[$Name$][DEBUG]Ruinen-Info passt nicht zum regulären Ausdruck:');
-							            window.console.log(rI);
+				    window.console.log('[$Name$][DEBUG]XHR-Request #' + i);
+				    new Ajax('http://mightandmagicheroeskingdoms.ubi.com/ajaxRequest/ruinsRegionNumberAutocompletion?start='
+				        + i, {
+				        'method': 'get',
+				        'evalResponse': true,
+				        'onRequest': function() {
+					        window.console.log('[$Name$][DEBUG]Starte XHR-Request:');
+					        window.console.log(arguments);
+				        },
+				        'onStateChange': function() {
+					        window.console.log('[$Name$][DEBUG]XHR-Statusänderung:');
+					        window.console.log(arguments);
+				        },
+				        'onFailure': function() {
+					        window.console.log('[$Name$][DEBUG]XHR-Fehler:');
+					        window.console.log(arguments);
+				        },
+				        'onSuccess': function() {
+					        window.console.log('[$Name$][DEBUG]XHR-Anfrage erfolgreich::');
+					        window.console.log(arguments);
+				        },
+				        'onComplete': function() {
+					        window.console.log('[$Name$][DEBUG]XHR-Anfrage komplett:');
+					        window.console.log(this.response);
+					        var ruins = JSON.parse(this.response['text']);
+					        $each(ruins, function(r) {
+						        // "r" enthält genau 3 einträge: region, kurzer text mit region & bündnis und text mit region,
+						        // x,y und bündnis
+						        window.console.log('[$Name$][DEBUG]Gefundene Ruine:');
+						        window.console.log(r);
+						        var rD = r.getLast();
+						        window.console.log('[$Name$][DEBUG]Verwendeter Eintrag:');
+						        window.console.log(rD);
+						        // rD sollte ein string sein im format: "regnr (x, y) bnd"
+						        // der string davor im array enthält dann: "regnr - bnd"
+						        var rI = rD.match(/([^\(]+)\(([^\)]+)\)(.*)/);
+						        window.console.log('[$Name$][DEBUG]Auswertung:');
+						        window.console.log(rI);
+						        /*
+										 * rI sollte sein: 0. der gesamte treffer, also alles 1. alles vor dem runden "klammerauf" 2. alles
+										 * innerhalb der runden klammern, also "x, y" 3. alles hiner dem runden "klammerzu"
+										 */
+						        if(rI.length > 4) {
+							        window.console.log('[$Name$][DEBUG]Ruinen-Info passt nicht zum regulären Ausdruck:');
+							        window.console.log(rI);
+						        }
+						        var rP = String(rI[2]).split(",");
+						        window.console.log('[$Name$][DEBUG]Koordinaten:');
+						        window.console.log(rP);
+						        /*
+										 * rP sollte sein: 0. X-Koord. 1. Y-Koord.
+										 */
+						        if(rP.length != 2) {
+							        window.console.log('[$Name$][DEBUG]Ruinentext passt nicht zum Schema:');
+							        window.console.log(rP);
+						        }
+						        var rE = new Element('div', {
+						            'class': "HkListEntry",
+						            'styles': {
+							            'cursor': 'pointer'
 						            }
-						            var rP = String(rI[2]).split(",");
-						            window.console.log('[$Name$][DEBUG]Koordinaten:');
-						            window.console.log(rP);
-						            /*
-												 * rP sollte sein: 0. X-Koord. 1. Y-Koord.
-												 */
-						            if(rP.length != 2) {
-							            window.console.log('[$Name$][DEBUG]Ruinentext passt nicht zum Schema:');
-							            window.console.log(rP);
-						            }
-						            var rE = new Element('div', {
-						                'class': "ExplRuin HkListEntry",
-						                'styles': {
-							                'cursor': 'pointer'
-						                }
-						            });
-						            rE.preventTextSelection();
-						            var rT = new Element('p', {
-						                'class': "HkListText",
-						                'styles': {
-							                'cursor': 'pointer'
-						                }
-						            });
-						            rT.preventTextSelection();
-						            rE.rX = rP[0].trim();
-						            rE.rY = rP[1].trim();
-						            rE.rN = rI[1].trim(); // alles vor "klammerauf"
-						            rE.rO = rI[3].trim(); // alles nach "klammerzu"
-						            window.console
-						                .log("Verwende Text: " + rE.rN + " - " + rE.rO + " (" + rE.rX + "," + rE.rY + ")");
-						            rT.setText(rE.rN + " - " + rE.rO + " (" + rE.rX + "," + rE.rY + ")");
-						            rE.adopt(rT);
-						            rE.onclick = function(evt) {
-							            window.console.log("[$Name$][DEBUG]Click Event an Ruineneintrag: ");
-							            window.console.log(evt);
-							            window.console.log(evt.target);
-							            evt.preventDefault();
-							            var cR = rE || evt.target;
-							            window.console.log("[$Name$][DEBUG]Event-Target: ");
-							            window.console.log(cR);
-							            window.console.log("[$Name$][DEBUG]Gehe zur Ruine " + cR.rX + "," + cR.rY);
-							            window.hk.gotoPosition(cR.rX, cR.rY);
-						            };
-						            $("HkExplorerRuinsList").adopt(rE);
-					            });
-				            }
-				        });
-				    window.console.log('[$Name$][DEBUG]XHR-Request #' + i + ': ');
-				    window.console.log(xhr);
-				    xhrs.push(xhr);
-				    xhr.request.delay(250, xhr);
+						        });
+						        rE.rX = rP[0].trim();
+						        rE.rY = rP[1].trim();
+						        rE.rN = rI[1].trim(); // alles vor "klammerauf"
+						        rE.rO = rI[3].trim(); // alles nach "klammerzu"
+						        window.console.log("Verwende Text: " + rE.rN + " - " + rE.rO + " (" + rE.rX + "," + rE.rY + ")");
+						        rE.setText(rE.rN + " - " + rE.rO + " (" + rE.rX + "," + rE.rY + ")");
+						        rE.preventTextSelection();
+						        rE.onclick = function(evt) {
+							        window.console.log("[$Name$][DEBUG]Click Event an Ruineneintrag: ");
+							        window.console.log(evt);
+							        window.console.log(evt.target);
+							        evt.preventDefault();
+							        var cR = rE || evt.target;
+							        window.console.log("[$Name$][DEBUG]Event-Target: ");
+							        window.console.log(cR);
+							        window.console.log("[$Name$][DEBUG]Gehe zur Ruine " + cR.rX + "," + cR.rY);
+							        window.hk.gotoPosition(cR.rX, cR.rY);
+						        };
+						        $("HkExplorerRuinsList").adopt(rE);
+					        });
+				        }
+				    }).request.delay(250);
 			    }
 		    },
 		    createCitiesSection: function createCitiesSection(eE) {
 			    window.console.log('[$Name$][DEBUG]Erzeuge Bereich der Städte: ');
 			    window.console.log(eE);
 			    var cC = new Element("div", {
-			    	'id': 'HkExplorerCities',
-			    	'class': 'HkListContainer'
-			    });
+			        'id': 'HkExplorerCities',
+			        'class': 'HkListContainer'
+			    }); // HkExplorerCities
 			    cC.preventTextSelection();
+			    eE.adopt(cC);
 			    var cM = new Element("div", {
-		    		"id": "HkExplorerCitiesCategory",
-		        "class": "HkListCategory",
-		        'styles': {
-			        'cursor': 'pointer'
-		        }
+			        "id": "HkExplorerCitiesCategory",
+			        "class": "HkListCategory",
+			        'styles': {
+				        'cursor': 'pointer'
+			        }
 			    });
-			    cM.preventTextSelection();
 			    cM.setText("Städte");
+			    cM.preventTextSelection();
+			    cC.adopt(cM);
 			    var cV = new Element("div", {
-		        "id": "HkExplorerCitiesList",
-		        "class": "HkList"
+			        "id": "HkExplorerCitiesList",
+			        "class": "HkList"
 			    });
 			    cV.preventTextSelection();
-			    cC.adopt(cM);
 			    cC.adopt(cV);
-			    eE.adopt(cC);
 			    cC.autoScroller = new Scroller($("HkExplorerCitiesList"));
+			    cc.autoScroller.start();
 		    },
 		    updateCities: function updateCities(eE) {
 			    window.console.log('[$Name$][DEBUG]Update der Städteliste: ');
@@ -304,20 +292,19 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 					    var cE = new Element("div", {
 						    "class": "HkListEntry"
 					    });
+					    cE.setText(c.cN + " - " + c.pN + ", " + c.iAN + "(" + c.x + "," + c.y + ")");
 					    cE.preventTextSelection();
-					    var cT = new Element("p", {
-						    "class": "HkListText"
-					    });
-					    cT.setText(c.cN + " - " + c.pN + ", " + c.iAN + "(" + c.x + "," + c.y + ")");
-					    cT.preventTextSelection();
-					    cE.adopt(cT);
+					    /*
+							 * var cT = new Element("p", { "class": "HkListText" }); cT.setText(c.cN + " - " + c.pN + ", " + c.iAN +
+							 * "(" + c.x + "," + c.y + ")"); cT.preventTextSelection(); cE.adopt(cT);
+							 */
 					    $("HkExplorerCitiesList").adopt(cE);
 				    });
 			    }
 			    window.console.log(cities);
 		    },
 		    updateDimensions: function updateDimensions() {
-		    	
+
 		    }
 		});
 		Hk.HkExplorer.implement(new Events, new Options);
@@ -344,6 +331,10 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 				    'reduce': $("HkWindowContentHkExplorer"),
 				    'title': "HkExplorer"
 				});
+			} catch(ex) {
+				window.console.log('[$Name$][ERROR]Fehler bei der Finalisierung des $Name$-Fensters: ' + ex);
+			}
+			try {
 				window.hk.Windows.makeScrollable("HkExplorer", {
 				    'scroll': $("HkWindowContentHkExplorer"),
 				    'title': "HkExplorer",
