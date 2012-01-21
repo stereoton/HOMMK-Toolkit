@@ -115,6 +115,7 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 			    rM.setText("Ruinen");
 			    eE.adopt(rM);
 			    var rV = new Element("div", {
+			    	"id": "HkRuins",
 				    "class": "ExplView HkList"
 			    });
 			    eE.adopt(rV);
@@ -149,9 +150,13 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 						            window.console.log('[$Name$][DEBUG]Gefundene Ruine:');
 						            window.console.log(r);
 						            var rD = r.getLast();
+						            window.console.log('[$Name$][DEBUG]Verwendeter Eintrag:');
+						            window.console.log(rD);
 						            // rD sollte ein string sein im format: "regnr (x, y) bnd"
 						            // der string davor im array enthält dann: "regnr - bnd"
-						            var rI = String(rD).match(/([^\(]+)\(([^\)]+)\)(.*)/);
+						            var rI = rD.match(/([^\(]+)\(([^\)]+)\)(.*)/);
+						            window.console.log('[$Name$][DEBUG]Auswertung:');
+						            window.console.log(rI);
 						            /* rI sollte sein: 
 						             * 0. der gesamte treffer, also alles
 						             * 1. alles vor dem runden "klammerauf"
@@ -161,9 +166,10 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 						            if(rI.length > 4) {
 							            window.console.log('[$Name$][DEBUG]Ruinen-Info passt nicht zum regulären Ausdruck:');
 							            window.console.log(rI);
-							            return;
 						            }
 						            var rP = String(rI[2]).split(",");
+						            window.console.log('[$Name$][DEBUG]Koordinaten:');
+						            window.console.log(rP);
 						            /* rP sollte sein:
 						             * 0. X-Koord.
 						             * 1. Y-Koord.
@@ -185,12 +191,13 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 							                'cursor': 'pointer'
 						                }
 						            });
-						            rT.preventTextSelection();
 						            rE.adopt(rT);
-						            rE.rX = String(rP[0]).trim();
-						            rE.rY = String(rP[1]).trim();
-						            rE.rN = String(rI[1]).trim(); // alles vor "klammerauf" 
-						            rE.rO = String(rI[3]).trim(); // alles nach "klammerzu"
+						            rT.preventTextSelection();
+						            rE.rX = rP[0].trim();
+						            rE.rY = rP[1].trim();
+						            rE.rN = rI[1].trim(); // alles vor "klammerauf" 
+						            rE.rO = rI[3].trim(); // alles nach "klammerzu"
+						            window.console.log("Verwende Text: " + rE.rN + " - " + rE.rO + " (" + rE.rX + "," + rE.rY + ")");
 						            rT.setText(rE.rN + " - " + rE.rO + " (" + rE.rX + "," + rE.rY + ")");
 						            rT.onclick = function(evt) {
 							            window.console.log("[$Name$][DEBUG]Click Event an Ruineneintrag: ");
@@ -198,10 +205,12 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 							            window.console.log(evt.target);
 							            evt.preventDefault();
 							            var cR = rE || evt.target;
+							            window.console.log("[$Name$][DEBUG]Event-Target: ");
+							            window.console.log(cR);
 							            window.console.log("[$Name$][DEBUG]Gehe zur Ruine " + cR.rX + "," + cR.rY);
 							            window.hk.gotoPosition(cR.rX, cR.rY);
 						            };
-						            rV.adopt(rE);
+						            $("HkRuins").adopt(rE);
 					            });
 				            }
 				        });
