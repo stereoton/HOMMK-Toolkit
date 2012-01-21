@@ -4,7 +4,7 @@ if(!window.hasOwnProperty("HkToolkitCreateClasses")) {
 			if(!window.hasOwnProperty("Hk")) {
 				window.Hk = new Class({
 				    idScript: "HkToolkit",
-				    version: "2012.01.20.07.59.060000",
+				    version: "$VersionString$",
 				    Coords: {
 				        lastRegion: {
 				            x: 0,
@@ -69,7 +69,7 @@ if(!window.hasOwnProperty("HkToolkitCreateClasses")) {
 				    gotoPosition: function gotoPosition(x, y, zoom) {
 					    var p;
 					    // window.console.log(this.HOMMK);
-					    if(!$defined(zoom)) zoom = window.HOMMK.REGION_WORLDMAP_ZOOM_13X13;
+					    if(!$defined(zoom)) zoom = window.HOMMK.REGION_WORLDMAP_ZOOM_35X35;
 					    p = window.HOMMK.getRegionNumberFromXY(x, y);
 					    if(!this.validatePosition(x) || !this.validatePosition(y)) return false;
 					    window.HOMMK.setCurrentView(zoom, p, x, y);
