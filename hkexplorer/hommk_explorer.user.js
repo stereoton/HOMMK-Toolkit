@@ -72,10 +72,26 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 			    window.console.log(contentNode.accordionTogglers);
 			    new Accordion(contentNode.accordionElements, contentNode.accordionTogglers, {
 			        'alwaysHide': false,
-			        'show': 1,
+			        'show': 0,
 			        'display': 1,
 			        'opacity': false,
-			        'fixedHeight': parseInt(window.getHeight()) / 6 + "px"
+			        'fixedHeight': parseInt(window.getHeight()) / 5 + "px",
+			        'onBackground': function() {
+			        	var bg = evt.target;
+			        	while(!bg.hasClass("HkListContainer")) {
+			        		bg = bg.getParent();
+			        		if("undefined" == typeof bg) return;
+			        	}
+			        	bg.autoScroller.stop();
+			        },
+			        'onActive': function() {
+			        	var bg = evt.target;
+			        	while(!bg.hasClass("HkListContainer")) {
+			        		bg = bg.getParent();
+			        		if("undefined" == typeof bg) return;
+			        	}
+			        	bg.autoScroller.start();
+			        }
 			    });
 		    },
 		    updateExplorer: function updateExplorer(eE) {
@@ -107,6 +123,7 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 			    window.console.log(eE);
 			    var rC = new Element("div", {
 			    	'id': 'HkExplorerRuins',
+			    	'class': 'HkListContainer'
 			    });
 			    var rM = new Element("div", {
 		    		"id": "HkExplorerRuinsCategory",
@@ -126,7 +143,6 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 			    eE.adopt(rC);
 			    this.updateRuins(eE);
 			    rC.autoScroller = new Scroller($("HkExplorerRuinsList"));
-			    rC.autoScroller.start();
 		    },
 		    updateRuins: function updateRuins(eE) {
 			    window.console.log('[$Name$][DEBUG]Update der Ruinenliste: ');
@@ -237,6 +253,7 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 			    window.console.log(eE);
 			    var cC = new Element("div", {
 			    	'id': 'HkExplorerCities',
+			    	'class': 'HkListContainer'
 			    });
 			    var cM = new Element("div", {
 		    		"id": "HkExplorerCitiesCategory",
@@ -256,7 +273,6 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 			    eE.adopt(cC);
 			    this.updateCities(eE);
 			    cC.autoScroller = new Scroller($("HkExplorerCitiesList"));
-			    cC.autoScroller.start();
 		    },
 		    updateCities: function updateCities(eE) {
 			    $("HkExplorerCitiesList").empty();
@@ -310,6 +326,7 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 				    'title': "HkExplorer",
 				    'autoScroll': true
 				});
+				
 			} catch(ex) {
 				window.console.log('[$Name$][ERROR]Fehler bei der Finalisierung des $Name$-Fensters: ' + ex);
 			}
