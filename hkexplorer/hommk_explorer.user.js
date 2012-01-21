@@ -168,7 +168,7 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 			    $("HkExplorerRuinsList").empty();
 			    for( var i = 1; i < 10; i++) {
 				    window.console.log('[$Name$][DEBUG]XHR-Request #' + i);
-				    new Ajax('http://mightandmagicheroeskingdoms.ubi.com/ajaxRequest/ruinsRegionNumberAutocompletion?start='
+				    var xhr = new Ajax('http://mightandmagicheroeskingdoms.ubi.com/ajaxRequest/ruinsRegionNumberAutocompletion?start='
 				        + i, {
 				        'method': 'get',
 				        'evalResponse': true,
@@ -250,7 +250,8 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 						        $("HkExplorerRuinsList").adopt(rE);
 					        });
 				        }
-				    }).request.delay(250);
+				    });
+				    xhr.request.delay(250, xhr);
 			    }
 		    },
 		    createCitiesSection: function createCitiesSection(eE) {
