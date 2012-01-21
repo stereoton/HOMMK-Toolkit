@@ -69,9 +69,10 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 			    contentNode.accordionTogglers = contentNode.getElements(".HkList");
 			    window.console.log('[$Name$][DEBUG]Explorer Menu Views: ');
 			    window.console.log(contentNode.accordionTogglers);
-			    contentNode.accordionMenu = new Accordion(contentNode.accordionElements, contentNode.accordionTogglers, {
+			    new Accordion(contentNode.accordionElements, contentNode.accordionTogglers, {
 				    'alwaysHide': false,
-				    'show': 1
+				    'show': 1,
+				    'display': 1
 			    });
 		    },
 		    updateExplorer: function updateExplorer(eE) {
@@ -109,18 +110,18 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 			    window.console.log('[$Name$][DEBUG]Update der Ruinenliste: ');
 			    window.console.log(eE);
 			    var rM = new Element("div", {
-			        "class": "ExplMenu HkListCategory",
+			        "class": "HkListCategory",
 			        'styles': {
 				        'cursor': 'pointer'
 			        }
 			    });
 			    rM.preventTextSelection();
 			    rM.setText("Ruinen");
-			    eE.adopt(rM);
 			    var rV = new Element("div", {
 			    	"id": "HkRuins",
-				    "class": "ExplView HkList"
+				    "class": "HkList"
 			    });
+			    eE.adopt(rM);
 			    eE.adopt(rV);
 			    var xhr, xhrs = [];
 			    for( var i = 1; i < 10; i++) {
@@ -194,7 +195,6 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 							                'cursor': 'pointer'
 						                }
 						            });
-						            rE.adopt(rT);
 						            rT.preventTextSelection();
 						            rE.rX = rP[0].trim();
 						            rE.rY = rP[1].trim();
@@ -202,7 +202,8 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 						            rE.rO = rI[3].trim(); // alles nach "klammerzu"
 						            window.console.log("Verwende Text: " + rE.rN + " - " + rE.rO + " (" + rE.rX + "," + rE.rY + ")");
 						            rT.setText(rE.rN + " - " + rE.rO + " (" + rE.rX + "," + rE.rY + ")");
-						            rT.onclick = function(evt) {
+						            rE.adopt(rT);
+						            rE.onclick = function(evt) {
 							            window.console.log("[$Name$][DEBUG]Click Event an Ruineneintrag: ");
 							            window.console.log(evt);
 							            window.console.log(evt.target);
