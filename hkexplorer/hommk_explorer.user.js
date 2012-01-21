@@ -165,7 +165,7 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 		    updateRuins: function updateRuins(eE) {
 			    window.console.log('[$Name$][DEBUG]Update der Ruinenliste: ');
 			    window.console.log($("HkExplorerRuinsList"));
-			    $("HkExplorerRuinsList").empty();
+			    $("HkExplorerRuinsList").getElements(".HkListEntry").remove();
 			    for( var i = 1; i < 10; i++) {
 				    window.console.log('[$Name$][DEBUG]XHR-Request #' + i);
 				    var xhr = new Ajax('http://mightandmagicheroeskingdoms.ubi.com/ajaxRequest/ruinsRegionNumberAutocompletion?start='
@@ -285,7 +285,7 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 		    updateCities: function updateCities(eE) {
 			    window.console.log('[$Name$][DEBUG]Update der Städteliste: ');
 			    window.console.log($("HkExplorerCitiesList"));
-			    $("HkExplorerCitiesList").empty();
+			    $("HkExplorerCitiesList").getElements(".HkListEntry").remove();
 			    var cities = this.getCities();
 			    if(cities.length > 0) {
 				    cities.each(function(c) {
