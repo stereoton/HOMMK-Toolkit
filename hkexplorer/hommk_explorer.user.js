@@ -149,7 +149,7 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 			        'class': 'HkListContainer'
 			    });
 			    rC.preventTextSelection();
-			    eE.adopt(rC);
+			    rC.injectInside(eE);
 			    var rM = new Element("div", {
 			        "id": "HkExplorerRuinsCategory",
 			        "class": "HkListCategory",
@@ -157,17 +157,18 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 				        'cursor': 'pointer'
 			        }
 			    });
-			    rM.setText("Ruinen");
+			    rM.setHTML("<p><strong>Ruinen</strong></p>");
 			    rM.preventTextSelection();
-			    rC.adopt(rM);
+			    rM.injectInside(rC);
 			    var rV = new Element("div", {
 			        "id": "HkExplorerRuinsList",
 			        "class": "HkList"
 			    });
 			    rV.preventTextSelection();
-			    rC.adopt(rV);
-			    rC.autoScroller = new Scroller($("HkExplorerRuinsList"));
-			    rC.autoScroller.start();
+			    rV.injectInside(rC);
+			    window.console.log('[$Name$][DEBUG]Erzeuge AutoScroller für Ruinen');
+			    rV.autoScroller = new Scroller($("HkExplorerRuinsList"));
+			    rV.autoScroller.start();
 		    },
 		    updateRuins: function updateRuins() {
 		    	var eE = $("HkWindowContentHkExplorer");
@@ -241,21 +242,21 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 						        rE.rY = rP[1].trim();
 						        rE.rN = rI[1].trim(); // alles vor "klammerauf"
 						        rE.rO = rI[3].trim(); // alles nach "klammerzu"
-						        window.console.log("Verwende Text: " + rE.rN + " - " + rE.rO + " (" + rE.rX + "," + rE.rY + ")");
-						        rE.setText(rE.rN + " - " + rE.rO + " (" + rE.rX + "," + rE.rY + ")");
+						        var rTx = "" + rE.rN + " - " + rE.rO + " (" + rE.rX + "," + rE.rY + ")";
+						        window.console.log("Verwende Text: " + rTx);
+						        rE.setHTML("<p class='HkListText'>" + rTx + "</p>");
 						        rE.preventTextSelection();
-						        rE.onclick = function(evt) {
+						        rE.addEvent('click', function(evt) {
 							        window.console.log("[$Name$][DEBUG]Click Event an Ruineneintrag: ");
 							        window.console.log(evt);
 							        window.console.log(evt.target);
-							        evt.preventDefault();
 							        var cR = rE || evt.target;
 							        window.console.log("[$Name$][DEBUG]Event-Target: ");
 							        window.console.log(cR);
 							        window.console.log("[$Name$][DEBUG]Gehe zur Ruine " + cR.rX + "," + cR.rY);
 							        window.hk.gotoPosition(cR.rX, cR.rY);
-						        };
-						        $("HkExplorerRuinsList").adopt(rE);
+						        });
+						        rE.injectInside($("HkExplorerRuinsList"));
 					        });
 				        }
 				    });
@@ -271,7 +272,7 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 			        'class': 'HkListContainer'
 			    }); // HkExplorerCities
 			    cC.preventTextSelection();
-			    eE.adopt(cC);
+			    cC.injectInside(eE);
 			    var cM = new Element("div", {
 			        "id": "HkExplorerCitiesCategory",
 			        "class": "HkListCategory",
@@ -279,15 +280,15 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 				        'cursor': 'pointer'
 			        }
 			    });
-			    cM.setText("Städte");
+			    cM.setHtml("Städte");
 			    cM.preventTextSelection();
-			    cC.adopt(cM);
+			    cM.injectInside(cC);
 			    var cV = new Element("div", {
 			        "id": "HkExplorerCitiesList",
 			        "class": "HkList"
 			    });
 			    cV.preventTextSelection();
-			    cC.adopt(cV);
+			    cV.injectInside(cC);
 			    cV.autoScroller = new Scroller($("HkExplorerCitiesList"));
 			    cV.autoScroller.start();
 		    },
@@ -303,19 +304,23 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 					    var cE = new Element("div", {
 						    "class": "HkListEntry"
 					    });
-					    cE.setText(c.cN + " - " + c.pN + ", " + c.iAN + "(" + c.x + "," + c.y + ")");
+					    var cTx = "" + c.cN + " - " + c.pN + ", " + c.iAN + "(" + c.x + "," + c.y + ")";
+					    cE.setHTML("<p class='HkListText'>" + cTx + "</p>");
 					    cE.preventTextSelection();
 					    /*
 							 * var cT = new Element("p", { "class": "HkListText" }); cT.setText(c.cN + " - " + c.pN + ", " + c.iAN +
 							 * "(" + c.x + "," + c.y + ")"); cT.preventTextSelection(); cE.adopt(cT);
 							 */
-					    $("HkExplorerCitiesList").adopt(cE);
+					    cE.injectInside($("HkExplorerCitiesList"));
 				    });
 			    }
 			    window.console.log(cities);
 		    },
 		    updateDimensions: function updateDimensions() {
-
+		    	var eE = $("HkWindowContentHkExplorer");
+		    	eE.setStyles({
+		    		'maxHeight': (parseInt(window.getHeight()) / 2) + "px"
+		    	});
 		    }
 		});
 		Hk.HkExplorer.implement(new Events, new Options);
