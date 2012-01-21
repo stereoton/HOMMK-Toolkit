@@ -279,7 +279,7 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 			    cV.preventTextSelection();
 			    cC.adopt(cV);
 			    cC.autoScroller = new Scroller($("HkExplorerCitiesList"));
-			    cc.autoScroller.start();
+			    cC.autoScroller.start();
 		    },
 		    updateCities: function updateCities(eE) {
 			    window.console.log('[$Name$][DEBUG]Update der Städteliste: ');
