@@ -280,7 +280,7 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 				        'cursor': 'pointer'
 			        }
 			    });
-			    cM.setHtml("Städte");
+			    cM.setHTML("<p><strong>Städte</strong></p>");
 			    cM.preventTextSelection();
 			    cM.injectInside(cC);
 			    var cV = new Element("div", {
