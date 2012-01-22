@@ -139,17 +139,20 @@ if("undefined" == typeof window.HkStylesGeneric) {
 	        }, {
 	            'selector': '.HkListItem',
 	            'styles': {
-	                'padding': '2px 0px',
-	                'borderBottom': '1px solid #202020',
-//	                'clear': 'both'
+	                'padding': '1px 0px',
 	            }
+	        }, {
+            'selector': '.HkListText',
+            'styles': {
+                'font-family': 'monospace',
+                'font-size': '0.95em'
+            }
 	        }, {
 	            'selector': '.HkListCategory',
 	            'styles': {
 	                'padding': '4px 0px',
 	                'borderTop': '1px solid #252525',
 	                'borderBottom': '2px solid #505050',
-//	                'clear': 'both'
 	            }
 	        }, {
 	            'selector': '.HkListText',

@@ -337,7 +337,7 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 					    			break;
 					    		}
 					    		case "a": {
-					    			iV = stringPadRight(iV, 18);
+					    			iV = stringPadRight(iV, 20);
 					    			break;
 					    		}
 					    		case "xy": {
