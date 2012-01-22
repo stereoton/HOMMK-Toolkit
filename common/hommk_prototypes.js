@@ -11,20 +11,20 @@ if(String.prototype.toCurrency == null) {
 }
 
 if(String.prototype.padLeft == null) {
-	String.prototype.padLeft = function padLeft(size, chr) {
+	String.prototype.padLeft = function (size, chr) {
 		var input = this.toString();
 		while(input.length < size) {
-			input = chr + input;
+			input = String(chr) + String(input);
 		}
 		return input;
 	};
 }
 
 if(String.prototype.padRight == null) {
-	String.prototype.padRight = function padRight(size, chr) {
+	String.prototype.padRight = function (size, chr) {
 		var input = this.toString();
 		while(input.length < size) {
-			input = input + chr;
+			input = String(chr) + String(input);
 		}
 		return input;
 	};
