@@ -20,6 +20,16 @@ if(String.prototype.padLeft == null) {
 	};
 }
 
+if(String.prototype.padRight == null) {
+	String.prototype.padRight = function padRight(size, chr) {
+		var input = this.toString();
+		while(input.length < size) {
+			input = input + chr;
+		}
+		return input;
+	};
+}
+
 if(Number.prototype.toK == null) {
 	Number.prototype.toK = function toK() {
 		var n = Number(this.toString());

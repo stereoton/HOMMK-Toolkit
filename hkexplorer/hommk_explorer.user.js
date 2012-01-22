@@ -330,7 +330,22 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 					    	window.console.log('[$Name$][DEBUG]Ermittle Key für Position #' + x);
 					    	var cK = dO[x];
 					    	window.console.log('[$Name$][DEBUG]Key für Position #' + x + ": " + cK);
-	            	rTx += String(r[cK]);
+					    	var iV = r[cK];
+					    	switch(cK) {
+					    		case "n": {
+					    			iV.padLeft(5, " ");
+					    			break;
+					    		}
+					    		case "a": {
+					    			iV.padRight(18, " ");
+					    			break;
+					    		}
+					    		case "xy": {
+					    			iV.padLeft(8, " ");
+					    			break;
+					    		}
+					    	}
+	            	rTx += String(iV);
 					    	window.console.log('[$Name$][DEBUG]Text-Eintrag #' + x + ": " + rTx);
 	            	if(x + 1 < 3) rTx += sS;
 	            }
