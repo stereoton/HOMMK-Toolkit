@@ -69,7 +69,7 @@ if(!window.hasOwnProperty("HkToolkitCreateClasses")) {
 				    gotoPosition: function gotoPosition(x, y, zoom) {
 					    var p;
 					    // window.console.log(this.HOMMK);
-					    if(!$defined(zoom)) zoom = window.HOMMK.REGION_WORLDMAP_ZOOM_35X35;
+					    if(!$defined(zoom) || !HOMMK.REGION_ZOOM_LIST.contains(zoom)) zoom = window.HOMMK.REGION_WORLDMAP_ZOOM_13X13;
 					    p = window.HOMMK.getRegionNumberFromXY(x, y);
 					    if(!this.validatePosition(x) || !this.validatePosition(y)) return false;
 					    window.HOMMK.setCurrentView(zoom, p, x, y);

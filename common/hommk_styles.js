@@ -103,27 +103,27 @@ if("undefined" == typeof window.HkStylesGeneric) {
 //	                'maxWidth': parseInt(window.getWidth()) + 'px'
 	            }
 	        }, {
-//	            'selector': '#HkWindowContentHkExplorer',
-//	            'styles': {
+	            'selector': '#HkWindowContentHkExplorer',
+	            'styles': {
 //	                'minHeight': '300px',
 //	                'height': '300px',
 //	                'overflow': 'hidden',
-//	                'height': 'auto',
+	                'height': 'auto',
 //	                'maxHeight': parseInt(window.getHeight()) + 'px',
 //	                'maxWidth': parseInt(window.getWidth()) + 'px'
-//	            }
-//	        }, {
+	            }
+	        }, {
 //	            'force': true,
-//	            'selector': '.HkListContainer',
-//	            'styles': {
+	            'selector': '.HkListContainer',
+	            'styles': {
 //	                'border': 'none',
 //	                'padding': '0',
 //	                'margin': 'auto',
 //	                'clear': 'none',
 //	                'overflow': 'hidden',
-//	                'height': 'auto'
-//	            }
-//	        }, {
+	                'height': 'auto'
+	            }
+	        }, {
 	            'selector': '.HkList',
 	            'styles': {
 	                'border': 'none',
