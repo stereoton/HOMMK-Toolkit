@@ -30,8 +30,6 @@
 			
 			/**
 			 * Datenstruktur für Shortcuts
-			 * 
-			 * @todo Auslagern
 			 */
 			Hk.Shortcut = new Class({
 			    $debug: 1,
@@ -90,8 +88,6 @@
 			
 			/**
 			 * Shortcuts
-			 * 
-			 * @todo Auslagern
 			 */
 			Hk.HkShortcutsWindow = new Class({
 			    $debug: 1,
