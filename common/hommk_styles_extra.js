@@ -1,7 +1,6 @@
 /**
- * CSS
- * 
- * @todo Core und Shortcuts trennen - Ergänzungen warten auf Core und "docken" sich an...
+ * @author Gelgamek <gelgamek@arcor.de>
+ * @copyright Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
  */
 window.HkStylesExtra = {
     'Shortcuts': {

@@ -1,3 +1,7 @@
+/**
+ * @author Gelgamek <gelgamek@arcor.de>
+ * @copyright Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
+ */
 try {
 	if("undefined" == typeof window.console) {
 		window.console = {

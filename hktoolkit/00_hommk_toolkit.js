@@ -1,3 +1,7 @@
+/**
+ * @author Gelgamek <gelgamek@arcor.de>
+ * @copyright Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
+ */
 if(!window.hasOwnProperty("HkToolkitCreateClasses")) {
 	window.HkToolkitCreateClasses = function() {
 		try {

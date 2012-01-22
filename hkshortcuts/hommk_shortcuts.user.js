@@ -1,4 +1,8 @@
-	// Master-Switch f. Debug-Ausgabe
+/**
+ * @author Gelgamek <gelgamek@arcor.de>
+ * @copyright Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
+ */
+// Master-Switch f. Debug-Ausgabe
 	window.$debug = $Debug$;
 	try {
 		if(!window.hasOwnProperty("$Name$AssetLoader")) {
