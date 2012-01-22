@@ -333,15 +333,15 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 					    	var iV = r[cK];
 					    	switch(cK) {
 					    		case "n": {
-					    			iV = iV.padLeft(5, " ");
+					    			iV = stringPadLeft(iV, 5, " ");
 					    			break;
 					    		}
 					    		case "a": {
-					    			iV = iV.padRight(18, " ");
+					    			iV = stringPadRight(iV, 18, " ");
 					    			break;
 					    		}
 					    		case "xy": {
-					    			iV = iV.padLeft(8, " ");
+					    			iV = stringPadLeft(iV, 8, " ");
 					    			break;
 					    		}
 					    	}

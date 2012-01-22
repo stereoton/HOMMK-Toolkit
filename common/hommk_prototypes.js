@@ -10,23 +10,33 @@ if(String.prototype.toCurrency == null) {
 	};
 }
 
-if(String.prototype.padLeft == null) {
-	String.prototype.padLeft = function (size, chr) {
-		var input = this.toString();
-		while(input.length < size) {
-			input = String(chr) + String(input);
+if("undefined" == typeof stringPadLeft) {
+	var stringPadLeft = function(str, size, chr) {
+		while(str.length < size) {
+			str = String(chr) + String(str);
 		}
-		return input;
+		return str;
+	}
+}
+
+if("undefined" == typeof stringPadRight) {
+	var stringPadRight = function(str, size, chr) {
+		while(str.length < size) {
+			str = String(str) + String(chr);
+		}
+		return str;
+	}
+}
+
+if(String.prototype.padLeft == null || String.padLeft == null) {
+	String.prototype.padLeft = function (size, chr) {
+		return stringPadLeft(this.toString, size, chr);
 	};
 }
 
-if(String.prototype.padRight == null) {
+if(String.prototype.padRight == null || String.padRight == null) {
 	String.prototype.padRight = function (size, chr) {
-		var input = this.toString();
-		while(input.length < size) {
-			input = String(chr) + String(input);
-		}
-		return input;
+		return stringPadRight(this.toString(), size, chr);
 	};
 }
 
