@@ -16,7 +16,7 @@ if("undefined" == typeof stringPadLeft) {
 			str = String(chr) + String(str);
 		}
 		return str;
-	}
+	};
 }
 
 if("undefined" == typeof stringPadRight) {
@@ -25,7 +25,7 @@ if("undefined" == typeof stringPadRight) {
 			str = String(str) + String(chr);
 		}
 		return str;
-	}
+	};
 }
 
 if(String.prototype.padLeft == null || String.padLeft == null) {
