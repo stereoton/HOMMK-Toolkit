@@ -317,7 +317,9 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 	            var rE = new Element('div', {
                 'class': "HkListEntry",
                 'styles': {
-	                'cursor': 'pointer'
+	                'cursor': 'pointer',
+	                'fontFamily': 'monospace',
+	                'fontSize': '0.9em'
                 }
 	            });
 				    	window.console.log('[$Name$][DEBUG]Erzeuge Text für Eintrag #' + j);
@@ -350,7 +352,7 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 	            	if(x + 1 < 3) rTx += sS;
 	            }
 	            window.console.log("Verwende Text: " + rTx);
-	            rE.innerHTML = "<p class='HkListText'>" + rTx + "</p>";
+	            rE.innerHTML = "<p class='HkListText' style='font-family: monospace;'>" + rTx + "</p>";
 	            rE.preventTextSelection();
 	            rE.addEvent('click', function(evt) {
 		            window.console.log("[$Name$][DEBUG]Click Event an Ruineneintrag: ");

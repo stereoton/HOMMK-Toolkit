@@ -137,15 +137,17 @@ if("undefined" == typeof window.HkStylesGeneric) {
 	                'backgroundColor': '#0e0e0e'
 	            }
 	        }, {
-	            'selector': '.HkListItem',
+	            'selector': '.HkListEntry',
 	            'styles': {
 	                'padding': '1px 0px',
+	                'fontFamily': 'monospace'
 	            }
 	        }, {
+	        	'force': true,
             'selector': '.HkListText',
             'styles': {
-                'font-family': 'monospace',
-                'font-size': '0.95em'
+                'fontFamily': 'monospace',
+                'fontSize': '0.95em'
             }
 	        }, {
 	            'selector': '.HkListCategory',
