@@ -12,6 +12,7 @@ if(String.prototype.toCurrency == null) {
 
 if("undefined" == typeof stringPadLeft) {
 	var stringPadLeft = function(str, size, chr) {
+		if(chr == null || "undefined" == typeof chr) chr = " ";
 		while(str.length < size) {
 			str = String(chr) + String(str);
 		}
@@ -21,6 +22,7 @@ if("undefined" == typeof stringPadLeft) {
 
 if("undefined" == typeof stringPadRight) {
 	var stringPadRight = function(str, size, chr) {
+		if(chr == null || "undefined" == typeof chr) chr = " ";
 		while(str.length < size) {
 			str = String(str) + String(chr);
 		}
@@ -30,12 +32,14 @@ if("undefined" == typeof stringPadRight) {
 
 if(String.prototype.padLeft == null || String.padLeft == null) {
 	String.prototype.padLeft = function (size, chr) {
+		if(chr == null || "undefined" == typeof chr) chr = " ";
 		return stringPadLeft(this.toString, size, chr);
 	};
 }
 
 if(String.prototype.padRight == null || String.padRight == null) {
 	String.prototype.padRight = function (size, chr) {
+		if(chr == null || "undefined" == typeof chr) chr = " ";
 		return stringPadRight(this.toString(), size, chr);
 	};
 }
