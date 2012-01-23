@@ -421,6 +421,8 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 			try {
 				window.console.log('[$Name$][DEBUG]Erzeuge $Name$-Fenster');
 				window.hk.Explorer = new window.Hk.HkExplorer();
+				var hkEA = window.Hk.HkAdapter();
+				hkEA.injectIntoAll("HkWindowContentHkExplorer", "HkExplorer");
 			} catch(ex) {
 				window.console.log('[$Name$][ERROR]Fehler beim Erzeugen des $Name$-Fensters: ' + ex);
 			}
@@ -454,7 +456,7 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 	};
 	window.$Name$DependentObjectsAvailable = function() {
 		try {
-			return window.Hk && window.hk && window.Hk.HkWindows && window.hk.Windows;
+			return window.Hk && window.hk && window.Hk.HkWindows && window.hk.Windows && $("sprintf07b1");
 		} catch(ex) {
 			return false;
 		}

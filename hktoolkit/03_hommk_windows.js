@@ -11,6 +11,72 @@ if(!window.hasOwnProperty("HkWindowsCreateClasses")) {
 				'storageKey': 'HkWindowsInternal'
 			});
 		}
+		if(!Hk.hasOwnProperty("HkAdapter")) {
+			Hk.HkAdapter = new Class({
+				initialize: function() {
+					return this;
+				},
+				injectIntoAll: function injectIntoAll(id, name) {
+					$(id).setStyle('display', none);
+					var results = [];
+					results.push(this.injectIntoHOMMKGold(id, name));
+					if(!results.every(function(val, idx) { return !!(val);})) {;
+						$(id).setStyle('display', "block");
+					}
+				},
+				injectIntoHOMMKGold: function injectIntoHOMMKGold(id, name) {
+					if("undefined" == typeof id) return false;
+					if("undefined" == typeof name) name = id;
+					window.console.log("[$Name$][DEBUG]Prüfe HOMMK Gold.");
+					var hkgT = $E('div.ui-widget', $("MainContainer"));
+					//"z-index: 101000; position: absolute; top: -1px; width: 100%; right: -1px; border: 0px none; left: -5px; overflow: visible; height: 17px; max-height: 17px;">
+					var hgST = {
+							zIndex: 101000,
+							position: "absolute",
+							width: "100%",
+							maxHeight: '17px'
+					};
+					if(hkgT.getStyles('zIndex', 'position', 'width', 'maxHeight') != hgST) return false;
+					window.console.log("[$Name$][DEBUG]HOMMK Gold vorhanden.");
+					window.console.log("[$Name$][DEBUG]Rufe HOMMK Gold-Menu ab.");
+					var hgTR = hkgT.getElement("table tr");
+					var hgTD = hkgT.getLast();
+					var hgML = hkTD.getFirst();
+					/** @type Node */
+					window.console.log("[$Name$][DEBUG]Lege Eintrag für " + name + " im Menü an (ID: " + id + ")");
+					var hgAC = new Element("td");
+					var hgAL = new Element("a");
+					window.console.log("[$Name$][DEBUG]Übertrage Stile.");
+					hgAC.setAttribute('style', hgTD.getAttribute(style));
+					window.console.log("[$Name$][DEBUG]Übertrage Attribute.");
+					hgAL.setProperties({
+						"class": hgML.getAttribute("class"),
+						"style": hgML.getAttribute("style"),
+						"href": hgML.getAttribute("href"),
+						"target": hgML.getAttribute("target")
+					});
+					hgAL.setText(name);
+					window.console.log("[$Name$][DEBUG]Registriere Event-Handler.");
+					hgAL.onclick = function(evt) {
+						window.console.log("[$Name$][DEBUG]HOMMK GOLD Adapter Link geklickt...");
+						evt.preventDefault();
+						var oS = $(id).getStyle('display');
+						var nS = oS == "none" ? "block" : "none"; 
+						window.console.log("[$Name$][DEBUG]Setze display-Wert von " + name + " auf " + nS);
+						$(id).setStyle('display', nS);
+					};
+					hgAL.injectInside(hgAC);						
+					window.console.log("[$Name$][DEBUG]Registriere Adapter im HOMMK GOLD Menü...");
+					hgAC.injectInside(hgTR);
+					/* <a class="toolbar_button ui-button ui-button-text-only 
+					 * ui-widget ui-state-default " style="display: block; text-align: 
+					 * center; width: 120px;" target="_blank" href="#"><img 
+					 * src="http://img834.imageshack.us/img834/9264/infotj.png">
+					 * info-panel</a> */
+					return true;
+				}
+			});
+		}
 		if(!Hk.hasOwnProperty("HkWindows")) {
 			Hk.HkWindows = new Class(
 			    {
