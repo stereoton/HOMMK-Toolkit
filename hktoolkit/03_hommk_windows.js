@@ -11,24 +11,31 @@ if(!window.hasOwnProperty("HkWindowsCreateClasses")) {
 				'storageKey': 'HkWindowsInternal'
 			});
 		}
-		if(!Hk.hasOwnProperty("HkAdapter")) {
-			Hk.HkAdapter = new Class({
+		if(!window.Hk.hasOwnProperty("HkAdapter")) {
+			window.Hk.HkAdapter = new Class({
 				initialize: function() {
 					return this;
 				},
 				injectIntoAll: function injectIntoAll(id, name) {
+					if($(id) == null) {
+						window.console.log("[$Name$][DEBUG]injectIntoAll-Id ist leer.");
+						return false;
+					}
 					$(id).setStyle('display', none);
 					var results = [];
 					results.push(this.injectIntoHOMMKGold(id, name));
-					if(!results.every(function(val, idx) { return !!(val);})) {;
+					if(results.contains(false)) {
+						window.console.log("[$Name$][DEBUG]injectInto… fehlgeschlagen, blende Fenster ein.");
 						$(id).setStyle('display', "block");
+						return false;
 					}
+					window.console.log("[$Name$][DEBUG]injectIntoAll erfolgreich.");
 				},
 				injectIntoHOMMKGold: function injectIntoHOMMKGold(id, name) {
 					if("undefined" == typeof id) return false;
 					if("undefined" == typeof name) name = id;
 					window.console.log("[$Name$][DEBUG]Prüfe HOMMK Gold.");
-					var hkgT = $E('div.ui-widget', $("MainContainer"));
+					var hkgT = $("MainContainer").getElement('div.ui-widget');
 					//"z-index: 101000; position: absolute; top: -1px; width: 100%; right: -1px; border: 0px none; left: -5px; overflow: visible; height: 17px; max-height: 17px;">
 					var hgST = {
 							zIndex: 101000,
@@ -40,7 +47,7 @@ if(!window.hasOwnProperty("HkWindowsCreateClasses")) {
 					window.console.log("[$Name$][DEBUG]HOMMK Gold vorhanden.");
 					window.console.log("[$Name$][DEBUG]Rufe HOMMK Gold-Menu ab.");
 					var hgTR = hkgT.getElement("table tr");
-					var hgTD = hkgT.getLast();
+					var hgTD = hkTR.getLast();
 					var hgML = hkTD.getFirst();
 					/** @type Node */
 					window.console.log("[$Name$][DEBUG]Lege Eintrag für " + name + " im Menü an (ID: " + id + ")");
