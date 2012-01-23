@@ -6,18 +6,6 @@ window.$debug = window.$debug || $Debug$;
 
 if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 	window.HkExplorerCreateClasses = function() {
-		try {
-			window.$Name$AssetLoader = new AssetLoader({
-				'SHA256CryptoJs': {
-					'url': 'http://crypto-js.googlecode.com/files/2.5.3-crypto-sha256.js'
-				},
-				'sprintf07b1': {
-					'url': 'http://sprintf.googlecode.com/files/sprintf-0.7-beta1.js'
-				}
-			});
-		} catch(ex) {
-			window.console.log('[$Name$AssetLoader][ERROR]' + ex);
-		}
 		
 		var Hk = window.Hk;
 		var hk = window.hk;
@@ -456,7 +444,7 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 	};
 	window.$Name$DependentObjectsAvailable = function() {
 		try {
-			return window.Hk && window.hk && window.Hk.HkWindows && window.hk.Windows && $("sprintf07b1");
+			return window.Hk && window.hk && window.Hk.HkWindows && window.hk.Windows;
 		} catch(ex) {
 			return false;
 		}

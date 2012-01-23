@@ -46,4 +46,16 @@ if("undefined" == typeof AssetLoader) {
 		    this.waiting.remove(scriptName);
 	    }
 	});
+	try {
+		window.$Name$AssetLoader = new AssetLoader({
+			'SHA256CryptoJs': {
+				'url': 'http://crypto-js.googlecode.com/files/2.5.3-crypto-sha256.js'
+			},
+			'sprintf07b1': {
+				'url': 'http://sprintf.googlecode.com/files/sprintf-0.7-beta1.js'
+			}
+		});
+	} catch(ex) {
+		window.console.log('[$Name$AssetLoader][ERROR]' + ex);
+	}
 }
