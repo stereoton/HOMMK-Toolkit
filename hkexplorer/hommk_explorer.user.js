@@ -431,7 +431,7 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 			}
 			try {
 			window.hk.hkAdapter = new window.Hk.HkAdapter();
-			window.hk.hkAdapter.injectIntoAll(window.hk.Explorer.$hkwin, "HkExplorer");
+			window.hk.hkAdapter.injectIntoAll($("HkWindowHkExplorer"), "HkExplorer");
 			} catch(ex) {
 				window.console.log('[$Name$][ERROR]Fehler bei der Finalisierung des $Name$-Fensters: ' + ex);
 			}			
