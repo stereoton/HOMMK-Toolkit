@@ -44,6 +44,17 @@ if(String.prototype.padRight == null || String.padRight == null) {
 	};
 }
 
+if(String.prototype.removeAtLeft == null) {
+	String.prototype.removeAtLeft = function (chr) {
+		if(chr == null || "undefined" == typeof chr) chr = "0";
+		var str = this.toString();
+		while(str.charAt(0) === chr) {
+			str = str.substr(1);
+		}
+		return str;
+	};
+}
+
 if(Number.prototype.toK == null) {
 	Number.prototype.toK = function toK() {
 		var n = Number(this.toString());

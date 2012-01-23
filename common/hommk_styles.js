@@ -102,29 +102,16 @@ if("undefined" == typeof window.HkStylesGeneric) {
 	            'force': true,
 	            'selector': '#HkWindowHkExplorer',
 	            'styles': {
-	                'height': 'auto',
-//	                'maxHeight': parseInt(window.getHeight()) + 'px',
-//	                'maxWidth': parseInt(window.getWidth()) + 'px'
+	                'height': 'auto'
 	            }
 	        }, {
 	            'selector': '#HkWindowContentHkExplorer',
 	            'styles': {
-//	                'minHeight': '300px',
-//	                'height': '300px',
-//	                'overflow': 'hidden',
 	                'height': 'auto',
-//	                'maxHeight': parseInt(window.getHeight()) + 'px',
-//	                'maxWidth': parseInt(window.getWidth()) + 'px'
 	            }
 	        }, {
-//	            'force': true,
 	            'selector': '.HkListContainer',
 	            'styles': {
-//	                'border': 'none',
-//	                'padding': '0',
-//	                'margin': 'auto',
-//	                'clear': 'none',
-//	                'overflow': 'hidden',
 	                'height': 'auto'
 	            }
 	        }, {
@@ -132,37 +119,49 @@ if("undefined" == typeof window.HkStylesGeneric) {
 	            'styles': {
 	                'border': 'none',
 	                'padding': '0px',
-//	                'clear': 'both',
-//	                'height': 'auto',
 	                'backgroundColor': '#0e0e0e'
 	            }
 	        }, {
+            	'force': true,
 	            'selector': '.HkListEntry',
 	            'styles': {
 	                'padding': '1px 0px',
-	                'fontFamily': 'monospace'
 	            }
+	        }, {
+            'force': true,
+            'selector': '.alignCenter',
+            'styles': {
+                'textAlign': 'center'
+            	}
+	        }, {
+            'force': true,
+	          'selector': '.alignRight',
+	          'styles': {
+	              'textAlign': 'right'
+	          	}
+	        }, {
+            'force': true,
+	          'selector': '.alignLeft',
+	          'styles': {
+	              'textAlign': 'left'
+	          	}
 	        }, {
 	        	'force': true,
             'selector': '.HkListText',
             'styles': {
                 'fontFamily': 'monospace',
+                'cursor': 'pointer',
+                'padding': '3px 20px 3px 2px',
                 'fontSize': '0.95em'
             }
 	        }, {
-	            'selector': '.HkListCategory',
-	            'styles': {
-	                'padding': '4px 0px',
-	                'borderTop': '1px solid #252525',
-	                'borderBottom': '2px solid #505050',
-	            }
-	        }, {
-	            'selector': '.HkListText',
-	            'styles': {
-	                'cursor': 'pointer',
-//	                'width': 'auto',
-	                'padding': '3px 20px 3px 2px',
-	            }
+	        	'force': true,
+            'selector': '.HkListCategory',
+            'styles': {
+                'padding': '4px 0px',
+                'borderTop': '1px solid #252525',
+                'borderBottom': '2px solid #505050',
+            }
 	        }]
 	});
 	var HkStylesGeneric = window.HkStylesGeneric;

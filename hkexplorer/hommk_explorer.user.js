@@ -10,6 +10,9 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 			window.$Name$AssetLoader = new AssetLoader({
 				'SHA256CryptoJs': {
 					'url': 'http://crypto-js.googlecode.com/files/2.5.3-crypto-sha256.js'
+				},
+				'sprintf07b1': {
+					'url': 'http://sprintf.googlecode.com/files/sprintf-0.7-beta1.js'
 				}
 			});
 		} catch(ex) {
@@ -56,7 +59,7 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 				    xR.request.delay(d, xR);
 			    }.bind(this));
 		    },
-		    sort: function(key, data) {
+		    sort: function sort(key, data) {
 			    window.console.log('[$Name$][RUINS]Sortiere Ruinen...');
 			    if("undefined" == typeof key) key = "n";
 			    window.console.log('[$Name$][RUINS]Sortierschlüssel: ' + key);
@@ -64,17 +67,26 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 				    window.console.log('[$Name$][RUINS]Benutze gespeicherte Daten...');
 			    	data = this.rA.copy();
 			    } else if("undefined" == typeof data) {
-			    	window.console.log('[$Name$][RUINS]Keine Daten zum Sortieren vorhanden, Abbruch...');
+			    	window.console.log('[$Name$][DEBUG]Keine Daten zum Sortieren vorhanden, Abbruch...');
 			    	return [];
 			    }
 			    /** @type Array */
-			    var d = data;
-			    window.console.log('[$Name$][RUINS]Verwendete Daten:');
+			    var d = data.copy();
+//			    window.console.log('[$Name$][DEBUG]Verwendete Daten:');
 			    window.console.log(d);
 			    var sD = d.sort(function(a, b) {
-				    return (a["key"] >= b["key"]) ? 1 : -1;
+			    	var cmp = [a[key], b[key]];
+			    	if(cmp.some(function(val, idx) {
+			    		return val.toString().test("[a-z]", "i");
+			    	})) { // text
+			    		cmp = cmp.map(function(val, idx) { return val.toString().toLowerCase(); }).reverse();
+			    	}	else { // nummern
+			    		cmp = cmp.map(function(val, idx) { return val.toString().toInt(); }).reverse();
+			    	}
+			    	if(cmp[0] == cmp[1]) return 0;
+			    	return cmp[0] > cmp[1] ? -1 : 1;
 			    });
-			    window.console.log('[$Name$][RUINS]Sortierte Daten: ');
+			    window.console.log('[$Name$][DEBUG]Sortierte Daten: ');
 			    window.console.log(sD);
 			    return sD;
 		    },
@@ -105,13 +117,12 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 					    window.console.log('[$Name$][RUINS]Ruinentext passt nicht zum Schema:');
 					    window.console.log(rP);
 				    }
-				    var rnD = {
-				        "n": rI[1].trim(), // alles vor "(" → Id der Ruine
-				        "x": rP[0].trim(),
+				    var rnD = { 
+				    		"n": stringPadLeft(rI[1].trim(), 5, "0"), // alles vor "(" → Id der Ruine
+			        	"x": rP[0].trim(),
 				        "y": rP[1].trim(),
 				        "a": rI[3].trim(),
-				        "xy": rP[0].trim() + ", " + rP[1].trim() 
-				    // alles nach ")" → "Besitzer" der Ruine
+				        "xy": rP[0].trim() + ", " + rP[1].trim() // alles nach ")" → "Besitzer" der Ruine 				    
 				    };
 				    window.console.log('[$Name$][DEBUG]Speichere Ruine:');
 				    window.console.log(rnD);
@@ -161,7 +172,8 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 						 */
 				    this.$hkWin = window.hk.Windows.createWindow("HkExplorer", {
 				        'title': "HkExplorer",
-				        "updateable": false
+				        "updateable": true,
+				        "updateUrl": "https://github.com/gelgamek/HOMMK-Toolkit/raw/STABLE/hommk_explorer.user.js"
 				    });
 				    window.console.log('[$Name$][DEBUG]Erzeuge Content\u2026');
 				    this.createContent(this.$hkWin);
@@ -190,7 +202,6 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 			    window.console.log('[$Name$][DEBUG]Initialisiere Content-Node: ');
 			    this.getHkRuins();
 			    this.createRuinSections();
-			    this.createRuinsSection();
 			    this.createCitiesSection();
 			    this.updateExplorer();
 			    this.createAccordion(contentNode);
@@ -207,7 +218,6 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 		    },
 		    updateExplorer: function updateExplorer() {
 			    window.console.log('[$Name$][DEBUG]Explorer-Update...');
-			    this.updateRuins();
 			    this.updateCities();
 		    },
 		    getCities: function getCities() {
@@ -285,16 +295,19 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 			    window.console.log('[$Name$][DEBUG]updateRuinSections:');
 			    window.console.log($A(arguments));
 			    var hkR = hkRuins || this.$hkRuins;
-		    	var sS = " - ";
 			    var sP = [
 			        {
 			            "key": "n",
 			            "name": "RegionNumber",
-			            "displayOrder": ["n", "a", "xy"]
+			            "displayOrder": ["n", "a", "xy"],
+			            "tableRow": "<td class='alignRight'>%(n)s</td><td class='alignCenter'> - </td><td class='alignLeft'>%(a)s</td><td class='alignCenter'> - </td><td class='alignRight'>%(x)s</td><td class='alignCenter'>,</td><td class='alignRight'>%(y)s</td>",
+			            "rowFormat": "%(n)s - %(a)s - %(x)s,%(y)s" // n, x, y, a, xy
 			        }, {
-			            "key": "o",
+			            "key": "a",
 			            "name": "Alliance",
-			            "displayOrder": ["a", "xy", "n"]
+			            "displayOrder": ["a", "xy", "n"],
+			            "tableRow": "<td class='alignLeft'>%(a)s</td><td class='alignCenter'> - </td><td class='alignRight'>%(x)s</td><td class='alignCenter'>,</td><td class='alignRight'>%(y)s</td><td class='alignCenter'> - </td><td class='alignRight'>%(n)s</td>",
+			            "rowFormat": "%(a)s - %(x)s,%(y)s - %(n)s" // n, x, y, a, xy
 			        }];
 			    window.console.log('[$Name$][DEBUG]Aktualisiere Bereiche der Ruinen: ');
 			    window.console.log(hkR);
@@ -307,160 +320,36 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 				    $(listName).getElements(".HkListEntry").remove();
 				    var sortKey = p["key"];
 				    window.console.log('[$Name$][DEBUG]Sortiere Daten für Ruinenliste nach ' + sortKey);
-				    window.console.log(hkRuins);
+				    window.console.log(hkR);
 				    var rD = hkR.sort(sortKey);
 				    window.console.log('[$Name$][DEBUG]Sortierte Daten für Ruinenliste nach ' + sortKey + ":");
-				    window.console.log(hkRuins);
+				    window.console.log(rD);
 				    window.console.log('[$Name$][DEBUG]Schreibe Daten in Ruinenliste...');
+				    var rTbl = new Element("table");
+				    rTbl.injectInside($(listName));
 				    rD.each(function(r, j) {
 				    	window.console.log('[$Name$][DEBUG]Erzeuge Eintrag #' + j);
-	            var rE = new Element('div', {
+	            var rE = new Element('tr', {
                 'class': "HkListEntry",
                 'styles': {
-	                'cursor': 'pointer',
-	                'fontFamily': 'monospace',
-	                'fontSize': '0.9em'
+	                'cursor': 'pointer'
                 }
 	            });
 				    	window.console.log('[$Name$][DEBUG]Erzeuge Text für Eintrag #' + j);
-	            var rTx = "";
-	            for(var x = 0; x < 3; x++) {
-					    	window.console.log('[$Name$][DEBUG]Ermittle Key für Text...');
-					    	var dO = p["displayOrder"];
-					    	window.console.log('[$Name$][DEBUG]Definierte Keys für Text:');
-					    	window.console.log(dO);
-					    	window.console.log('[$Name$][DEBUG]Ermittle Key für Position #' + x);
-					    	var cK = dO[x];
-					    	window.console.log('[$Name$][DEBUG]Key für Position #' + x + ": " + cK);
-					    	var iV = r[cK];
-					    	switch(cK) {
-					    		case "n": {
-					    			iV = stringPadLeft(iV, 5);
-					    			break;
-					    		}
-					    		case "a": {
-					    			iV = stringPadRight(iV, 20);
-					    			break;
-					    		}
-					    		case "xy": {
-					    			iV = stringPadLeft(iV, 8);
-					    			break;
-					    		}
-					    	}
-	            	rTx += String(iV);
-					    	window.console.log('[$Name$][DEBUG]Text-Eintrag #' + x + ": " + rTx);
-	            	if(x + 1 < 3) rTx += sS;
-	            }
+	            var rTx = sprintf(p.rowFormat, r);
 	            window.console.log("Verwende Text: " + rTx);
-	            rE.innerHTML = "<p class='HkListText' style='font-family: monospace;'>" + rTx + "</p>";
+	            var rTR = sprintf(p.tableRow, r);
+	            window.console.log("Test TableRow: " + rTR);
+	            rE.innerHTML = rTR;
 	            rE.preventTextSelection();
-	            rE.addEvent('click', function(evt) {
+	            rE.injectInside(rTbl);
+	            rE.getElements("td").addEvent('click', function(evt) {
 		            window.console.log("[$Name$][DEBUG]Click Event an Ruineneintrag: ");
 		            window.hk.gotoPosition(r["x"], r["y"]);
 	            });
-	            rE.injectInside($(listName));
 				    });
 			    });
-		    },
-		    createRuinsSection: function createRuinsSection() {
-			    var eE = $("HkWindowContentHkExplorer");
-			    window.console.log('[$Name$][DEBUG]Erzeuge Bereich der Ruinen: ');
-			    window.console.log(eE);
-			    var rC = new Element("div", {
-			        'id': 'HkExplorerRuins',
-			        'class': 'HkListContainer'
-			    });
-			    rC.preventTextSelection();
-			    rC.injectInside(eE);
-			    var rM = new Element("div", {
-			        "id": "HkExplorerRuinsCategory",
-			        "class": "HkListCategory",
-			        'styles': {
-				        'cursor': 'pointer'
-			        }
-			    });
-			    rM.setHTML("<p><strong>Ruinen</strong></p>");
-			    // rM.preventTextSelection();
-			    rM.injectInside(rC);
-			    var rV = new Element("div", {
-			        "id": "HkExplorerRuinsList",
-			        "class": "HkList"
-			    });
-			    rV.preventTextSelection();
-			    rV.injectInside(rC);
-			    window.console.log('[$Name$][DEBUG]Erzeuge AutoScroller für Ruinen');
-			    rM.autoScroller = new Scroller(rV);
-			    rM.autoScroller.start();
-		    },
-		    updateRuins: function updateRuins() {
-			    var eE = $("HkWindowContentHkExplorer");
-			    window.console.log('[$Name$][DEBUG]Update der Ruinenliste: ');
-			    window.console.log($("HkExplorerRuinsList"));
-			    $("HkExplorerRuinsList").getElements(".HkListEntry").remove();
-			    for( var i = 1; i < 10; i++) {
-				    window.console.log('[$Name$][DEBUG]XHR-Request #' + i);
-				    var xhr = new Ajax(
-				        'http://mightandmagicheroeskingdoms.ubi.com/ajaxRequest/ruinsRegionNumberAutocompletion?start=' + i, {
-				            'method': 'get',
-				            'evalResponse': false,
-				            'onComplete': function() {
-					            // window.console.log('[$Name$][DEBUG]XHR-Anfrage komplett:');
-					            // window.console.log(this.response);
-					            var ruins = JSON.parse(this.response['text']);
-					            $each(ruins, function(r) {
-						            // "r" enthält genau 3 einträge: region, kurzer text mit region & bündnis und text mit region,
-						            // x,y und bündnis
-						            window.console.log('[$Name$][DEBUG]Gefundene Ruine:');
-						            window.console.log(r);
-						            var rD = r.getLast();
-						            window.console.log('[$Name$][DEBUG]Verwendeter Eintrag:');
-						            window.console.log(rD);
-						            // rD sollte ein string sein im format: "regnr (x, y) bnd"
-						            // der string davor im array enthält dann: "regnr - bnd"
-						            var rI = rD.match(/([^\(]+)\(([^\)]+)\)(.*)/);
-						            // window.console.log('[$Name$][DEBUG]Auswertung:');
-						            // window.console.log(rI);
-						            /*
-												 * rI sollte sein: 0. der gesamte treffer, also alles 1. alles vor dem runden "klammerauf" 2.
-												 * alles innerhalb der runden klammern, also "x, y" 3. alles hiner dem runden "klammerzu"
-												 */
-						            if(rI.length > 4) {
-							            window.console.log('[$Name$][DEBUG]Ruinen-Info passt nicht zum regulären Ausdruck:');
-							            window.console.log(rI);
-						            }
-						            var rP = String(rI[2]).split(",");
-						            /*
-												 * rP sollte sein: 0. X-Koord. 1. Y-Koord.
-												 */
-						            if(rP.length != 2) {
-							            window.console.log('[$Name$][DEBUG]Ruinentext passt nicht zum Schema:');
-							            window.console.log(rP);
-						            }
-						            var rE = new Element('div', {
-						                'class': "HkListEntry",
-						                'styles': {
-							                'cursor': 'pointer'
-						                }
-						            });
-						            rE.rX = rP[0].trim();
-						            rE.rY = rP[1].trim();
-						            rE.rN = rI[1].trim(); // alles vor "klammerauf"
-						            rE.rO = rI[3].trim(); // alles nach "klammerzu"
-						            var rTx = "" + rE.rN + " - " + rE.rO + " (" + rE.rX + "," + rE.rY + ")";
-						            window.console.log("Verwende Text: " + rTx);
-						            rE.innerHTML = "<p class='HkListText'>" + rTx + "</p>";
-						            rE.preventTextSelection();
-						            rE.addEvent('click', function(evt) {
-							            window.console.log("[$Name$][DEBUG]Click Event an Ruineneintrag: ");
-							            var cR = rE || evt.target;
-							            window.hk.gotoPosition(cR.rX, cR.rY);
-						            });
-						            rE.injectInside($("HkExplorerRuinsList"));
-					            });
-				            }
-				        });
-				    xhr.request.delay(1000, xhr);
-			    }
+			    window.hkStylesGeneric.applyStyles();
 		    },
 		    createCitiesSection: function createCitiesSection() {
 			    var eE = $("HkWindowContentHkExplorer");
