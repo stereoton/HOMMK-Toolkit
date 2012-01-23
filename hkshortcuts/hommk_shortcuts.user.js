@@ -7,9 +7,9 @@
 	try {
 		if(!window.hasOwnProperty("$Name$AssetLoader")) {
 			window.$Name$AssetLoader = new AssetLoader({
-				'SHA256CryptoJs': {
-					'url': 'http://crypto-js.googlecode.com/files/2.5.3-crypto-sha256.js'
-				}
+//				'SHA256CryptoJs': {
+//					'url': 'http://crypto-js.googlecode.com/files/2.5.3-crypto-sha256.js'
+//				}
 			});
 		}
 	} catch(ex) {
