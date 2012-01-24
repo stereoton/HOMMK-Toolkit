@@ -8,7 +8,7 @@ if(!window.hasOwnProperty("HkStorageCreateClasses")) {
 	window.HkStorageCreateClasses = function() {
 		
 		try {
-			if(window.hasOwnProperty("Hk") && !window.hasOwnProperty("HkStorage")) {
+			if(window.hasOwnProperty("Hk") && !window.Hk.hasOwnProperty("HkStorage")) {
 				/**
 				 * Events: onStorageUpdate
 				 * 

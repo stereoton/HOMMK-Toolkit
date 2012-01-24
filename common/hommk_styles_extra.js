@@ -83,7 +83,8 @@ window.HkStylesExtra = {
         'paddingBottom': '0px',
         'borderTopLeftRadius': '10px',
         'borderTopRightRadius': '10px',
-        'borderBottomLeftRadius': '5px'
+        'borderBottomLeftRadius': '5px',
+        'opacity': '$Opacity$'
     },
     'footer': {
         'clear': 'both',

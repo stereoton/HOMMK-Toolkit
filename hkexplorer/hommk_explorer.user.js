@@ -429,12 +429,6 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 			} catch(ex) {
 				window.console.log('[$Name$][ERROR]Fehler bei der Finalisierung des $Name$-Fensters: ' + ex);
 			}
-			try {
-			window.hk.hkAdapter = new window.Hk.HkAdapter();
-			window.hk.hkAdapter.injectIntoAll($("HkWindowHkExplorer"), "HkExplorer");
-			} catch(ex) {
-				window.console.log('[$Name$][ERROR]Fehler bei der Finalisierung des $Name$-Fensters: ' + ex);
-			}			
 			if("undefined" == typeof window.hkStylesGeneric) {
 				try {
 					window.hkStylesGeneric = new window.HkStylesGeneric();

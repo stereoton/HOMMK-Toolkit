@@ -234,6 +234,12 @@
 		                       target="${target}"
 		                       dir="${dir}"
 		                       filepattern="${hk.replace.filepattern}" />
+		<hk.replace.replaceOne pkg="${pkg}"
+		                       search="$$Opacity$$"
+		                       replace="hk.opacity"
+		                       target="${target}"
+		                       dir="${dir}"
+		                       filepattern="${hk.replace.filepattern}" />
 		<echo message="${pkg}: Ersetze die Versionsplatzhalter in ${dir}/${hk.replace.filepattern}..." />
 		<git-replace-all-versions dir="${dir}"
 		                          filepattern="${hk.replace.filepattern}"
