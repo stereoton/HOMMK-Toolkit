@@ -211,6 +211,12 @@
 		                       dir="${dir}"
 		                       filepattern="${hk.replace.filepattern}" />
 		<hk.replace.replaceOne pkg="${pkg}"
+		                       search="$$WebFonts$$"
+		                       replace="hk.webfonts"
+		                       target="${target}"
+		                       dir="${dir}"
+		                       filepattern="${hk.replace.filepattern}" />
+		<hk.replace.replaceOne pkg="${pkg}"
 		                       search="$$LoaderConditions$$"
 		                       replace="hk.${pkg}.loader.conditions"
 		                       target="${target}"
