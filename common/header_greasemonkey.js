@@ -8,8 +8,7 @@
 // @namespace http://mightandmagicheroeskingdoms.ubi.com/play
 // @match http://mightandmagicheroeskingdoms.ubi.com/play*
 //
-// Content Scope Runner
+// Content Scope Runner:
 // @require http://userscripts.org/scripts/source/68059.user.js
-// @-updateURL      $updateURL$
-// @-installURL     $installURL$
 // ==/UserScript==
+
