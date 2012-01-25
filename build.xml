@@ -173,7 +173,7 @@
 		<!--<echo message="${pkg}: Ersetze ${search} durch ${replace} in ${target} - ${dir}/${filepattern}..." />-->
 	</target>
 
-	<target name="hk.replace.getUpdateURL" if="pkg">
+	<!--<target name="hk.replace.getUpdateURL" if="pkg">
 		<cpprop name="testingUpdates" from="hk.${pkg}.update.testing" />
 		<cpprop name="releaseUpdates" from="hk.${pkg}.update.release" />
 		<condition property="hk.${pkg}.update.url"
@@ -181,10 +181,10 @@
 		           else="${testingUpdates}">
 			<matches string="${hk.debug}" pattern="[0]" />
 		</condition>
-	</target>
+	</target>-->
 
 	<!-- pkg, search, replace, dir, target, filepattern -->
-	<target name="hk.replace.replaceURLs" depends="hk.replace.getUpdateURL">
+	<!--<target name="hk.replace.replaceURLs" depends="hk.replace.getUpdateURL">
 		<local name="replace" />
 		<cpprop name="replace" from="hk.${pkg}.update.url" />
 		<antcall target="hk.replace.doReplace">
@@ -195,7 +195,7 @@
 			<param name="dir" value="${dir}" />
 			<param name="filepattern" value="${filepattern}" />
 		</antcall>
-	</target>
+	</target>-->
 	<macrodef name="hk.replace.replaceOne">
 		<attribute name="pkg" />
 		<attribute name="search" />
@@ -269,7 +269,7 @@
 		                       target="${target}"
 		                       dir="${dir}"
 		                       filepattern="${hk.replace.filepattern}" />
-		<hk.replace.replaceOne pkg="${pkg}"
+		<!--<hk.replace.replaceOne pkg="${pkg}"
 		                       search="$$installURL$$"
 		                       replace="hk.${pkg}.install"
 		                       target="${target}"
@@ -282,7 +282,7 @@
 			<param name="target" value="${target}" />
 			<param name="dir" value="${dir}" />
 			<param name="filepattern" value="${hk.replace.filepattern}" />
-		</antcall>
+		</antcall>-->
 		<echo message="${pkg}: Ersetze die Versionsplatzhalter in ${dir}/${hk.replace.filepattern}..." />
 		<git-replace-all-versions dir="${dir}"
 		                          filepattern="${hk.replace.filepattern}"
@@ -388,10 +388,10 @@
 			<param name="filepattern" value="${gm.tmp.file}" />
 			<param name="target" value="${gm.tmp.target}" />
 		</antcall>
-		<antcall target="gm.meta">
+		<!--<antcall target="gm.meta">
 			<param name="pkg" value="${pkg}" />
 			<param name="gm.target" value="${gm.tmp.target}" />
-		</antcall>
+		</antcall>-->
 		<echo message="Kopiere das Greasemonkey-Template nach ${target}..." />
 		<copy file="${gm.tmp.target}" tofile="${target}" />
 		<echo message="Lösche das temporäre Verzeichnis ${gm.tmp.dir}..." />
@@ -551,7 +551,7 @@
 		</concat>
 	</target>
 	
-	<target name="gm.checkMeta" if="hk.${pkg}.gm.enabled">
+	<!--<target name="gm.checkMeta" if="hk.${pkg}.gm.enabled">
 		<local name="gm.enabled" />
 		<cpprop name="gm.enabled" from="hk.${pkg}.gm.enabled" />
 		<condition property="gm.${pkg}.checked" value="yes">
@@ -560,17 +560,17 @@
 				<isset property="${gm.target}" />
 			</and>
 		</condition>
-	</target>
+	</target>-->
 	
 	<!-- gm.meta - Erzeugt das GM-Metafile -->
-	<target name="gm.meta" if="gm.${pkg}.checked" depends="gm.checkMeta">
+	<!--<target name="gm.meta" if="gm.${pkg}.checked" depends="gm.checkMeta">
 		<local name="meta.src" />
 		<local name="meta.location" />
 		<property name="meta.src" location="${gm.target}" />
 		<cpploc name="meta.location" from="hk.${pkg}.build.metalocation" />
 		<echo message="Kopiere GM-Metafile von ${meta.src} nach ${meta.location}..." />
 		<copy file="${meta.src}" tofile="${meta.location}" />
-	</target>
+	</target>-->
 
 	<!-- hk.buildparts - Baut die Teile einer Komponente -->
 	<macrodef name="hk.buildparts">
@@ -644,7 +644,7 @@
 			<concat destfile="${hk.@{pkg}.build.location}" append="false" force="yes">
 				<filelist files="${gm.target},${ps.target},${hk.buildparts.tmp.location}" />
 			</concat>
-			<echo message="Kopiere GM-Metafile von ${gm.target} nach ${hk.@{pkg}.build.metalocation}..." />
+			<!--<echo message="Kopiere GM-Metafile von ${gm.target} nach ${hk.@{pkg}.build.metalocation}..." />
 			<!--<copy file="${gm.target}" tofile="${hk.@{pkg}.build.metalocation}" />-->
 			<antcall target="gm.meta">
 				<param name="pkg" value="@{pkg}" />
@@ -653,7 +653,7 @@
 				<param name="target" value="${gm.target}" />
 				-->
 				<param name="gm.target" value="${gm.target}" />
-			</antcall>
+			</antcall>-->
 			<echo message="Lösche übrig gebliebene Dateien..." />
 			<delete file="${gm.target}" />
 			<delete file="${ps.target}" />
@@ -745,36 +745,36 @@
 		<copy file="${dist.dir}/${hk.hkexplorer.file}"
 		      todir="${basedir}"
 		      overwrite="true" />
-		<copy file="${dist.dir}/${hk.hkexplorer.meta}"
+		<!--<copy file="${dist.dir}/${hk.hkexplorer.meta}"
 		      todir="${basedir}"
-		      overwrite="true" />
+		      overwrite="true" />-->
 	</target>
 
 	<target name="deploy-hkshortcuts" depends="clean,init,dist-hkshortcuts">
 		<copy file="${dist.dir}/${hk.hkshortcuts.file}"
 		      todir="${basedir}"
 		      overwrite="true" />
-		<copy file="${dist.dir}/${hk.hkshortcuts.meta}"
+		<!--<copy file="${dist.dir}/${hk.hkshortcuts.meta}"
 		      todir="${basedir}"
-		      overwrite="true" />
+		      overwrite="true" />-->
 	</target>
 
 	<target name="dist-hkexplorer" depends="build-hkexplorer">
 		<copy file="${build.dir}/${hk.hkexplorer.file}"
 		      todir="${dist.dir}"
 		      overwrite="true" />
-		<copy file="${build.dir}/${hk.hkexplorer.meta}"
+		<!--<copy file="${build.dir}/${hk.hkexplorer.meta}"
 		      todir="${dist.dir}"
-		      overwrite="true" />
+		      overwrite="true" />-->
 	</target>
 
 	<target name="dist-hkshortcuts" depends="build-hkshortcuts">
 		<copy file="${build.dir}/${hk.hkshortcuts.file}"
 		      todir="${dist.dir}"
 		      overwrite="true" />
-		<copy file="${build.dir}/${hk.hkshortcuts.meta}"
+		<!--<copy file="${build.dir}/${hk.hkshortcuts.meta}"
 		      todir="${dist.dir}"
-		      overwrite="true" />
+		      overwrite="true" />-->
 	</target>
 
 	<target name="deploy-hktoolkit"
