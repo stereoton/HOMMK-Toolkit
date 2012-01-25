@@ -173,6 +173,29 @@
 		<!--<echo message="${pkg}: Ersetze ${search} durch ${replace} in ${target} - ${dir}/${filepattern}..." />-->
 	</target>
 
+	<target name="hk.replace.getUpdateURL" if="pkg">
+		<cpprop name="testingUpdates" from="hk.${pkg}.update.testing" />
+		<cpprop name="releaseUpdates" from="hk.${pkg}.update.release" />
+		<condition property="hk.${pkg}.update.url"
+		           value="${releaseUpdates}"
+		           else="${testingUpdates}">
+			<matches string="${hk.debug}" pattern="[0]" />
+		</condition>
+	</target>
+
+	<!-- pkg, search, replace, dir, target, filepattern -->
+	<target name="hk.replace.replaceURLs" depends="hk.replace.getUpdateURL">
+		<local name="replace" />
+		<cpprop name="replace" from="hk.${pkg}.update.url" />
+		<antcall target="hk.replace.doReplace">
+			<param name="pkg" value="${pkg}" />
+			<param name="search" value="${search}" />
+			<param name="replace" value="${replace}" />
+			<param name="target" value="${target}" />
+			<param name="dir" value="${dir}" />
+			<param name="filepattern" value="${filepattern}" />
+		</antcall>
+	</target>
 	<macrodef name="hk.replace.replaceOne">
 		<attribute name="pkg" />
 		<attribute name="search" />
@@ -246,6 +269,20 @@
 		                       target="${target}"
 		                       dir="${dir}"
 		                       filepattern="${hk.replace.filepattern}" />
+		<hk.replace.replaceOne pkg="${pkg}"
+		                       search="$$installURL$$"
+		                       replace="hk.${pkg}.install"
+		                       target="${target}"
+		                       dir="${dir}"
+		                       filepattern="${hk.replace.filepattern}" />
+		<echo message="${pkg}: Ersetze die Update-URL in ${dir}/${hk.replace.filepattern}..." />
+		<antcall target="hk.replace.replaceURLs">
+			<param name="pkg" value="${pkg}" />
+			<param name="search" value="$$updateURL$$" />
+			<param name="target" value="${target}" />
+			<param name="dir" value="${dir}" />
+			<param name="filepattern" value="${hk.replace.filepattern}" />
+		</antcall>
 		<echo message="${pkg}: Ersetze die Versionsplatzhalter in ${dir}/${hk.replace.filepattern}..." />
 		<git-replace-all-versions dir="${dir}"
 		                          filepattern="${hk.replace.filepattern}"
@@ -351,6 +388,10 @@
 			<param name="filepattern" value="${gm.tmp.file}" />
 			<param name="target" value="${gm.tmp.target}" />
 		</antcall>
+		<antcall target="gm.meta">
+			<param name="pkg" value="${pkg}" />
+			<param name="gm.target" value="${gm.tmp.target}" />
+		</antcall>
 		<echo message="Kopiere das Greasemonkey-Template nach ${target}..." />
 		<copy file="${gm.tmp.target}" tofile="${target}" />
 		<echo message="Lösche das temporäre Verzeichnis ${gm.tmp.dir}..." />
@@ -358,7 +399,7 @@
 	</target>
 
 	<target name="ps.check" if="pkg">
-		<echo message="Prüfe PageScopeRunner-Parameter für ${pkg}..." />
+		<echo level="debug" message="Prüfe PageScopeRunner-Parameter für ${pkg}..." />
 		<local name="ps.enabled" />
 		<cpprop name="ps.enabled" from="hk.${pkg}.ps.enabled" />
 		<condition property="ps.${pkg}.checked">
@@ -370,7 +411,7 @@
 	</target>
 	<!-- pkg, file, target, result -->
 	<target name="ps.insert" depends="ps.check" if="ps.${pkg}.checked">
-		<echo message="Ergänze PageScopeRunner in ${target}..." />
+		<echo level="verbose" message="Ergänze PageScopeRunner in ${target}..." />
 		<local name="ps.tmp.dir" />
 		<local name="ps.location" />
 		<local name="ps.uuid" />
@@ -390,10 +431,10 @@
 		      message="Kopiere ${psr_main} in das temporäre Verzeichnis ${ps.tmp.dir}..." />
 		<copy todir="${ps.tmp.dir}" file="${ps.dir}/${psr_main}" />
 		<echo level="debug"
-		      message="Ersetze __PAGE_SCOPE_RUN__ durch __PAGE_SCOPE_${ps.uuid}_RUN__ in ${ps.tmp.dir}" />
+		      message="Ersetze __PAGE_SCOPE___RUN__ durch __PAGE_SCOPE_${ps.uuid}_RUN__ in ${ps.tmp.dir}" />
 		<replace file="${ps.tmp.dir}/${psr_main}"
 		         value="__PAGE_SCOPE_${ps.uuid}_RUN__"
-		         token="__PAGE_SCOPE_RUN__" />
+		         token="__PAGE_SCOPE___RUN__" />
 		<echo level="info" message="Komprimiere ${ps.tmp.dir}/${psr_main}..." />
 		<!-- pkg,destdir,(srcdir,includes|location) -->
 		<antcall target="yui.compress">
@@ -410,10 +451,10 @@
 		      message="Kopiere ${psr_start} in das temporäre Verzeichnis ${ps.tmp.dir}..." />
 		<copy todir="${ps.tmp.dir}" file="${ps.dir}/${psr_start}" />
 		<echo level="debug"
-		      message="Ersetze __PAGE_SCOPE_RUN__ durch __PAGE_SCOPE_${ps.uuid}_RUN__ in ${ps.tmp.dir}" />
+		      message="Ersetze __PAGE_SCOPE___RUN__ durch __PAGE_SCOPE_${ps.uuid}_RUN__ in ${ps.tmp.dir}" />
 		<replace file="${ps.tmp.dir}/${psr_start}"
 		         value="__PAGE_SCOPE_${ps.uuid}_RUN__"
-		         token="__PAGE_SCOPE_RUN__" />
+		         token="__PAGE_SCOPE___RUN__" />
 		<echo level="info"
 		      message="Kopiere ${psr_end} in das temporäre Verzeichnis ${ps.tmp.dir}..." />
 		<copy todir="${ps.tmp.dir}" file="${ps.dir}/${psr_end}" />
@@ -427,7 +468,7 @@
 	</target>
 
 	<target name="yui.check" if="pkg">
-		<echo message="Prüfe YUI Compressor-Parameter für ${pkg}..." />
+		<echo level="verbose" message="Prüfe YUI Compressor-Parameter für ${pkg}..." />
 		<local name="yui.enabled" />
 		<cpprop name="yui.enabled" from="hk.${pkg}.yui.enabled" />
 		<condition property="yui.${pkg}.checked">
@@ -462,19 +503,19 @@
 				<length string="${destdir}" when="greater" length="0" />
 			</and>
 		</condition>
-		<echo message="${pkg}: yui.target.dir=${yui.target.dir},destdir=${destdir},srcdir=${srcdir},includes=${yui.src.includes}" />
+		<echo level="debug" message="${pkg}: yui.target.dir=${yui.target.dir},destdir=${destdir},srcdir=${srcdir},includes=${yui.src.includes}" />
 		<property name="yui.target.location" location="${yui.target.dir}" />
-		<echo message="Komprimiere ${srcdir}:${yui.src.includes} nach ${yui.target.location}" />
+		<echo level="info" message="Komprimiere ${srcdir}:${yui.src.includes} nach ${yui.target.location}" />
 
-		<echo message="Lege das temporäre Verzeichnis ${yui.tmp.dir} an" />
+		<echo level="verbose" message="Lege das temporäre Verzeichnis ${yui.tmp.dir} an" />
 		<mkdir dir="${yui.tmp.dir}" />
 
-		<echo message="Kopiere Daten aus ${srcdir} in das temporäre Verzeichnis ${yui.tmp.dir}" />
+		<echo level="verbose" message="Kopiere Daten aus ${srcdir} in das temporäre Verzeichnis ${yui.tmp.dir}" />
 		<copy todir="${yui.tmp.dir}">
 			<fileset dir="${srcdir}" includes="${yui.src.includes}" />
 		</copy>
 
-		<echo message="Komprimiere Daten von ${yui.tmp.dir} nach ${yui.target.location}: ${yui.src.includes}" />
+		<echo level="verbose" message="Komprimiere Daten von ${yui.tmp.dir} nach ${yui.target.location}: ${yui.src.includes}" />
 		<yui-compressor warn="false"
 		                munge="true"
 		                jsSuffix=".js"
@@ -485,13 +526,13 @@
 		                toDir="${yui.target.location}">
 			<!--<fileset dir="${yui.tmp.dir}" includes="${yui.src.includes}" />-->
 		</yui-compressor>
-		<echo message="Lösche das temporäre Verzeichnis ${yui.tmp.dir}" />
+		<echo level="info" message="Lösche das temporäre Verzeichnis ${yui.tmp.dir}" />
 		<delete dir="${yui.tmp.dir}" />
 	</target>
 
 	<!-- ld.check - Prüft die Einbindung des Loaders -->
 	<target name="ld.check" if="pkg">
-		<echo message="Prüfe Loader-Parameter für ${pkg}..." />
+		<echo level="debug" message="Prüfe Loader-Parameter für ${pkg}..." />
 		<local name="isEnabled" />
 		<cpprop name="isEnabled" from="hk.${pkg}.loader.enabled" />
 		<condition property="ld.${pkg}.checked">
@@ -504,10 +545,31 @@
 
 	<!-- ld.insert - Bindet den Loader ein -->
 	<target name="ld.insert" depends="ld.check" if="ld.${pkg}.checked">
-		<echo message="Ergänze ${ld.file} aus ${ld.dir} zu ${target}..." />
+		<echo level="verbose" message="Ergänze ${ld.file} aus ${ld.dir} zu ${target}..." />
 		<concat destfile="${target}" append="true" force="true">
 			<filelist dir="${ld.dir}" files="${ld.file}" />
 		</concat>
+	</target>
+	
+	<target name="gm.checkMeta" if="hk.${pkg}.gm.enabled">
+		<local name="gm.enabled" />
+		<cpprop name="gm.enabled" from="hk.${pkg}.gm.enabled" />
+		<condition property="gm.${pkg}.checked" value="yes">
+			<and>
+				<istrue value="${gm.enabled}" />
+				<isset property="${gm.target}" />
+			</and>
+		</condition>
+	</target>
+	
+	<!-- gm.meta - Erzeugt das GM-Metafile -->
+	<target name="gm.meta" if="gm.${pkg}.checked" depends="gm.checkMeta">
+		<local name="meta.src" />
+		<local name="meta.location" />
+		<property name="meta.src" location="${gm.target}" />
+		<cpploc name="meta.location" from="hk.${pkg}.build.metalocation" />
+		<echo message="Kopiere GM-Metafile von ${meta.src} nach ${meta.location}..." />
+		<copy file="${meta.src}" tofile="${meta.location}" />
 	</target>
 
 	<!-- hk.buildparts - Baut die Teile einer Komponente -->
@@ -518,26 +580,26 @@
 			<local name="hk.buildparts.tmp.dir" />
 			<local name="hk.buildparts.tmp.location" />
 			<property name="hk.buildparts.tmp.file" value="@{pkg}_temp_content.js" />
-			<echo message="@{pkg}: Speichere in Datei ${hk.buildparts.tmp.file}.." />
+			<echo level="info" message="@{pkg}: Speichere in Datei ${hk.buildparts.tmp.file}.." />
 			<property name="hk.buildparts.tmp.dir"
 			          value="${hk.@{pkg}.tmp.dir}/hk.buildparts" />
-			<echo message="Erzeuge temporäres Verzeichnis ${hk.buildparts.tmp.dir}.." />
+			<echo level="info" message="Erzeuge temporäres Verzeichnis ${hk.buildparts.tmp.dir}.." />
 			<mkdir dir="${hk.buildparts.tmp.dir}" />
 			<property name="hk.buildparts.tmp.location"
 			          location="${hk.buildparts.tmp.dir}/${hk.buildparts.tmp.file}" />
-			<echo message="@{pkg}: Speichere als ${hk.buildparts.tmp.location}.." />
-			<echo message="@{pkg}: Verbinde ${hk.@{pkg}.src.files} aus ${hk.@{pkg}.src.dir} zu ${hk.buildparts.tmp.location}..." />
+			<echo level="verbose" message="@{pkg}: Speichere als ${hk.buildparts.tmp.location}.." />
+			<echo level="debug" message="@{pkg}: Verbinde ${hk.@{pkg}.src.files} aus ${hk.@{pkg}.src.dir} zu ${hk.buildparts.tmp.location}..." />
 			<concat destfile="${hk.buildparts.tmp.location}"
 			        append="false"
 			        force="true">
 				<filelist dir="${hk.@{pkg}.src.dir}" files="${hk.@{pkg}.src.files}" />
 			</concat>
-			<echo message="Ergänze Loader aus ${hk.@{pkg}.src.dir} zu ${hk.buildparts.tmp.location}..." />
+			<echo level="info" message="Ergänze Loader aus ${hk.@{pkg}.src.dir} zu ${hk.buildparts.tmp.location}..." />
 			<antcall target="ld.insert">
 				<param name="pkg" value="@{pkg}" />
 				<param name="target" value="${hk.buildparts.tmp.location}" />
 			</antcall>
-			<echo message="@{pkg}: Ersetze die Platzhalter in ${hk.buildparts.tmp.location}..." />
+			<echo level="info" message="@{pkg}: Ersetze die Platzhalter in ${hk.buildparts.tmp.location}..." />
 			<!-- 
 			Properties: 
 			rpl.pkg, rpl.name, rpl.description, rpl.icon, rpl.dir, 
@@ -549,14 +611,14 @@
 				<param name="filepattern" value="*.*" />
 				<param name="target" value="${hk.buildparts.tmp.location}" />
 			</antcall>
-			<echo message="Komprimiere ${hk.buildparts.tmp.location}..." />
+			<echo level="verbose" message="Komprimiere ${hk.buildparts.tmp.location}..." />
 			<antcall target="yui.compress">
 				<!-- pgk, srcdir,target,includes -->
 				<param name="pkg" value="@{pkg}" />
 				<param name="srcdir" value="${hk.buildparts.tmp.dir}" />
 				<param name="includes" value="${hk.buildparts.tmp.file}" />
 			</antcall>
-			<echo message="Rufe ps.insert auf für @{pkg}..." />
+			<echo level="debug" message="Rufe ps.insert auf für @{pkg}..." />
 			<local name="ps.target" />
 			<property name="ps.target"
 			          location="${hk.buildparts.tmp.dir}/@{pkg}_pagescope.user.js" />
@@ -568,7 +630,7 @@
 				<param name="result"
 				       value="${hk.buildparts.tmp.dir}/${hk.buildparts.tmp.file}" />
 			</antcall>
-			<echo message="Rufe gm.insert auf für @{pkg}..." />
+			<echo level="debug" message="Rufe gm.insert auf für @{pkg}..." />
 			<local name="gm.target" />
 			<property name="gm.target"
 			          location="${hk.buildparts.tmp.dir}/@{pkg}-gm-header.js" />
@@ -578,10 +640,20 @@
 				<param name="target" value="${gm.target}" />
 				<param name="gm.result" value="${hk.buildparts.tmp.location}" />
 			</antcall>
-			<echo message="Füge Dateien zusammen nach ${hk.@{pkg}.build.location}: ${gm.target},${ps.target},${hk.buildparts.tmp.location}" />
+			<echo level="info" message="Füge Dateien zusammen nach ${hk.@{pkg}.build.location}: ${gm.target},${ps.target},${hk.buildparts.tmp.location}" />
 			<concat destfile="${hk.@{pkg}.build.location}" append="false" force="yes">
 				<filelist files="${gm.target},${ps.target},${hk.buildparts.tmp.location}" />
 			</concat>
+			<echo message="Kopiere GM-Metafile von ${gm.target} nach ${hk.@{pkg}.build.metalocation}..." />
+			<!--<copy file="${gm.target}" tofile="${hk.@{pkg}.build.metalocation}" />-->
+			<antcall target="gm.meta">
+				<param name="pkg" value="@{pkg}" />
+				<!--
+				<param name="file" value="@{pkg}_gm.header" />
+				<param name="target" value="${gm.target}" />
+				-->
+				<param name="gm.target" value="${gm.target}" />
+			</antcall>
 			<echo message="Lösche übrig gebliebene Dateien..." />
 			<delete file="${gm.target}" />
 			<delete file="${ps.target}" />
@@ -633,8 +705,8 @@
 	<target name="dist-core" depends="build-core">
 		<echo message="core: Erstelle ${build.dir}/${hk.file} aus ${hk.commons.file}, ${hk.hktoolkit.file}, ${hk.hkstorage.file}, ${hk.hkreducer.file}, ${hk.hkwindows.file}..." />
 		<concat destfile="${build.dir}/${hk.file}" append="false" force="yes">
-			<filelist dir="${build.dir}" 
-				files="${hk.commons.file},${hk.hktoolkit.file},${hk.hkstorage.file},${hk.hkreducer.file},${hk.hkwindows.file}" />
+			<filelist dir="${build.dir}"
+			          files="${hk.commons.file},${hk.hktoolkit.file},${hk.hkstorage.file},${hk.hkreducer.file},${hk.hkwindows.file}" />
 		</concat>
 	</target>
 
@@ -673,10 +745,16 @@
 		<copy file="${dist.dir}/${hk.hkexplorer.file}"
 		      todir="${basedir}"
 		      overwrite="true" />
+		<copy file="${dist.dir}/${hk.hkexplorer.meta}"
+		      todir="${basedir}"
+		      overwrite="true" />
 	</target>
 
 	<target name="deploy-hkshortcuts" depends="clean,init,dist-hkshortcuts">
 		<copy file="${dist.dir}/${hk.hkshortcuts.file}"
+		      todir="${basedir}"
+		      overwrite="true" />
+		<copy file="${dist.dir}/${hk.hkshortcuts.meta}"
 		      todir="${basedir}"
 		      overwrite="true" />
 	</target>
@@ -685,10 +763,16 @@
 		<copy file="${build.dir}/${hk.hkexplorer.file}"
 		      todir="${dist.dir}"
 		      overwrite="true" />
+		<copy file="${build.dir}/${hk.hkexplorer.meta}"
+		      todir="${dist.dir}"
+		      overwrite="true" />
 	</target>
 
 	<target name="dist-hkshortcuts" depends="build-hkshortcuts">
 		<copy file="${build.dir}/${hk.hkshortcuts.file}"
+		      todir="${dist.dir}"
+		      overwrite="true" />
+		<copy file="${build.dir}/${hk.hkshortcuts.meta}"
 		      todir="${dist.dir}"
 		      overwrite="true" />
 	</target>

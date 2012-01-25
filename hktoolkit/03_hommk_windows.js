@@ -28,10 +28,12 @@ if(!window.hasOwnProperty("HkWindowsCreateClasses")) {
 			            'title': 'HkWindow',
 			            'createHeader': true,
 			            'createTitle': true,
+			            'showVersion': true,
 			            'createContentContainer': true,
 			            'createDonateButton': false,
 			            'preventTextSelection': true,
 			            'addToDOM': true,
+			            'handleFocus': true,
 			            'reduce': false,
 			            'updateable': true,
 			            // Trunk:
@@ -117,6 +119,16 @@ if(!window.hasOwnProperty("HkWindowsCreateClasses")) {
 					        this.windows.push(windowNode);
 				        }
 				        this.loadWindowPosition(id, options);
+				        if(this.options.handleFocus) {
+					        windowNode.addEventListener('mouseenter', function(evt) {
+					        	var eT = evt.target;
+					        	eT.setStyle("zIndex", eT.getStyle("zIndex").toString().toInt() +  1000);
+					        });
+					        windowNode.addEventListener('mouseleave', function(evt) {
+					        	var eT = evt.target;
+					        	eT.setStyle("zIndex", eT.getStyle("zIndex").toString().toInt() -  1000);
+					        });
+				        }
 				        return windowNode;
 			        },
 			        getWindowNode: function getWindowNode(id, options) {
@@ -291,7 +303,11 @@ if(!window.hasOwnProperty("HkWindowsCreateClasses")) {
 				            'class': 'HkWindowTitle Radius10TopLeft Radius10TopRight',
 				            'styles': this.options.titleStyles
 				        });
-				        titleNode.setText(this.options.title);
+				        var tT = this.options.title;
+				        if(this.options.showVersion) {
+				        	tT += " v.$VersionString$";
+				        }
+				        titleNode.setText(tT);
 				        if(this.options.preventTextSelection) titleNode.preventTextSelection();
 				        if(this.options.draggable) {
 					        new Drag.Move($(this.getWindowId(id, options)), {

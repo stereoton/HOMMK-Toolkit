@@ -8,7 +8,7 @@
 	// Note that we are intentionally *not* scope-wrapping here.
 	var script = document.createElement('script');
 	script.setAttribute("type", "text/javascript");
-	script.textContent = "var __PAGE_SCOPE__RUN__ = true;\n" + my_src;
+	script.textContent = "var __PAGE_SCOPE_RUN__ = true;\n" + my_src;
 	
 	// Insert the script node into the page, so it will run, and immediately
 	// remove it to clean up. Use setTimeout to force execution "outside" of
