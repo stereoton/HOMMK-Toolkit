@@ -131,12 +131,14 @@ if("undefined" == typeof window.HkStylesGeneric) {
 	            'force': true,
 	            'selector': '#HkWindowHkExplorer',
 	            'styles': {
-		            'height': 'auto'
+		            'height': 'auto',
+		            'minWidth': '240px'
 	            }
 	        }, {
 	            'selector': '#HkWindowContentHkExplorer',
 	            'styles': {
 		            'height': 'auto',
+		            'minHeight': '60px' 
 	            }
 	        }, {
 	            'force': true,
