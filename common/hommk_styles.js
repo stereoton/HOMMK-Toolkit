@@ -22,7 +22,7 @@ if("undefined" == typeof window.HkStylesGeneric) {
         }
 	      return '' + ($zIndex$ + inc) + '';
 	    },
-      setBelow: function setAbove(inc) {
+      setBelow: function setBelow(inc) {
         if("undefined" == typeof dec) {
           dec = 250;
         }
@@ -149,39 +149,39 @@ if("undefined" == typeof window.HkStylesGeneric) {
 	            'selector': '.HkButton',
 	            'styles': {
 		            'border': 'none',
-	              'zIndex': this.setAbove(1000),
+	              'zIndex': window.HkStylesGeneric().setAbove(1000),
 	              'cursor': 'pointer',
 	            }
           }, {
             'force': true,
             'selector': '.maxHeight125',
             'styles': {
-              'maxHeight': this.getMaxHeight(1.25) + "px",
+              'maxHeight': window.HkStylesGeneric().getMaxHeight(1.25) + "px",
             }
           }, {
           }, {
             'force': true,
             'selector': '.above50',
             'styles': {
-              'zIndex': this.setAbove(50),
+              'zIndex': window.HkStylesGeneric().setAbove(50),
             }
           }, {
             'force': true,
             'selector': '.above1000',
             'styles': {
-              'zIndex': this.setAbove(1000),
+              'zIndex': window.HkStylesGeneric().setAbove(1000),
             }
           }, {
             'force': true,
             'selector': '.above1500',
             'styles': {
-              'zIndex': this.setAbove(1500),
+              'zIndex': window.HkStylesGeneric().setAbove(1500),
             }
           }, {
             'force': true,
             'selector': '.above250',
             'styles': {
-              'zIndex': this.setAbove(250),
+              'zIndex': window.HkStylesGeneric().setAbove(250),
             }
 	        }, {
 	            'force': true,
