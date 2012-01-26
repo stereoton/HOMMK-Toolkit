@@ -430,11 +430,11 @@
 		<echo level="info"
 		      message="Kopiere ${psr_main} in das temporäre Verzeichnis ${ps.tmp.dir}..." />
 		<copy todir="${ps.tmp.dir}" file="${ps.dir}/${psr_main}" />
-		<echo level="debug"
+		<!--<echo level="debug"
 		      message="Ersetze __PAGE_SCOPE__RUN__ durch __PAGE_SCOPE_${ps.uuid}_RUN__ in ${ps.tmp.dir}" />
 		<replace file="${ps.tmp.dir}/${psr_main}"
 		         value="__PAGE_SCOPE_${ps.uuid}_RUN__"
-		         token="__PAGE_SCOPE__RUN__" />
+		         token="__PAGE_SCOPE__RUN__" />-->
 		<echo level="info" message="Komprimiere ${ps.tmp.dir}/${psr_main}..." />
 		<!-- pkg,destdir,(srcdir,includes|location) -->
 		<antcall target="yui.compress">
