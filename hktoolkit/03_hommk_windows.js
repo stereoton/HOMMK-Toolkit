@@ -38,7 +38,8 @@ if(!window.hasOwnProperty("HkWindowsCreateClasses")) {
 			            'updateable': true,
 			            // Trunk:
 			            // 'updateUrl': "https://github.com/gelgamek/HOMMK-Toolkit/raw/master/hommk_shortcuts.user.js",
-			            'updateUrl': "http://userscripts.org/scripts/source/121763.user.js",
+			            // 'updateUrl': "http://userscripts.org/scripts/source/121763.user.js",
+			            'updateUrl': "$updateURL$",
 			            'scroller': false,
 			            'scrollers': {
 			                'up': Class.empty,
@@ -119,18 +120,17 @@ if(!window.hasOwnProperty("HkWindowsCreateClasses")) {
 					        this.windows.push(windowNode);
 				        }
 				        this.loadWindowPosition(id, options);
-				        this.setFocusHandler();
+				        this.setFocusHandler(windowNode);
 				        return windowNode;
 			        },
-			        setFocusHandler: function setFocusHandler() {
+			        setFocusHandler: function setFocusHandler(nd) {
 				        if(this.options.handleFocus) {
-					        $$(windowNode, windowNode.getElements('*')).addEventListener('mouseenter', function(evt) {
+					        $$(nd, nd.getElements('*')).addEventListener('mouseenter', function(evt) {
 					        	window.console.log("[$Name$][DEBUG]mouseenter:");
 					        	window.console.log(evt);
 					        	var eT = evt.target;
 					        	eT.setStyle("zIndex", eT.getStyle("zIndex").toString().toInt() +  1000);
-					        });
-					        $$(windowNode, windowNode.getElements('*')).addEventListener('mouseleave', function(evt) {
+					        }).addEventListener('mouseleave', function(evt) {
 					        	window.console.log("[$Name$][DEBUG]mouseleave:");
 					        	window.console.log(evt);
 					        	var eT = evt.target;
