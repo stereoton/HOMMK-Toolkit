@@ -644,15 +644,15 @@
 			<concat destfile="${hk.@{pkg}.build.location}" append="false" force="yes">
 				<filelist files="${gm.target},${ps.target},${hk.buildparts.tmp.location}" />
 			</concat>
-			<!--<echo message="Kopiere GM-Metafile von ${gm.target} nach ${hk.@{pkg}.build.metalocation}..." />
+			<!--<echo message="Kopiere GM-Metafile von ${gm.target} nach ${hk.@{pkg}.build.metalocation}..." />-->
 			<!--<copy file="${gm.target}" tofile="${hk.@{pkg}.build.metalocation}" />-->
-			<antcall target="gm.meta">
-				<param name="pkg" value="@{pkg}" />
+			<!--<antcall target="gm.meta">
+				<param name="pkg" value="@{pkg}" />-->
 				<!--
 				<param name="file" value="@{pkg}_gm.header" />
 				<param name="target" value="${gm.target}" />
 				-->
-				<param name="gm.target" value="${gm.target}" />
+				<!--<param name="gm.target" value="${gm.target}" />
 			</antcall>-->
 			<echo message="Lösche übrig gebliebene Dateien..." />
 			<delete file="${gm.target}" />
