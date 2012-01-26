@@ -129,14 +129,16 @@ if(!window.hasOwnProperty("HkWindowsCreateClasses")) {
                     window.console.log("[$Name$][DEBUG]mouseenter:");
                     window.console.log(evt);
                     var eT = evt.target;
+                    var max = window.hkStylesGeneric.setAbove(500);
                     var tzI = eT.getStyle("zIndex").toString().toInt() + 500;
-                    eT.setStyle("zIndex", tzI > $zIndex$ + 500 ? $zIndex$ + 500 : tzI);
+                    eT.setStyle("zIndex", tzI > max ? max : tzI);
                   }).addEvent('mouseleave', function(evt) {
                     window.console.log("[$Name$][DEBUG]mouseleave:");
                     window.console.log(evt);
                     var eT = evt.target;
+                    var min = window.hkStylesGeneric.setBelow(0);
                     var tzI = eT.getStyle("zIndex").toString().toInt() - 500;
-                    eT.setStyle("zIndex", tzI < $zIndex$ ? $zIndex$ : tzI);
+                    eT.setStyle("zIndex", tzI < min ? min : tzI);
                   });
                 }
               },
@@ -207,6 +209,7 @@ if(!window.hasOwnProperty("HkWindowsCreateClasses")) {
                   var donate = new Element("form", {
                       'action': "https://www.paypal.com/cgi-bin/webscr",
                       'method': 'post',
+                      'class': 'above250',
                       'target': '_blank',
                       'alt': 'Unterstütze den Entwickler!',
                       'title': 'Unterstütze den Entwickler!',
@@ -237,6 +240,7 @@ if(!window.hasOwnProperty("HkWindowsCreateClasses")) {
                 var btnId = this.getId('HkWindowScroll' + direction, id, options);
                 var scrollNode = new Element('img', {
                     'id': btnId,
+                    'class': 'above250',
                     'src': 'http://icons.iconarchive.com/icons/saki/nuoveXT/16/Small-arrow-' + direction + '-icon.png',
                     'styles': this.options.scrollButtonStyles
                 });
@@ -323,10 +327,10 @@ if(!window.hasOwnProperty("HkWindowsCreateClasses")) {
                 if(this.options.preventTextSelection) titleNode.preventTextSelection();
                 if(this.options.draggable) {
                   this.HkMover = new Drag.Move($(this.getWindowId(id, options)), {
-                    handle: titleNode,
-                    hkWindow: this,
-                    hkBaseId: id,
-                    hkOptions: options
+                      handle: titleNode,
+                      hkWindow: this,
+                      hkBaseId: id,
+                      hkOptions: options
                   });
                   titleNode.setStyles({
                     cursor: "move"
@@ -337,6 +341,7 @@ if(!window.hasOwnProperty("HkWindowsCreateClasses")) {
               createUpdateButton: function createUpdateButton(id, options) {
                 this.setOptions(options);
                 var updateLink = new Element("a", {
+                    'class': 'HkButton above250',
                     'href': this.options.updateUrl,
                     'target': '_blank',
                     'styles': this.options.updateLinkStyles
@@ -355,7 +360,7 @@ if(!window.hasOwnProperty("HkWindowsCreateClasses")) {
               createCloseButton: function createCloseButton(id, options) {
                 this.setOptions(options);
                 var closeButton = new Element("div", {
-                    'class': 'HkClose HkButton',
+                    'class': 'HkClose HkButton above250',
                     'styles': this.options.closeButtonStyles
                 });
                 closeButton.hkWindow = this;
@@ -388,7 +393,7 @@ if(!window.hasOwnProperty("HkWindowsCreateClasses")) {
               createReduceButton: function createReduceButton(id, options) {
                 this.setOptions(options);
                 var reduceButton = new Element("div", {
-                    'class': 'HkReduce HkButton',
+                    'class': 'HkReduce HkButton above250',
                     'title': 'Einrollen',
                     'name': 'Einrollen',
                     'styles': this.options.reduceButtonStyles
@@ -422,7 +427,7 @@ if(!window.hasOwnProperty("HkWindowsCreateClasses")) {
                 var btnId = this.getId("HkWindowResize", id, options);
                 var resizeNode = new Element("div", {
                     'id': btnId,
-                    'class': 'HkWindowResizeButton',
+                    'class': 'HkWindowResizeButton above250',
                     'styles': this.options.resizeButtonStyles
                 });
                 if(this.options.preventTextSelection) resizeNode.preventTextSelection();
@@ -448,10 +453,10 @@ if(!window.hasOwnProperty("HkWindowsCreateClasses")) {
                         },
                         onStart: function(evt) {
                           window.console.log('[HkWindow][Event]Resize Start Event an ' + this.options.hkWindowId);
-//                          var reduceable = this.hkResize || evt.getParent();
-//                          reduceable.setStyles({
-//                            'maxHeight': (parseInt(window.getHeight())) / 2 + "px"
-//                          });
+                          // var reduceable = this.hkResize || evt.getParent();
+                          // reduceable.setStyles({
+                          // 'maxHeight': (parseInt(window.getHeight())) / 2 + "px"
+                          // });
                         },
                         onDrag: function(evt) {
                           window.console.log('[HkWindow][Event]Resize Event an ' + this.options.hkWindowId);
@@ -466,8 +471,8 @@ if(!window.hasOwnProperty("HkWindowsCreateClasses")) {
                             // JSON.toString(evt.getStyles()));
                             if(reduceable.getStyle('overflow') == 'hidden' && reduceable.getStyle('height') != 'auto') {
                               reduceable.setStyles({
-                                  'height': 'auto',
-                                  'maxHeight': (parseInt(window.getHeight())) / 1.25 + "px"
+                                'height': 'auto',
+                                'maxHeight': window.hkStylesGeneric.getMaxHeight(1.25)
                               });
                             }
                           }
@@ -478,10 +483,10 @@ if(!window.hasOwnProperty("HkWindowsCreateClasses")) {
                                     + this.options.hkWindowId);
                           }
                           /**
-                           * evt → hkWWindow
-                           * evt.getParent() → reduceable
+                           * evt → hkWWindow evt.getParent() → reduceable
                            */
-                          this.fireEvent("windowResize", [evt, evt.getParent]);
+                          this.fireEvent("windowResize", [
+                              evt, evt.getParent]);
                         }
                     });
               },

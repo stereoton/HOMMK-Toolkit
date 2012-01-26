@@ -16,6 +16,30 @@ if("undefined" == typeof window.HkStylesGeneric) {
 	
 	window.HkStylesGeneric = new Class({
 	    initialize: function() {},
+	    setAbove: function setAbove(inc) {
+        if("undefined" == typeof inc) {
+          inc = 250;
+        }
+	      return '' + ($zIndex$ + inc) + '';
+	    },
+      setBelow: function setAbove(inc) {
+        if("undefined" == typeof dec) {
+          dec = 250;
+        }
+        return '' + ($zIndex$ - dec) + '';
+      },
+	    getMaxHeight: function(div) {
+	      if("undefined" == typeof div) {
+	        div = 1.25;
+	      }
+	      return (parseInt(window.getHeight()) / div) + 'px';
+	    },
+      getMaxWidth: function(div) {
+        if("undefined" == typeof div) {
+          div = 1.25;
+        }
+        return (parseInt(window.getWidth()) / div) + 'px';
+      },
 	    applyStyles: function applyStyles(applyGlobal) {
 		    if(("undefined" != typeof applyGlobal && !applyGlobal) || "undefined" == typeof addStylesheetRules) {
 			    $A(this.styles).each(function(ss, idx) {
@@ -125,8 +149,29 @@ if("undefined" == typeof window.HkStylesGeneric) {
 	            'force': true,
 	            'selector': '.HkButton',
 	            'styles': {
-		            'border': 'none'
+		            'border': 'none',
+	              'zIndex': this.setAbove(250),
+	              'cursor': 'pointer',
 	            }
+          }, {
+            'force': true,
+            'selector': '.maxHeight125',
+            'styles': {
+              'maxHeight': this.getMaxHeight(1.25) + "px",
+            }
+          }, {
+          }, {
+            'force': true,
+            'selector': '.abobe50',
+            'styles': {
+              'zIndex': this.setAbove(50),
+            }
+          }, {
+            'force': true,
+            'selector': '.abobe250',
+            'styles': {
+              'zIndex': this.setAbove(250),
+            }
 	        }, {
 	            'force': true,
 	            'selector': '#HkWindowHkExplorer',
@@ -226,4 +271,7 @@ if("undefined" == typeof window.HkStylesGeneric) {
 	        }]
 	});
 	var HkStylesGeneric = window.HkStylesGeneric;
+	if("undefined" == typeof window.hkStylesGeneric) {
+    window.hkStylesGeneric = new HkStylesGeneric();
+	}
 }

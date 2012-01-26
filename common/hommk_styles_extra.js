@@ -137,8 +137,6 @@ window.HkStylesExtra = {
         'width': 'auto'
     },
     'reduceButton': {
-        'zIndex': '$zIndex$',
-        'cursor': 'pointer',
         'float': 'right',
         'width': '22px',
         'height': '18px',
@@ -147,18 +145,15 @@ window.HkStylesExtra = {
         'backgroundImage': 'url("http://cgit.compiz.org/fusion/decorators/emerald/plain/defaults/theme/buttons.min.png")'
     },
     'updateLink': {
-        'zIndex': '$zIndex$',
         'verticalAlign': 'middle',
         'float': 'right',
         'paddingTop': '2px',
         'fontSize': '0px'
     },
     'updateButton': {
-        'zIndex': '$zIndex$',
         'border': ' none'
     },
     'resizeButton': {
-        'zIndex': '$zIndex$',
         'verticalAlign': 'middle',
         'float': 'right',
         'cursor': 'se-resize',
