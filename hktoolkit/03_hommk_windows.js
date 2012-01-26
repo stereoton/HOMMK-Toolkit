@@ -125,7 +125,7 @@ if(!window.hasOwnProperty("HkWindowsCreateClasses")) {
 			        },
 			        setFocusHandler: function setFocusHandler(nd) {
 				        if(this.options.handleFocus) {
-					        $$(nd, nd.getElements('*')).addEvent('mouseenter', function(evt) {
+					        $$(nd, nd.getElements('>div')).addEvent('mouseenter', function(evt) {
 					        	window.console.log("[$Name$][DEBUG]mouseenter:");
 					        	window.console.log(evt);
 					        	var eT = evt.target;
