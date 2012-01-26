@@ -1,0 +1,6 @@
+#! /usr/bin/env php
+<?php
+$vnumber = exec('git log --date=iso --pretty=format:"%ad" -1');
+$dt = new DateTime($vnumber);
+$vnumber = $dt->format("Y.m.d.H.i.s");
+echo $vnumber;
