@@ -119,21 +119,24 @@ if(!window.hasOwnProperty("HkWindowsCreateClasses")) {
 					        this.windows.push(windowNode);
 				        }
 				        this.loadWindowPosition(id, options);
-				        if(this.options.createContentContainer && this.options.handleFocus) {
-					        contentNode.addEventListener('mouseenter', function(evt) {
+				        this.setFocusHandler();
+				        return windowNode;
+			        },
+			        setFocusHandler: function setFocusHandler() {
+				        if(this.options.handleFocus) {
+					        $$(windowNode, windowNode.getElements('*')).addEventListener('mouseenter', function(evt) {
 					        	window.console.log("[$Name$][DEBUG]mouseenter:");
 					        	window.console.log(evt);
 					        	var eT = evt.target;
 					        	eT.setStyle("zIndex", eT.getStyle("zIndex").toString().toInt() +  1000);
 					        });
-					        contentNode.addEventListener('mouseleave', function(evt) {
+					        $$(windowNode, windowNode.getElements('*')).addEventListener('mouseleave', function(evt) {
 					        	window.console.log("[$Name$][DEBUG]mouseleave:");
 					        	window.console.log(evt);
 					        	var eT = evt.target;
 					        	eT.setStyle("zIndex", eT.getStyle("zIndex").toString().toInt() -  1000);
 					        });
 				        }
-				        return windowNode;
 			        },
 			        getWindowNode: function getWindowNode(id, options) {
 				        window.console.log('[HkWindow][DEBUG]Rufe Fenster-Knoten für ' + id);

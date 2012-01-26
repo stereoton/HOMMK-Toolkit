@@ -198,12 +198,19 @@ if("undefined" == typeof window.HkStylesGeneric) {
 	                'font-family': '"Ubuntu", sans-serif',
 	                'font-weight': '400'
 	            }
+	        }, { // Plakativschrift 
+            'force': true,
+            'selector': '.HkWindow',
+            'styles': {
+                'font-family': '"Ubuntu", sans-serif',
+                'font-weight': '600'
+            }
 	        }, { // Headerschrift
 	            'force': true,
 	            'selector': '.HkWindowHeader',
 	            'styles': {
 	                'font-family': '"Jura", sans-serif',
-	                'font-size': '1em',
+	                'font-size': '1.2em',
 	                'font-weight': '600'
 	            }
 	        }, { // "Code"-Schrift
