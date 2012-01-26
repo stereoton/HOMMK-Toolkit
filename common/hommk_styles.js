@@ -12,34 +12,46 @@ try {
 	}
 } catch(ex) {}
 
+if("undefined" == typeof window.hkSetAbove) {
+  window.hkSetAbove = function(inc) {
+    if("undefined" == typeof inc) {
+      inc = 250;
+    }
+    return '' + ($zIndex$ + inc) + '';
+  };
+}
+
+if("undefined" == typeof window.hkSetBelow) {
+  window.hkSetBelow = function(dec) {
+    if("undefined" == typeof dec) {
+      dec = 250;
+    }
+    return '' + ($zIndex$ - dec) + '';
+  };
+}
+
+if("undefined" == typeof window.hkGetMaxHeight) {
+  window.hkGetMaxHeight = function(div) {
+    if("undefined" == typeof div) {
+      div = 1.25;
+    }
+    return (parseInt(window.getHeight()) / div) + 'px';
+  };
+}
+
+if("undefined" == typeof window.hkGetMaxWidth) {
+  window.hkGetMaxWidth = function(div) {
+    if("undefined" == typeof div) {
+      div = 1.25;
+    }
+    return (parseInt(window.getWidth()) / div) + 'px';
+  };
+}
+
 if("undefined" == typeof window.HkStylesGeneric) {
 	
 	window.HkStylesGeneric = new Class({
 	    initialize: function() {},
-	    setAbove: function setAbove(inc) {
-        if("undefined" == typeof inc) {
-          inc = 250;
-        }
-	      return '' + ($zIndex$ + inc) + '';
-	    },
-      setBelow: function setBelow(inc) {
-        if("undefined" == typeof dec) {
-          dec = 250;
-        }
-        return '' + ($zIndex$ - dec) + '';
-      },
-	    getMaxHeight: function(div) {
-	      if("undefined" == typeof div) {
-	        div = 1.25;
-	      }
-	      return (parseInt(window.getHeight()) / div) + 'px';
-	    },
-      getMaxWidth: function(div) {
-        if("undefined" == typeof div) {
-          div = 1.25;
-        }
-        return (parseInt(window.getWidth()) / div) + 'px';
-      },
 	    applyStyles: function applyStyles(applyGlobal) {
 		    if(("undefined" != typeof applyGlobal && !applyGlobal) || "undefined" == typeof addStylesheetRules) {
 			    $A(this.styles).each(function(ss, idx) {
@@ -149,39 +161,39 @@ if("undefined" == typeof window.HkStylesGeneric) {
 	            'selector': '.HkButton',
 	            'styles': {
 		            'border': 'none',
-	              'zIndex': setAbove(1000),
+	              'zIndex': window.hkSetAbove(1000),
 	              'cursor': 'pointer'
 	            }
           }, {
             'force': true,
             'selector': '.maxHeight125',
             'styles': {
-              'maxHeight': getMaxHeight(1.25) + "px",
+              'maxHeight': window.hkGetMaxHeight(1.25) + "px",
             }
           }, {
           }, {
             'force': true,
             'selector': '.above50',
             'styles': {
-              'zIndex': setAbove(50)
+              'zIndex': window.hkSetAbove(50)
             }
           }, {
             'force': true,
             'selector': '.above1000',
             'styles': {
-              'zIndex': setAbove(1000)
+              'zIndex': window.hkSetAbove(1000)
             }
           }, {
             'force': true,
             'selector': '.above1500',
             'styles': {
-              'zIndex': setAbove(1500)
+              'zIndex': window.hkSetAbove(1500)
             }
           }, {
             'force': true,
             'selector': '.above250',
             'styles': {
-              'zIndex': this.setAbove(250)
+              'zIndex': window.hkSetAbove(250)
             }
 	        }, {
 	            'force': true,
