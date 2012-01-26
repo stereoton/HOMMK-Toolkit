@@ -15,6 +15,7 @@ if(!window.hasOwnProperty("HkWindowsCreateClasses")) {
       Hk.HkWindows = new Class(
           {
               $debug: 1,
+              $hkStylesGeneric: window.hkStylesGeneric || new window.HkStylesGeneric(),
               storage: window.hk.Storage.HkWindows,
               windows: [],
               options: {
@@ -129,14 +130,14 @@ if(!window.hasOwnProperty("HkWindowsCreateClasses")) {
                     window.console.log("[$Name$][DEBUG]mouseenter:");
                     window.console.log(evt);
                     var eT = evt.target;
-                    var max = window.HkStylesGeneric().setAbove(500);
+                    var max = this.$hkStylesGeneric().setAbove(500);
                     var tzI = eT.getStyle("zIndex").toString().toInt() + 500;
                     eT.setStyle("zIndex", tzI > max ? max : tzI);
                   }).addEvent('mouseleave', function(evt) {
                     window.console.log("[$Name$][DEBUG]mouseleave:");
                     window.console.log(evt);
                     var eT = evt.target;
-                    var min = window.HkStylesGeneric().setBelow(0);
+                    var min = this.$hkStylesGeneric().setBelow(0);
                     var tzI = eT.getStyle("zIndex").toString().toInt() - 500;
                     eT.setStyle("zIndex", tzI < min ? min : tzI);
                   });
@@ -473,7 +474,7 @@ if(!window.hasOwnProperty("HkWindowsCreateClasses")) {
                             if(reduceable.getStyle('overflow') == 'hidden' && reduceable.getStyle('height') != 'auto') {
                               reduceable.setStyles({
                                 'height': 'auto',
-                                'maxHeight': window.hkStylesGeneric.getMaxHeight(1.25)
+                                'maxHeight': this.$hkStylesGeneric.getMaxHeight(1.25)
                               });
                             }
                           }

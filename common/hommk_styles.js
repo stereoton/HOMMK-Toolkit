@@ -149,39 +149,39 @@ if("undefined" == typeof window.HkStylesGeneric) {
 	            'selector': '.HkButton',
 	            'styles': {
 		            'border': 'none',
-	              'zIndex': window.HkStylesGeneric().setAbove(1000),
-	              'cursor': 'pointer',
+	              'zIndex': setAbove(1000),
+	              'cursor': 'pointer'
 	            }
           }, {
             'force': true,
             'selector': '.maxHeight125',
             'styles': {
-              'maxHeight': window.HkStylesGeneric().getMaxHeight(1.25) + "px",
+              'maxHeight': getMaxHeight(1.25) + "px",
             }
           }, {
           }, {
             'force': true,
             'selector': '.above50',
             'styles': {
-              'zIndex': window.HkStylesGeneric().setAbove(50),
+              'zIndex': setAbove(50)
             }
           }, {
             'force': true,
             'selector': '.above1000',
             'styles': {
-              'zIndex': window.HkStylesGeneric().setAbove(1000),
+              'zIndex': setAbove(1000)
             }
           }, {
             'force': true,
             'selector': '.above1500',
             'styles': {
-              'zIndex': window.HkStylesGeneric().setAbove(1500),
+              'zIndex': setAbove(1500)
             }
           }, {
             'force': true,
             'selector': '.above250',
             'styles': {
-              'zIndex': window.HkStylesGeneric().setAbove(250),
+              'zIndex': this.setAbove(250)
             }
 	        }, {
 	            'force': true,
