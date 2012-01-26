@@ -1,16 +1,16 @@
 // ==UserScript==
-// @name HkShortcuts
+// @name HkExplorer
 // @version 2012.01.26.12.28.23
 //
-// @description Shortcuts für HkToolkit :: Werkzeugkasten für MMHK/HOMMK
+// @description Explorer für HkToolkit :: Werkzeugkasten für MMHK/HOMMK
 //
 // @author Gelgamek <gelgamek@arcor.de>
 // @copyright Gelgamek et al., Artistic License 2.0, http://www.opensource.org/licenses/Artistic-2.0
 //
-// @updateURL		https://github.com/gelgamek/HOMMK-Toolkit/raw/TESTING/hommk_shortcuts.user.js
-// @installURL  https://github.com/gelgamek/HOMMK-Toolkit/raw/RELEASE/hommk_shortcuts.user.js
+// @updateURL		https://github.com/gelgamek/HOMMK-Toolkit/raw/TESTING/hommk_explorer.user.js
+// @installURL  https://github.com/gelgamek/HOMMK-Toolkit/raw/RELEASE/hommk_explorer.user.js
 //
-// @icon 				http://icons.iconarchive.com/icons/webiconset/mobile/32/maps-icon.png
+// @icon 				http://icons.iconarchive.com/icons/arrioch/senary/32/System-search-icon.png
 // @namespace 	http://mightandmagicheroeskingdoms.ubi.com/play
 // @match 			http://mightandmagicheroeskingdoms.ubi.com/play*
 //

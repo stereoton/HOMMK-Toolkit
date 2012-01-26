@@ -157,6 +157,12 @@ if("undefined" == typeof window.HkStylesGeneric) {
 		            'padding': '1px 0px',
 	            }
 	        }, {
+            'force': true,
+            'selector': '.HkWindowResizeButton',
+            'styles': {
+	            'opacity': '0.5',
+            }
+	        }, {
 	            'force': true,
 	            'selector': '.alignCenter',
 	            'styles': {
@@ -210,8 +216,8 @@ if("undefined" == typeof window.HkStylesGeneric) {
 	            'selector': '.HkWindowHeader',
 	            'styles': {
 	                'font-family': '"Jura", sans-serif',
-	                'font-size': '1.2em',
-	                'font-weight': '600'
+	                'font-size': '1.1em',
+	                'font-weight': '500'
 	            }
 	        }, { // "Code"-Schrift
 	            'force': true,

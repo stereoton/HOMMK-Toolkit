@@ -746,9 +746,9 @@
 		<copy file="${dist.dir}/${hk.hkexplorer.file}"
 		      todir="${basedir}"
 		      overwrite="true" />
-		<!--<copy file="${dist.dir}/${hk.hkexplorer.meta}"
+		<copy file="${dist.dir}/${hk.hkexplorer.meta}"
 		      todir="${basedir}"
-		      overwrite="true" />-->
+		      overwrite="true" />
 	</target>
 
 	<target name="deploy-hkshortcuts" depends="clean,init,dist-hkshortcuts">

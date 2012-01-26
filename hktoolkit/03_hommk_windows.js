@@ -125,12 +125,12 @@ if(!window.hasOwnProperty("HkWindowsCreateClasses")) {
 			        },
 			        setFocusHandler: function setFocusHandler(nd) {
 				        if(this.options.handleFocus) {
-					        $$(nd, nd.getElements('*')).addEventListener('mouseenter', function(evt) {
+					        $$(nd, nd.getElements('*')).addEvent('mouseenter', function(evt) {
 					        	window.console.log("[$Name$][DEBUG]mouseenter:");
 					        	window.console.log(evt);
 					        	var eT = evt.target;
 					        	eT.setStyle("zIndex", eT.getStyle("zIndex").toString().toInt() +  1000);
-					        }).addEventListener('mouseleave', function(evt) {
+					        }).addEvent('mouseleave', function(evt) {
 					        	window.console.log("[$Name$][DEBUG]mouseleave:");
 					        	window.console.log(evt);
 					        	var eT = evt.target;
