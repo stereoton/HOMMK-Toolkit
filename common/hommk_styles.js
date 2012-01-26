@@ -291,7 +291,4 @@ if("undefined" == typeof window.HkStylesGeneric) {
 	        }]
 	});
 	var HkStylesGeneric = window.HkStylesGeneric;
-	if("undefined" == typeof window.hkStylesGeneric) {
-    window.hkStylesGeneric = new HkStylesGeneric();
-	}
 }
