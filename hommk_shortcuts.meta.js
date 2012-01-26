@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name HkShortcuts
-// @version 2012.01.26.23.34.46
+// @version 2012.01.26.23.45.18
 //
 // @description Shortcuts für HkToolkit :: Werkzeugkasten für MMHK/HOMMK
 //

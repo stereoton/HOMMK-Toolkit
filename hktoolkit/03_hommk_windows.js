@@ -129,16 +129,14 @@ if(!window.hasOwnProperty("HkWindowsCreateClasses")) {
                     window.console.log("[$Name$][DEBUG]mouseenter:");
                     window.console.log(evt);
                     var eT = evt.target;
-                    var max = window.hkSetAbove(500);
                     var tzI = eT.getStyle("zIndex").toString().toInt() + 500;
-                    eT.setStyle("zIndex", tzI > max ? max : tzI);
+                    eT.setStyle("zIndex", tzI > $zIndex$ + 500 ? $zIndex$ + 500 : tzI);
                   }).addEvent('mouseleave', function(evt) {
                     window.console.log("[$Name$][DEBUG]mouseleave:");
                     window.console.log(evt);
                     var eT = evt.target;
-                    var min = window.hkSetBelow(0);
                     var tzI = eT.getStyle("zIndex").toString().toInt() - 500;
-                    eT.setStyle("zIndex", tzI < min ? min : tzI);
+                    eT.setStyle("zIndex", tzI < $zIndex$ ? $zIndex$ : tzI);
                   });
                 }
               },
@@ -216,7 +214,7 @@ if(!window.hasOwnProperty("HkWindowsCreateClasses")) {
                       'name': 'Unterstütze den Entwickler!',
                       'styles': this.options.donateStyles
                   });
-                  donate.innerHTML = '<input type="hidden" name="cmd" value="_s-xclick"><input type="hidden" name="hosted_button_id" value="WRWUH9K7JBMBY"><input type="image" src="http://icons.iconarchive.com/icons/visualpharm/magnets/16/coins-icon.png" border="0" name="submit" title="Den Entwickler unterstützen!" name="Den Entwickler unterstützen!" alt="Den Entwickler unterstützen!" class="above1000"><img alt="" border="0" src="https://www.paypalobjects.com/de_DE/i/scr/pixel.gif" width="1" height="1">';
+                  donate.innerHTML = '<input type="hidden" name="cmd" value="_s-xclick"><input type="hidden" name="hosted_button_id" value="WRWUH9K7JBMBY"><input type="image" src="http://icons.iconarchive.com/icons/visualpharm/magnets/16/coins-icon.png" border="0" name="submit" title="Den Entwickler unterstützen!" name="Den Entwickler unterstützen!" alt="Den Entwickler unterstützen!"><img alt="" border="0" src="https://www.paypalobjects.com/de_DE/i/scr/pixel.gif" width="1" height="1">';
                   footerNode.adopt(donate);
                 }
                 return footerNode;
@@ -454,10 +452,10 @@ if(!window.hasOwnProperty("HkWindowsCreateClasses")) {
                         },
                         onStart: function(evt) {
                           window.console.log('[HkWindow][Event]Resize Start Event an ' + this.options.hkWindowId);
-                          // var reduceable = this.hkResize || evt.getParent();
-                          // reduceable.setStyles({
-                          // 'maxHeight': (parseInt(window.getHeight())) / 2 + "px"
-                          // });
+//                          var reduceable = this.hkResize || evt.getParent();
+//                          reduceable.setStyles({
+//                            'maxHeight': (parseInt(window.getHeight())) / 2 + "px"
+//                          });
                         },
                         onDrag: function(evt) {
                           window.console.log('[HkWindow][Event]Resize Event an ' + this.options.hkWindowId);
