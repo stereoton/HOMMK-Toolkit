@@ -271,6 +271,12 @@
 		                       dir="${dir}"
 		                       filepattern="${hk.replace.filepattern}" />
 		<hk.replace.replaceOne pkg="${pkg}"
+		                       search="$$zIndex$$"
+		                       replace="hk.zindex"
+		                       target="${target}"
+		                       dir="${dir}"
+		                       filepattern="${hk.replace.filepattern}" />
+		<hk.replace.replaceOne pkg="${pkg}"
 		                       search="$$installURL$$"
 		                       replace="hk.${pkg}.install"
 		                       target="${target}"

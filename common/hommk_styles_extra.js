@@ -64,7 +64,7 @@ window.HkStylesExtra = {
         },
     },
     'window': {
-        'zIndex': '95000',
+        'zIndex': '$zIndex$',
         'margin': 'auto',
         'display': 'block',
         'position': 'absolute',
@@ -122,7 +122,7 @@ window.HkStylesExtra = {
         'maxWidth': parseInt(window.getWidth()) / 3 + 'px'
     },
     'header': {
-        'zIndex': '96000',
+        'zIndex': "" + ($zIndex$ + 1000) + "",
         'marginTop': '0px 0px 5px 0px',
         'padding': '1px 5px',
         'borderTopLeftRadius': '10px',
@@ -137,7 +137,7 @@ window.HkStylesExtra = {
         'width': 'auto'
     },
     'reduceButton': {
-        'zIndex': '97000',
+        'zIndex': '' + ($zIndex$ + 2000) + '',
         'cursor': 'pointer',
         'float': 'right',
         'width': '22px',
@@ -147,18 +147,18 @@ window.HkStylesExtra = {
         'backgroundImage': 'url("http://cgit.compiz.org/fusion/decorators/emerald/plain/defaults/theme/buttons.min.png")'
     },
     'updateLink': {
-        'zIndex': '97000',
+        'zIndex': '' + ($zIndex$ + 2000) + '',
         'verticalAlign': 'middle',
         'float': 'right',
         'paddingTop': '2px',
         'fontSize': '0px'
     },
     'updateButton': {
-        'zIndex': '97000',
+        'zIndex': '' + ($zIndex$ + 2000) + '',
         'border': ' none'
     },
     'resizeButton': {
-        'zIndex': '97000',
+        'zIndex': '' + ($zIndex$ + 2000) + '',
         'verticalAlign': 'middle',
         'float': 'right',
         'cursor': 'se-resize',

@@ -37,41 +37,41 @@ if("undefined" == typeof window.HkStylesGeneric) {
 				    }
 			    });
 		    } else {
-		    	window.console.log("[HkGenericStyles][DEBUG]Benutze dokumentweite Styles...");
+			    window.console.log("[HkGenericStyles][DEBUG]Benutze dokumentweite Styles...");
 			    var styleRules = [];
 			    this.styles.each(function(style) {
-			    	window.console.log("[HkGenericStyles][DEBUG]Verarbeite Stildefinition:");
-			    	window.console.log(style);
+				    window.console.log("[HkGenericStyles][DEBUG]Verarbeite Stildefinition:");
+				    window.console.log(style);
 				    var sOs = style.styles;
-			    	window.console.log("[HkGenericStyles][DEBUG]Definierte Styles:");
-			    	window.console.log(sOs);
+				    window.console.log("[HkGenericStyles][DEBUG]Definierte Styles:");
+				    window.console.log(sOs);
 				    for( var sO in sOs) {
-				    	window.console.log("[HkGenericStyles][DEBUG]Erzeuge Style-Regel:");
-				    	window.console.log(sO);
+					    window.console.log("[HkGenericStyles][DEBUG]Erzeuge Style-Regel:");
+					    window.console.log(sO);
 					    var styleDef = "";
-//					    var styleDef = "{";
+					    // var styleDef = "{";
 					    var currentStyle = sOs[sO];
-				    	window.console.log("[HkGenericStyles][DEBUG]Verarbeite:");
-				    	window.console.log(currentStyle);
+					    window.console.log("[HkGenericStyles][DEBUG]Verarbeite:");
+					    window.console.log(currentStyle);
 					    var isImportant = false;
-				    	window.console.log("[HkGenericStyles][DEBUG]Prüfe '!important'");
+					    window.console.log("[HkGenericStyles][DEBUG]Prüfe '!important'");
 					    if(currentStyle.test(/\!important/)) {
 						    var cPs = currentStyle.match(/(.*)(\!important)(.*)/);
 						    currentStyle = cPs[1] + cPs[3];
 					    }
 					    styleDef += sO + ":" + currentStyle + ";";
-//					    styleDef += "}";
-				    	window.console.log("[HkGenericStyles][DEBUG]Erzeugter Stil:");
-				    	window.console.log(styleDef);
+					    // styleDef += "}";
+					    window.console.log("[HkGenericStyles][DEBUG]Erzeugter Stil:");
+					    window.console.log(styleDef);
 					    var styleRule = [
 					        style.selector, styleDef, isImportant];
-				    	window.console.log("[HkGenericStyles][DEBUG]Erzeugte Stilregel:");
-				    	window.console.log(styleRule);
+					    window.console.log("[HkGenericStyles][DEBUG]Erzeugte Stilregel:");
+					    window.console.log(styleRule);
 					    styleRules.push(styleRule);
 				    }
 			    });
-		    	window.console.log("[HkGenericStyles][DEBUG]Wende Stilregeln an:");
-		    	window.console.log(styleRules);
+			    window.console.log("[HkGenericStyles][DEBUG]Wende Stilregeln an:");
+			    window.console.log(styleRules);
 			    window.addStylesheetRules(styleRules);
 		    }
 	    },
@@ -139,30 +139,6 @@ if("undefined" == typeof window.HkStylesGeneric) {
 		            'height': 'auto',
 	            }
 	        }, {
-	            'selector': '.HkListContainer',
-	            'styles': {
-		            'height': 'auto'
-	            }
-	        }, {
-	            'selector': '.HkList',
-	            'styles': {
-	                'border': 'none',
-	                'padding': '0px',
-	                'background-color': '#0e0e0e'
-	            }
-	        }, {
-	            'force': true,
-	            'selector': '.HkListEntry',
-	            'styles': {
-		            'padding': '1px 0px',
-	            }
-	        }, {
-            'force': true,
-            'selector': '.HkWindowResizeButton',
-            'styles': {
-	            'opacity': '0.5',
-            }
-	        }, {
 	            'force': true,
 	            'selector': '.alignCenter',
 	            'styles': {
@@ -181,6 +157,30 @@ if("undefined" == typeof window.HkStylesGeneric) {
 		            'text-align': 'left'
 	            }
 	        }, {
+	            'selector': '.HkListContainer',
+	            'styles': {
+		            'height': 'auto'
+	            }
+	        }, {
+	            'selector': '.HkList',
+	            'styles': {
+	                'border': 'none',
+	                'padding': '0px',
+	                'background-color': '#0e0e0e'
+	            }
+	        }, {
+	            'force': true,
+	            'selector': '.HkListEntry',
+	            'styles': {
+		            'padding': '1px 0px',
+	            }
+	        }, {
+	            'force': true,
+	            'selector': '.HkWindowResizeButton',
+	            'styles': {
+		            'opacity': '0.5',
+	            }
+	        }, {
 	            'force': true,
 	            'selector': '.HkListText',
 	            'styles': {
@@ -196,21 +196,16 @@ if("undefined" == typeof window.HkStylesGeneric) {
 	                'padding': '4px 2px',
 	                'border-top': '1px solid #252525',
 	                'border-bottom': '2px solid #505050',
+	                'font-family': '"Ubuntu", sans-serif',
+	                'font-weight': '400'
 	            }
 	        }, { // Standardschrift
 	            'force': true,
 	            'selector': '.HkWindow',
 	            'styles': {
 	                'font-family': '"Ubuntu", sans-serif',
-	                'font-weight': '400'
+	                'font-weight': '300'
 	            }
-	        }, { // Plakativschrift 
-            'force': true,
-            'selector': '.HkWindow',
-            'styles': {
-                'font-family': '"Ubuntu", sans-serif',
-                'font-weight': '600'
-            }
 	        }, { // Headerschrift
 	            'force': true,
 	            'selector': '.HkWindowHeader',
