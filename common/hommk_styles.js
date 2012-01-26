@@ -204,7 +204,7 @@ if("undefined" == typeof window.HkStylesGeneric) {
 	            'styles': {
 	                'font-family': '"Jura", sans-serif',
 	                'font-size': '1em',
-	                'font-weight': '500'
+	                'font-weight': '600'
 	            }
 	        }, { // "Code"-Schrift
 	            'force': true,

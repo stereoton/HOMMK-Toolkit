@@ -121,10 +121,14 @@ if(!window.hasOwnProperty("HkWindowsCreateClasses")) {
 				        this.loadWindowPosition(id, options);
 				        if(this.options.handleFocus) {
 					        windowNode.addEventListener('mouseenter', function(evt) {
+					        	window.console.log("[$Name$][DEBUG]mouseenter:");
+					        	window.console.log(evt);
 					        	var eT = evt.target;
 					        	eT.setStyle("zIndex", eT.getStyle("zIndex").toString().toInt() +  1000);
 					        });
 					        windowNode.addEventListener('mouseleave', function(evt) {
+					        	window.console.log("[$Name$][DEBUG]mouseleave:");
+					        	window.console.log(evt);
 					        	var eT = evt.target;
 					        	eT.setStyle("zIndex", eT.getStyle("zIndex").toString().toInt() -  1000);
 					        });
