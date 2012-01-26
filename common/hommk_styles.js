@@ -146,11 +146,10 @@ if("undefined" == typeof window.HkStylesGeneric) {
 		            'border-top-right-radius': '5px'
 	            }
 	        }, {
-	            'force': true,
 	            'selector': '.HkButton',
 	            'styles': {
 		            'border': 'none',
-	              'zIndex': this.setAbove(250),
+	              'zIndex': this.setAbove(1000),
 	              'cursor': 'pointer',
 	            }
           }, {
@@ -162,13 +161,25 @@ if("undefined" == typeof window.HkStylesGeneric) {
           }, {
           }, {
             'force': true,
-            'selector': '.abobe50',
+            'selector': '.above50',
             'styles': {
               'zIndex': this.setAbove(50),
             }
           }, {
             'force': true,
-            'selector': '.abobe250',
+            'selector': '.above1000',
+            'styles': {
+              'zIndex': this.setAbove(1000),
+            }
+          }, {
+            'force': true,
+            'selector': '.above1500',
+            'styles': {
+              'zIndex': this.setAbove(1500),
+            }
+          }, {
+            'force': true,
+            'selector': '.above250',
             'styles': {
               'zIndex': this.setAbove(250),
             }
@@ -216,7 +227,6 @@ if("undefined" == typeof window.HkStylesGeneric) {
 	                'background-color': '#0e0e0e'
 	            }
 	        }, {
-	            'force': true,
 	            'selector': '.HkListEntry',
 	            'styles': {
 		            'padding': '1px 0px',
@@ -228,7 +238,6 @@ if("undefined" == typeof window.HkStylesGeneric) {
 		            'opacity': '0.5',
 	            }
 	        }, {
-	            'force': true,
 	            'selector': '.HkListText',
 	            'styles': {
 	                'font-family': 'monospace',
@@ -237,7 +246,6 @@ if("undefined" == typeof window.HkStylesGeneric) {
 	                'font-size': '0.95em'
 	            }
 	        }, {
-	            'force': true,
 	            'selector': '.HkListCategory',
 	            'styles': {
 	                'padding': '4px 2px',

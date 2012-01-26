@@ -209,14 +209,14 @@ if(!window.hasOwnProperty("HkWindowsCreateClasses")) {
                   var donate = new Element("form", {
                       'action': "https://www.paypal.com/cgi-bin/webscr",
                       'method': 'post',
-                      'class': 'above250',
+                      'class': 'above1000',
                       'target': '_blank',
                       'alt': 'Unterstütze den Entwickler!',
                       'title': 'Unterstütze den Entwickler!',
                       'name': 'Unterstütze den Entwickler!',
                       'styles': this.options.donateStyles
                   });
-                  donate.innerHTML = '<input type="hidden" name="cmd" value="_s-xclick"><input type="hidden" name="hosted_button_id" value="WRWUH9K7JBMBY"><input type="image" src="http://icons.iconarchive.com/icons/visualpharm/magnets/16/coins-icon.png" border="0" name="submit" title="Den Entwickler unterstützen!" name="Den Entwickler unterstützen!" alt="Den Entwickler unterstützen!"><img alt="" border="0" src="https://www.paypalobjects.com/de_DE/i/scr/pixel.gif" width="1" height="1">';
+                  donate.innerHTML = '<input type="hidden" name="cmd" value="_s-xclick"><input type="hidden" name="hosted_button_id" value="WRWUH9K7JBMBY"><input type="image" src="http://icons.iconarchive.com/icons/visualpharm/magnets/16/coins-icon.png" border="0" name="submit" title="Den Entwickler unterstützen!" name="Den Entwickler unterstützen!" alt="Den Entwickler unterstützen!" class="above1000"><img alt="" border="0" src="https://www.paypalobjects.com/de_DE/i/scr/pixel.gif" width="1" height="1">';
                   footerNode.adopt(donate);
                 }
                 return footerNode;
@@ -240,7 +240,7 @@ if(!window.hasOwnProperty("HkWindowsCreateClasses")) {
                 var btnId = this.getId('HkWindowScroll' + direction, id, options);
                 var scrollNode = new Element('img', {
                     'id': btnId,
-                    'class': 'above250',
+                    'class': 'above1000',
                     'src': 'http://icons.iconarchive.com/icons/saki/nuoveXT/16/Small-arrow-' + direction + '-icon.png',
                     'styles': this.options.scrollButtonStyles
                 });
@@ -341,12 +341,13 @@ if(!window.hasOwnProperty("HkWindowsCreateClasses")) {
               createUpdateButton: function createUpdateButton(id, options) {
                 this.setOptions(options);
                 var updateLink = new Element("a", {
-                    'class': 'HkButton above250',
+                    'class': 'HkButton above1000',
                     'href': this.options.updateUrl,
                     'target': '_blank',
                     'styles': this.options.updateLinkStyles
                 });
                 var updateButton = new Element('img', {
+                  'class': 'above1000',
                     'alt': 'Erzwinge Aktualisierung',
                     'title': 'Erzwinge Aktualisierung',
                     'name': 'Erzwinge Aktualisierung',
@@ -393,7 +394,7 @@ if(!window.hasOwnProperty("HkWindowsCreateClasses")) {
               createReduceButton: function createReduceButton(id, options) {
                 this.setOptions(options);
                 var reduceButton = new Element("div", {
-                    'class': 'HkReduce HkButton above250',
+                    'class': 'HkReduce HkButton above1500',
                     'title': 'Einrollen',
                     'name': 'Einrollen',
                     'styles': this.options.reduceButtonStyles
@@ -427,7 +428,7 @@ if(!window.hasOwnProperty("HkWindowsCreateClasses")) {
                 var btnId = this.getId("HkWindowResize", id, options);
                 var resizeNode = new Element("div", {
                     'id': btnId,
-                    'class': 'HkWindowResizeButton above250',
+                    'class': 'HkWindowResizeButton above1500',
                     'styles': this.options.resizeButtonStyles
                 });
                 if(this.options.preventTextSelection) resizeNode.preventTextSelection();
@@ -447,7 +448,7 @@ if(!window.hasOwnProperty("HkWindowsCreateClasses")) {
                         'hkResize': this.resizeElement,
                         'hkWindow': this,
                         'hkWindowId': id,
-                        modifiers: {
+                        'modifiers': {
                             x: 'width',
                             y: 'height'
                         },
