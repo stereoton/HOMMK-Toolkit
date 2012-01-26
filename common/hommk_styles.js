@@ -202,8 +202,7 @@ if("undefined" == typeof window.HkStylesGeneric) {
 	            'force': true,
 	            'selector': '.HkWindowHeader',
 	            'styles': {
-//	                'font-family': '"Ubuntu Condensed", sans-serif',
-	                'font-family': '"Ubuntu Condensed", sans-serif',
+	                'font-family': '"Jura", sans-serif',
 	                'font-size': '1em',
 	                'font-weight': '500'
 	            }
