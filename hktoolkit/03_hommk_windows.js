@@ -440,7 +440,7 @@ if(!window.hasOwnProperty("HkWindowsCreateClasses")) {
                 resizeElement = $(($defined(resizeElement) ? resizeElement : this.getId("HkWindow", id, options)));
                 this.resizeElement = $(resizeElement);
                 window.console.log('[HkWindow][DEBUG]Erzeuge Resizeable-Funktion via ' + btnId);
-                resizeElement.HkResizer = new Drag.Base(resizeElement, {
+                this.resizeElement.HkResizer = new Drag.Base(resizeElement, {
                     'handle': $(btnId),
                     'hkResize': this.resizeElement,
                     'hkWindow': this,
@@ -450,7 +450,7 @@ if(!window.hasOwnProperty("HkWindowsCreateClasses")) {
                         y: 'height'
                     }
                 });
-                resizeElement.HkResizer.HkResizer
+                this.resizeElement.HkResizer
                     .addEvents({
                         "onStart": function(evt) {
                           window.console.log('[HkWindow][Event]Resize Start Event an ' + this.options.hkWindowId);
@@ -491,6 +491,10 @@ if(!window.hasOwnProperty("HkWindowsCreateClasses")) {
                               evt, evt.getParent]);
                         }
                     });
+                this.resizeElement.getParent().setStyles({
+                  'height': 'auto',
+                  'maxHeight': hkGetMaxHeight(1.25)
+                });
               },
               getWindowSize: function getWindowSize(id, options) {
                 var win = this.resizeElement || this.getWindowNode(id, options);
