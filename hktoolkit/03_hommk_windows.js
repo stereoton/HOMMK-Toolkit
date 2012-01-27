@@ -319,14 +319,14 @@ if(!window.hasOwnProperty("HkWindowsCreateClasses")) {
                   tT += " v.$VersionString$";
                 }
                 titleNode.setText(tT);
-//                titleNode.hkWindow = this;
+                // titleNode.hkWindow = this;
                 titleNode.hkBaseId = id;
                 titleNode.hkOptions = options;
                 if(this.options.preventTextSelection) titleNode.preventTextSelection();
                 if(this.options.draggable) {
                   this.HkMover = new Drag.Move($(this.getWindowId(id, options)), {
                       handle: titleNode,
-//                      hkWindow: this,
+                      // hkWindow: this,
                       hkBaseId: id,
                       hkOptions: options
                   });
@@ -345,7 +345,7 @@ if(!window.hasOwnProperty("HkWindowsCreateClasses")) {
                     'styles': this.options.updateLinkStyles
                 });
                 var updateButton = new Element('img', {
-                  'class': 'above1000',
+                    'class': 'above1000',
                     'alt': 'Erzwinge Aktualisierung',
                     'title': 'Erzwinge Aktualisierung',
                     'name': 'Erzwinge Aktualisierung',
@@ -362,7 +362,7 @@ if(!window.hasOwnProperty("HkWindowsCreateClasses")) {
                     'class': 'HkClose HkButton above250',
                     'styles': this.options.closeButtonStyles
                 });
-//                closeButton.hkWindow = this;
+                // closeButton.hkWindow = this;
                 closeButton.hkBaseId = id;
                 closeButton.hkOptions = options;
                 return closeButton;
@@ -376,7 +376,7 @@ if(!window.hasOwnProperty("HkWindowsCreateClasses")) {
                     'styles': this.options.contentStyles
                 });
                 if(this.options.preventTextSelection) contentNode.preventTextSelection();
-//                contentNode.hkWindow = this;
+                // contentNode.hkWindow = this;
                 contentNode.hkBaseId = id;
                 contentNode.hkOptions = options;
                 return contentNode;
@@ -416,7 +416,7 @@ if(!window.hasOwnProperty("HkWindowsCreateClasses")) {
                 if(reduceButton && reduce) {
                   this.HkReducer = new Hk.HkReducer(reduceButton, reduce, {
                       'hkWindowId': id,
-//                      'hkWindow': this,
+                      // 'hkWindow': this,
                       'hkReduceButton': reduceButton,
                       'hkReduce': reduce
                   });
@@ -440,38 +440,41 @@ if(!window.hasOwnProperty("HkWindowsCreateClasses")) {
                 resizeElement = $(($defined(resizeElement) ? resizeElement : this.getId("HkWindow", id, options)));
                 this.resizeElement = $(resizeElement);
                 window.console.log('[HkWindow][DEBUG]Erzeuge Resizeable-Funktion via ' + btnId);
-                this.HkResizer = new Drag.Base(resizeElement,
-                    {
-                        'handle': $(btnId),
-                        'hkResize': this.resizeElement,
-//                        'hkWindow': this,
-                        'hkWindowId': id,
-                        'modifiers': {
-                            x: 'width',
-                            y: 'height'
-                        },
-                        onStart: function(evt) {
+                resizeElement.HkResizer = new Drag.Base(resizeElement, {
+                    'handle': $(btnId),
+                    'hkResize': this.resizeElement,
+                    'hkWindow': this,
+                    'hkWindowId': id,
+                    'modifiers': {
+                        x: 'width',
+                        y: 'height'
+                    }
+                });
+                this.HkResizer
+                    .addEvents({
+                        "onStart": function(evt) {
                           window.console.log('[HkWindow][Event]Resize Start Event an ' + this.options.hkWindowId);
-//                          var reduceable = this.hkResize || evt.getParent();
-//                          reduceable.setStyles({
-//                            'maxHeight': (parseInt(window.getHeight())) / 2 + "px"
-//                          });
+                          var reduceable = this.hkResize || evt.getParent();
+                          reduceable.setStyles({
+                            'maxHeight': hkGetMaxHeight(1.25)
+                          });
                         },
-                        onDrag: function(evt) {
+                        "onDrag": function(evt) {
                           window.console.log('[HkWindow][Event]Resize Event an ' + this.options.hkWindowId);
                         },
-                        onComplete: function(evt) {
+                        "onComplete": function(evt) {
                           window.console.log('[HkWindow][Event]Resize Complete Event an ' + this.options.hkWindowId);
                           if(this.options.hkWindow.options.reduceable) {
                             window.console.log('[HkWindow][DEBUG]Löse Höhenfestlegung durch Reduceable für '
                                 + this.options.hkWindowId);
-                            var reduceable = evt.getParent();
+                            // var reduceable = evt.getParent();
+                            var reduceable = this.hkResize || evt.getParent();
                             // window.console.log('[HkWindow][DEBUG]Reduceable-Stile: ' +
                             // JSON.toString(evt.getStyles()));
                             if(reduceable.getStyle('overflow') == 'hidden' && reduceable.getStyle('height') != 'auto') {
                               reduceable.setStyles({
-                                'height': 'auto',
-                                'maxHeight': window.hkGetMaxHeight(1.25)
+                                  'height': 'auto',
+                                  'maxHeight': window.hkGetMaxHeight(1.25)
                               });
                             }
                           }

@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name HkExplorer
-// @version 2012.01.27.00.06.54
+// @version 2012.01.27.01.08.29
 //
 // @description Explorer für HkToolkit :: Werkzeugkasten für MMHK/HOMMK
 //
