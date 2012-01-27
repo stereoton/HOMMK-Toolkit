@@ -450,7 +450,7 @@ if(!window.hasOwnProperty("HkWindowsCreateClasses")) {
                         y: 'height'
                     }
                 });
-                this.HkResizer
+                resizeElement.HkResizer.HkResizer
                     .addEvents({
                         "onStart": function(evt) {
                           window.console.log('[HkWindow][Event]Resize Start Event an ' + this.options.hkWindowId);
