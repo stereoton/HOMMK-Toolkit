@@ -131,6 +131,7 @@ if(!window.hasOwnProperty("HkWindowsCreateClasses")) {
                     var eT = evt.target;
                     var tzI = eT.getStyle("zIndex").toString().toInt() + 500;
                     eT.setStyle("zIndex", tzI > $zIndex$ + 500 ? $zIndex$ + 500 : tzI);
+                    $('MainContainer').getElements(".HkWindow[id!=" + evt.target.id + "]").setStyle("zIndex", $zIndex$);
                   }).addEvent('mouseleave', function(evt) {
                     window.console.log("[$Name$][DEBUG]mouseleave:");
                     window.console.log(evt);
