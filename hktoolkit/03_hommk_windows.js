@@ -442,55 +442,53 @@ if(!window.hasOwnProperty("HkWindowsCreateClasses")) {
                 window.console.log('[HkWindow][DEBUG]Erzeuge Resizeable-Funktion via ' + btnId);
                 this.resizeElement.HkResizer = new Drag.Base(resizeElement, {
                     'handle': $(btnId),
-                    'hkResize': this.resizeElement,
+                    'hkResize': $(resizeElement),
                     'hkWindow': this,
                     'hkWindowId': id,
+                    'hkWindowOptions': options,
                     'modifiers': {
                         x: 'width',
                         y: 'height'
+                    },
+//                    "onStart": function(evt) {
+//                      window.console.log('[HkWindow][Event]Resize Start Event an ' + this.options.hkWindowId);
+//                      var reduceable = this.hkResize || evt.getParent();
+//                      reduceable.setStyles({
+//                        'maxHeight': hkGetMaxHeight(1.25)
+//                      });
+//                    },
+//                    "onDrag": function(evt) {
+//                      window.console.log('[HkWindow][Event]Resize Event an ' + this.options.hkWindowId);
+//                    },
+                    "onComplete": function(evt) {
+                      window.console.log('[HkWindow][Event]Resize Complete Event an ' + this.options.hkWindowId);
+                      if(this.options.hkWindow.options.reduceable) {
+                        window.console.log('[HkWindow][DEBUG]Löse Höhenfestlegung durch Reduceable für '
+                            + this.options.hkWindowId);
+                        // var reduceable = evt.getParent();
+                        var reduceable = this.hkResize || evt.getParent();
+                        // window.console.log('[HkWindow][DEBUG]Reduceable-Stile: ' +
+                        // JSON.toString(evt.getStyles()));
+                        if(reduceable.getStyle('overflow') == 'hidden' && reduceable.getStyle('height') != 'auto') {
+                          reduceable.setStyles({
+                              'height': 'auto',
+                              'maxHeight': window.hkGetMaxHeight(1.25)
+                          });
+                        }
+                      }
+                      if(!this.options.hkWindow.saveWindowSize(this.options.hkWindowId,
+                          this.options.hkWindow.options)) {
+                        window.console
+                            .log('[HkWindow][WARN]Resize Event Handler saveWindowSize fehlgeschlagen für '
+                                + this.options.hkWindowId);
+                      }
+                      /**
+                       * evt → hkWWindow evt.getParent() → reduceable
+                       */
+                      this.options.hkWindow.resizeElement.fireEvent("windowResize", [
+                          evt, evt.getParent]);
                     }
                 });
-                this.resizeElement.HkResizer
-                    .addEvents({
-                        "onStart": function(evt) {
-                          window.console.log('[HkWindow][Event]Resize Start Event an ' + this.options.hkWindowId);
-                          var reduceable = this.hkResize || evt.getParent();
-                          reduceable.setStyles({
-                            'maxHeight': hkGetMaxHeight(1.25)
-                          });
-                        },
-                        "onDrag": function(evt) {
-                          window.console.log('[HkWindow][Event]Resize Event an ' + this.options.hkWindowId);
-                        },
-                        "onComplete": function(evt) {
-                          window.console.log('[HkWindow][Event]Resize Complete Event an ' + this.options.hkWindowId);
-                          if(this.options.hkWindow.options.reduceable) {
-                            window.console.log('[HkWindow][DEBUG]Löse Höhenfestlegung durch Reduceable für '
-                                + this.options.hkWindowId);
-                            // var reduceable = evt.getParent();
-                            var reduceable = this.hkResize || evt.getParent();
-                            // window.console.log('[HkWindow][DEBUG]Reduceable-Stile: ' +
-                            // JSON.toString(evt.getStyles()));
-                            if(reduceable.getStyle('overflow') == 'hidden' && reduceable.getStyle('height') != 'auto') {
-                              reduceable.setStyles({
-                                  'height': 'auto',
-                                  'maxHeight': window.hkGetMaxHeight(1.25)
-                              });
-                            }
-                          }
-                          if(!this.options.hkWindow.saveWindowSize(this.options.hkWindowId,
-                              this.options.hkWindow.options)) {
-                            window.console
-                                .log('[HkWindow][WARN]Resize Event Handler saveWindowSize fehlgeschlagen für '
-                                    + this.options.hkWindowId);
-                          }
-                          /**
-                           * evt → hkWWindow evt.getParent() → reduceable
-                           */
-                          this.resizeElement.fireEvent("windowResize", [
-                              evt, evt.getParent]);
-                        }
-                    });
                 this.resizeElement.getParent().setStyles({
                   'height': 'auto',
                   'maxHeight': hkGetMaxHeight(1.25)
