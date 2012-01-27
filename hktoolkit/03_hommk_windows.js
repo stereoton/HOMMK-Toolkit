@@ -137,7 +137,12 @@ if(!window.hasOwnProperty("HkWindowsCreateClasses")) {
                     window.console.log(evt);
                     var eT = evt.target;
                     var tzI = eT.getStyle("zIndex").toString().toInt() - 500;
-                    eT.setStyle("zIndex", tzI < $zIndex$ ? $zIndex$ : tzI);
+                    eT.setStyle("zIndex", tzI < $zIndex$ ? $zIndex$ : (tzI > $zIndex$ ? $zIndex$ : tzI));
+                    if(evt.relatedTarget.hasClass('HkWindow')) {
+                      var eT = evt.relatedTarget;
+                      var tzI = eT.getStyle("zIndex").toString().toInt() + 500;
+                      eT.setStyle("zIndex", tzI > $zIndex$ + 500 ? $zIndex$ + 500 : tzI);
+                    }
                   });
                 }
               },
@@ -446,6 +451,15 @@ if(!window.hasOwnProperty("HkWindowsCreateClasses")) {
                 // var dpnNode = this.getId("HkWindowContent", id, options);
                 resizeElement = $(($defined(resizeElement) ? resizeElement : this.getId("HkWindow", id, options)));
                 this.resizeElement = $(resizeElement);
+                if(this.options.reduceable) {
+                  var reduceable = $(resizeElement);
+                  if(reduceable.getStyle('overflow') == 'hidden' && reduceable.getStyle('height') != 'auto') {
+                    $$(reduceable, reduceable.getParent()).setStyles({
+                        'height': 'auto',
+                        'maxHeight': window.hkGetMaxHeight(1.25)
+                    });
+                  }
+                }
                 window.console.log('[HkWindow][DEBUG]Erzeuge Resizeable-Funktion via ' + btnId);
                 this.resizeElement.HkResizer = new Drag.Base(resizeElement, {
                     'handle': $(btnId),
@@ -457,16 +471,6 @@ if(!window.hasOwnProperty("HkWindowsCreateClasses")) {
                         x: 'width',
                         y: 'height'
                     },
-//                    "onStart": function(evt) {
-//                      window.console.log('[HkWindow][Event]Resize Start Event an ' + this.options.hkWindowId);
-//                      var reduceable = this.hkResize || evt.getParent();
-//                      reduceable.setStyles({
-//                        'maxHeight': hkGetMaxHeight(1.25)
-//                      });
-//                    },
-//                    "onDrag": function(evt) {
-//                      window.console.log('[HkWindow][Event]Resize Event an ' + this.options.hkWindowId);
-//                    },
                     "onComplete": function(evt) {
                       window.console.log('[HkWindow][Event]Resize Complete Event an ' + this.options.hkWindowId);
                       if(this.options.hkWindow.options.reduceable) {
@@ -492,7 +496,7 @@ if(!window.hasOwnProperty("HkWindowsCreateClasses")) {
                       /**
                        * evt → hkWWindow evt.getParent() → reduceable
                        */
-                      this.options.hkWindow.resizeElement.fireEvent("windowResize", [
+                      this.options.hkWindow.resizeElement.fireEvent("onWindowResize", [
                           evt, evt.getParent]);
                     }
                 });
