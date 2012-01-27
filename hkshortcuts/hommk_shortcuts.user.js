@@ -405,19 +405,6 @@
         } catch(ex) {
           window.console.log('[HkPublic][ERROR]Fehler bei der Finalisierung des Shortcuts-Fensters: ' + ex);
         }
-        if("undefined" == typeof window.hkStylesGeneric) {
-          try {
-            window.hkStylesGeneric = new window.HkStylesGeneric();
-          } catch(ex) {
-            window.console.log('[HkPublic][ERROR]Fehler bei der Finalisierung des Shortcuts-Fensters: ' + ex);
-          }
-        }
-        try {
-          window.hk.Shortcuts.updateDimensions();
-        } catch(ex) {
-          window.console.log('[HkPublic][WARN]Update der Abmessungen des Shortcuts-Fensters fehlgeschlagen: ' + ex);
-        }
-        window.hkStylesGeneric.applyStyles();
         try {
           window.hk.Windows.makeResizeable("HkShortcuts", {
               'reduce': $("HkWindowContentHkShortcuts"),
@@ -426,6 +413,19 @@
         } catch(ex) {
           window.console.log('[HkPublic][ERROR]Fehler bei der Finalisierung des Shortcuts-Fensters: ' + ex);
         }
+        try {
+          window.hk.Shortcuts.updateDimensions();
+        } catch(ex) {
+          window.console.log('[HkPublic][WARN]Update der Abmessungen des Shortcuts-Fensters fehlgeschlagen: ' + ex);
+        }
+        if("undefined" == typeof window.hkStylesGeneric) {
+          try {
+            window.hkStylesGeneric = new window.HkStylesGeneric();
+          } catch(ex) {
+            window.console.log('[HkPublic][ERROR]Fehler bei der Finalisierung des Shortcuts-Fensters: ' + ex);
+          }
+        }
+        window.hkStylesGeneric.applyStyles();
 			};
 			return window.initHkToolkit;
 		};

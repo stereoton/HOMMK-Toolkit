@@ -128,20 +128,14 @@ if(!window.hasOwnProperty("HkWindowsCreateClasses")) {
                   $$(nd).addEvent('mouseenter', function(evt) {
                     window.console.log("[$Name$][DEBUG]mouseenter:");
                     window.console.log(evt);
-                    var eT = evt.target;
-                    var tzI = eT.getStyle("zIndex").toString().toInt() + 500;
-                    eT.setStyle("zIndex", tzI > $zIndex$ + 500 ? $zIndex$ + 500 : tzI);
-                    $('MainContainer').getElements(".HkWindow[id!=" + evt.target.id + "]").setStyle("zIndex", $zIndex$);
+                    evt.target.setStyle("zIndex", $zIndex$ + 500);
+                    $('MainContainer').getElements(".HkWindow[id!=" + evt.target.id + "]").setStyle("zIndex", $zIndex$ - 1);
                   }).addEvent('mouseleave', function(evt) {
                     window.console.log("[$Name$][DEBUG]mouseleave:");
                     window.console.log(evt);
-                    var eT = evt.target;
-                    var tzI = eT.getStyle("zIndex").toString().toInt() - 500;
-                    eT.setStyle("zIndex", tzI < $zIndex$ ? $zIndex$ : (tzI > $zIndex$ ? $zIndex$ : tzI));
+                    evt.target.setStyle("zIndex", $zIndex$);
                     if(evt.relatedTarget.hasClass('HkWindow')) {
-                      var eT = evt.relatedTarget;
-                      var tzI = eT.getStyle("zIndex").toString().toInt() + 500;
-                      eT.setStyle("zIndex", tzI > $zIndex$ + 500 ? $zIndex$ + 500 : tzI);
+                      evt.relatedTarget.setStyle("zIndex", $zIndex$ + 500);
                     }
                   });
                 }
@@ -451,15 +445,6 @@ if(!window.hasOwnProperty("HkWindowsCreateClasses")) {
                 // var dpnNode = this.getId("HkWindowContent", id, options);
                 resizeElement = $(($defined(resizeElement) ? resizeElement : this.getId("HkWindow", id, options)));
                 this.resizeElement = $(resizeElement);
-                if(this.options.reduceable) {
-                  var reduceable = $(resizeElement);
-                  if(reduceable.getStyle('overflow') == 'hidden' && reduceable.getStyle('height') != 'auto') {
-                    $(reduceable).setStyles({
-                        'height': 'auto',
-                        'maxHeight': window.hkGetMaxHeight(1.25)
-                    });
-                  }
-                }
                 window.console.log('[HkWindow][DEBUG]Erzeuge Resizeable-Funktion via ' + btnId);
                 this.resizeElement.HkResizer = new Drag.Base(resizeElement, {
                     'handle': $(btnId),
@@ -499,10 +484,6 @@ if(!window.hasOwnProperty("HkWindowsCreateClasses")) {
                       this.options.hkWindow.resizeElement.fireEvent("onWindowResize", [
                           evt, evt.getParent]);
                     }
-                });
-                this.resizeElement.getParent().setStyles({
-                  'height': 'auto',
-                  'maxHeight': hkGetMaxHeight(1.25)
                 });
               },
               getWindowSize: function getWindowSize(id, options) {
