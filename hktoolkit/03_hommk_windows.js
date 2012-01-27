@@ -319,14 +319,14 @@ if(!window.hasOwnProperty("HkWindowsCreateClasses")) {
                   tT += " v.$VersionString$";
                 }
                 titleNode.setText(tT);
-                titleNode.hkWindow = this;
+//                titleNode.hkWindow = this;
                 titleNode.hkBaseId = id;
                 titleNode.hkOptions = options;
                 if(this.options.preventTextSelection) titleNode.preventTextSelection();
                 if(this.options.draggable) {
                   this.HkMover = new Drag.Move($(this.getWindowId(id, options)), {
                       handle: titleNode,
-                      hkWindow: this,
+//                      hkWindow: this,
                       hkBaseId: id,
                       hkOptions: options
                   });
@@ -362,7 +362,7 @@ if(!window.hasOwnProperty("HkWindowsCreateClasses")) {
                     'class': 'HkClose HkButton above250',
                     'styles': this.options.closeButtonStyles
                 });
-                closeButton.hkWindow = this;
+//                closeButton.hkWindow = this;
                 closeButton.hkBaseId = id;
                 closeButton.hkOptions = options;
                 return closeButton;
@@ -376,7 +376,7 @@ if(!window.hasOwnProperty("HkWindowsCreateClasses")) {
                     'styles': this.options.contentStyles
                 });
                 if(this.options.preventTextSelection) contentNode.preventTextSelection();
-                contentNode.hkWindow = this;
+//                contentNode.hkWindow = this;
                 contentNode.hkBaseId = id;
                 contentNode.hkOptions = options;
                 return contentNode;
@@ -416,7 +416,7 @@ if(!window.hasOwnProperty("HkWindowsCreateClasses")) {
                 if(reduceButton && reduce) {
                   this.HkReducer = new Hk.HkReducer(reduceButton, reduce, {
                       'hkWindowId': id,
-                      'hkWindow': this,
+//                      'hkWindow': this,
                       'hkReduceButton': reduceButton,
                       'hkReduce': reduce
                   });
@@ -444,7 +444,7 @@ if(!window.hasOwnProperty("HkWindowsCreateClasses")) {
                     {
                         'handle': $(btnId),
                         'hkResize': this.resizeElement,
-                        'hkWindow': this,
+//                        'hkWindow': this,
                         'hkWindowId': id,
                         'modifiers': {
                             x: 'width',

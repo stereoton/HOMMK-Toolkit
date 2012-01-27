@@ -12,8 +12,8 @@ try {
 	}
 } catch(ex) {}
 
-if("undefined" == typeof window.hkSetAbove) {
-  window.hkSetAbove = function(inc) {
+if("undefined" == typeof hkSetAbove) {
+  var hkSetAbove = function(inc) {
     if("undefined" == typeof inc) {
       inc = 250;
     }
@@ -21,8 +21,8 @@ if("undefined" == typeof window.hkSetAbove) {
   };
 }
 
-if("undefined" == typeof window.hkSetBelow) {
-  window.hkSetBelow = function(dec) {
+if("undefined" == typeof hkSetBelow) {
+  var hkSetBelow = function(dec) {
     if("undefined" == typeof dec) {
       dec = 250;
     }
@@ -30,8 +30,8 @@ if("undefined" == typeof window.hkSetBelow) {
   };
 }
 
-if("undefined" == typeof window.hkGetMaxHeight) {
-  window.hkGetMaxHeight = function(div) {
+if("undefined" == typeof hkGetMaxHeight) {
+  hkGetMaxHeight = function(div) {
     if("undefined" == typeof div) {
       div = 1.25;
     }
@@ -39,8 +39,8 @@ if("undefined" == typeof window.hkGetMaxHeight) {
   };
 }
 
-if("undefined" == typeof window.hkGetMaxWidth) {
-  window.hkGetMaxWidth = function(div) {
+if("undefined" == typeof hkGetMaxWidth) {
+  var hkGetMaxWidth = function(div) {
     if("undefined" == typeof div) {
       div = 1.25;
     }
@@ -161,39 +161,39 @@ if("undefined" == typeof window.HkStylesGeneric) {
 	            'selector': '.HkButton',
 	            'styles': {
 		            'border': 'none',
-	              'zIndex': window.hkSetAbove(1000),
+	              'zIndex': hkSetAbove(1000),
 	              'cursor': 'pointer'
 	            }
           }, {
             'force': true,
             'selector': '.maxHeight125',
             'styles': {
-              'maxHeight': window.hkGetMaxHeight(1.25) + "px",
+              'maxHeight': hkGetMaxHeight(1.25) + "px",
             }
           }, {
           }, {
             'force': true,
             'selector': '.above50',
             'styles': {
-              'zIndex': window.hkSetAbove(50)
+              'zIndex': hkSetAbove(50)
             }
           }, {
             'force': true,
             'selector': '.above1000',
             'styles': {
-              'zIndex': window.hkSetAbove(1000)
+              'zIndex': hkSetAbove(1000)
             }
           }, {
             'force': true,
             'selector': '.above1500',
             'styles': {
-              'zIndex': window.hkSetAbove(1500)
+              'zIndex': hkSetAbove(1500)
             }
           }, {
             'force': true,
             'selector': '.above250',
             'styles': {
-              'zIndex': window.hkSetAbove(250)
+              'zIndex': hkSetAbove(250)
             }
 	        }, {
 	            'force': true,
@@ -290,5 +290,7 @@ if("undefined" == typeof window.HkStylesGeneric) {
 	            }
 	        }]
 	});
-	var HkStylesGeneric = window.HkStylesGeneric;
+	if("undefined" == typeof HkStylesGeneric) {
+		var HkStylesGeneric = window.HkStylesGeneric;
+	}
 }
