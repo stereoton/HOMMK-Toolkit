@@ -421,7 +421,13 @@ if(!window.hasOwnProperty("HkWindowsCreateClasses")) {
                       'hkReduceButton': reduceButton,
                       'hkReduce': reduce
                   });
+                  this.HkReducer.addEvent("onTargetComplete", this.reduceCompleted.bind(this));
                 }
+              },
+              reduceCompleted: function reduceCompleted(toggle, target) {
+                window.console.log("[$Name$][DEBUG]reduceCompleted:");
+                window.console.log(toggle);
+                window.console.log(target);
               },
               createResizeButton: function createResizeButton(id, options) {
                 var btnId = this.getId("HkWindowResize", id, options);
