@@ -412,14 +412,6 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 			} catch(ex) {
 				window.console.log('[$Name$][ERROR]Fehler beim Erzeugen des $Name$-Fensters: ' + ex);
 			}
-      if("undefined" == typeof window.hkStylesGeneric) {
-        try {
-          window.hkStylesGeneric = new window.HkStylesGeneric();
-        } catch(ex) {
-          window.console.log('[$Name$][ERROR]Fehler bei der Finalisierung des $Name$-Fensters: ' + ex);
-        }
-      }
-      window.hkStylesGeneric.applyStyles();
       try {
         window.hk.Windows.makeScrollable("HkExplorer", {
             'scroll': $("HkWindowContentHkExplorer"),
@@ -434,6 +426,14 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 				    'reduce': $("HkWindowContentHkExplorer"),
 				    'title': "HkExplorer"
 				});
+	      if("undefined" == typeof window.hkStylesGeneric) {
+	        try {
+	          window.hkStylesGeneric = new window.HkStylesGeneric();
+	        } catch(ex) {
+	          window.console.log('[$Name$][ERROR]Fehler bei der Finalisierung des $Name$-Fensters: ' + ex);
+	        }
+	      }
+	      window.hkStylesGeneric.applyStyles();
 	      try {
 	        window.hk.Windows.makeResizeable("HkExplorer", {
 	            'scroll': $("HkWindowContentHkExplorer"),

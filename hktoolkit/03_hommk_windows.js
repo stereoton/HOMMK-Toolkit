@@ -454,7 +454,7 @@ if(!window.hasOwnProperty("HkWindowsCreateClasses")) {
                 if(this.options.reduceable) {
                   var reduceable = $(resizeElement);
                   if(reduceable.getStyle('overflow') == 'hidden' && reduceable.getStyle('height') != 'auto') {
-                    $$(reduceable, reduceable.getParent()).setStyles({
+                    $(reduceable).setStyles({
                         'height': 'auto',
                         'maxHeight': window.hkGetMaxHeight(1.25)
                     });

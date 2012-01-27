@@ -235,7 +235,7 @@
 				    window.hk.Shortcuts.updateDimensions();
 			    },
 			    updateDimensions: function updateDimensions() {
-				    var divs = $("ShortcutList").getElementsByTagName("div");
+				    var divs = $("ShortcutList").getElements("div");
 				    $each(divs, function(aDiv) {
 					    var divHeight = $(aDiv).getStyle('height');
 					    if($chk(divHeight) && parseInt(divHeight) <= 0) {
@@ -412,12 +412,12 @@
             window.console.log('[HkPublic][ERROR]Fehler bei der Finalisierung des Shortcuts-Fensters: ' + ex);
           }
         }
+        try {
+          window.hk.Shortcuts.updateDimensions();
+        } catch(ex) {
+          window.console.log('[HkPublic][WARN]Update der Abmessungen des Shortcuts-Fensters fehlgeschlagen: ' + ex);
+        }
         window.hkStylesGeneric.applyStyles();
-				try {
-					window.hk.Shortcuts.updateDimensions();
-				}	catch(ex) {
-					window.console.log('[HkPublic][WARN]Update der Abmessungen des Shortcuts-Fensters fehlgeschlagen: ' + ex);
-				}
         try {
           window.hk.Windows.makeResizeable("HkShortcuts", {
               'reduce': $("HkWindowContentHkShortcuts"),
