@@ -203,6 +203,7 @@ if("undefined" == typeof window.HkStylesGeneric) {
 		            'minWidth': '240px'
 	            }
 	        }, {
+            'force': true,
 	            'selector': '#HkWindowContentHkExplorer',
 	            'styles': {
 		            'height': 'auto',

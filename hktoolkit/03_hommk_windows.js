@@ -487,7 +487,7 @@ if(!window.hasOwnProperty("HkWindowsCreateClasses")) {
                           /**
                            * evt → hkWWindow evt.getParent() → reduceable
                            */
-                          this.fireEvent("windowResize", [
+                          this.resizeElement.fireEvent("windowResize", [
                               evt, evt.getParent]);
                         }
                     });
