@@ -412,61 +412,49 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
         });
     Hk.HkExplorer.implement(new Events, new Options);
     
-    /**
-     * Erzeugt Explorer-Fenster
-     */
-    var init$Name$ = function() {
-      try {
-        window.console.log('[$Name$][DEBUG]Erzeuge $Name$-Fenster');
-        window.hk.Explorer = new window.Hk.HkExplorer();
-      } catch(ex) {
-        window.console.log('[$Name$][ERROR]Fehler beim Erzeugen des $Name$-Fensters: ' + ex);
-      }
-      try {
-        window.hk.Windows.makeScrollable("HkExplorer", {
-            'scroll': $("HkWindowContentHkExplorer"),
-            'autoScroll': true
-        }).start();
-      } catch(ex) {
-        window.console.log('[$Name$][ERROR]Fehler bei der Finalisierung des $Name$-Fensters: ' + ex);
-      }
-      try {
-        window.hk.Windows.makeReduceable("HkExplorer", {
-            'reduce': $("HkWindowContentHkExplorer"),
-            'title': "HkExplorer"
-        });
-      } catch(ex) {
-        window.console.log('[$Name$][ERROR]Fehler bei der Finalisierung des $Name$-Fensters: ' + ex);
-      }
-      try {
-        window.hk.Windows.makeResizeable("HkExplorer", {
-            'scroll': $("HkWindowContentHkExplorer"),
-            'autoScroll': true
-        }).start();
-      } catch(ex) {
-        window.console.log('[$Name$][ERROR]Fehler bei der Finalisierung des $Name$-Fensters: ' + ex);
-      }
-      try {
-        window.hk.Explorer.updateDimensions();
-      } catch(ex) {
-        window.console.log('[$Name$][ERROR]Fehler bei der Finalisierung des $Name$-Fensters: ' + ex);
-      }
-      if("undefined" == typeof window.hkStylesGeneric) {
-        try {
-          window.hkStylesGeneric = new window.HkStylesGeneric();
-        } catch(ex) {
-          window.console.log('[$Name$][ERROR]Fehler bei der Finalisierung des $Name$-Fensters: ' + ex);
-        }
-      }
-      window.hkStylesGeneric.applyStyles();
-    };
-    return init$Name$;
-  };
-  window.$Name$DependentObjectsAvailable = function() {
-    try {
-      return window.Hk && window.hk && window.Hk.HkWindows && window.hk.Windows;
-    } catch(ex) {
-      return false;
-    }
-  };
+		/**
+		 * Erzeugt Explorer-Fenster
+		 */
+		var init$Name$ = function() {
+			try {
+				window.console.log('[$Name$][DEBUG]Erzeuge $Name$-Fenster');
+				window.hk.Explorer = new window.Hk.HkExplorer();
+			} catch(ex) {
+				window.console.log('[$Name$][ERROR]Fehler beim Erzeugen des $Name$-Fensters: ' + ex);
+			}
+			try {
+				window.hk.Explorer.updateDimensions();
+				window.hk.Windows.makeReduceable("HkExplorer", {
+				    'reduce': $("HkWindowContentHkExplorer"),
+				    'title': "HkExplorer"
+				});
+			} catch(ex) {
+				window.console.log('[$Name$][ERROR]Fehler bei der Finalisierung des $Name$-Fensters: ' + ex);
+			}
+			try {
+				window.hk.Windows.makeScrollable("HkExplorer", {
+				    'scroll': $("HkWindowContentHkExplorer"),
+				    'autoScroll': true
+				}).start();
+			} catch(ex) {
+				window.console.log('[$Name$][ERROR]Fehler bei der Finalisierung des $Name$-Fensters: ' + ex);
+			}
+			if("undefined" == typeof window.hkStylesGeneric) {
+				try {
+					window.hkStylesGeneric = new window.HkStylesGeneric();
+				} catch(ex) {
+					window.console.log('[$Name$][ERROR]Fehler bei der Finalisierung des $Name$-Fensters: ' + ex);
+				}
+			}
+			window.hkStylesGeneric.applyStyles();
+		};
+		return init$Name$;
+	};
+	window.$Name$DependentObjectsAvailable = function() {
+		try {
+			return window.Hk && window.hk && window.Hk.HkWindows && window.hk.Windows;
+		} catch(ex) {
+			return false;
+		}
+	};
 }
