@@ -412,31 +412,39 @@ if(!window.hasOwnProperty("HkExplorerCreateClasses")) {
 			} catch(ex) {
 				window.console.log('[$Name$][ERROR]Fehler beim Erzeugen des $Name$-Fensters: ' + ex);
 			}
+      if("undefined" == typeof window.hkStylesGeneric) {
+        try {
+          window.hkStylesGeneric = new window.HkStylesGeneric();
+        } catch(ex) {
+          window.console.log('[$Name$][ERROR]Fehler bei der Finalisierung des $Name$-Fensters: ' + ex);
+        }
+      }
+      window.hkStylesGeneric.applyStyles();
+      try {
+        window.hk.Windows.makeScrollable("HkExplorer", {
+            'scroll': $("HkWindowContentHkExplorer"),
+            'autoScroll': true
+        }).start();
+      } catch(ex) {
+        window.console.log('[$Name$][ERROR]Fehler bei der Finalisierung des $Name$-Fensters: ' + ex);
+      }
 			try {
 				window.hk.Explorer.updateDimensions();
 				window.hk.Windows.makeReduceable("HkExplorer", {
 				    'reduce': $("HkWindowContentHkExplorer"),
 				    'title': "HkExplorer"
 				});
+	      try {
+	        window.hk.Windows.makeResizeable("HkExplorer", {
+	            'scroll': $("HkWindowContentHkExplorer"),
+	            'autoScroll': true
+	        }).start();
+	      } catch(ex) {
+	        window.console.log('[$Name$][ERROR]Fehler bei der Finalisierung des $Name$-Fensters: ' + ex);
+	      }
 			} catch(ex) {
 				window.console.log('[$Name$][ERROR]Fehler bei der Finalisierung des $Name$-Fensters: ' + ex);
 			}
-			try {
-				window.hk.Windows.makeScrollable("HkExplorer", {
-				    'scroll': $("HkWindowContentHkExplorer"),
-				    'autoScroll': true
-				}).start();
-			} catch(ex) {
-				window.console.log('[$Name$][ERROR]Fehler bei der Finalisierung des $Name$-Fensters: ' + ex);
-			}
-			if("undefined" == typeof window.hkStylesGeneric) {
-				try {
-					window.hkStylesGeneric = new window.HkStylesGeneric();
-				} catch(ex) {
-					window.console.log('[$Name$][ERROR]Fehler bei der Finalisierung des $Name$-Fensters: ' + ex);
-				}
-			}
-			window.hkStylesGeneric.applyStyles();
 		};
 		return init$Name$;
 	};

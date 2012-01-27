@@ -396,28 +396,36 @@
 				} catch(ex) {
 					window.console.log('[HkPublic][ERROR]Fehler bei der Finalisierung des Shortcuts-Fensters: ' + ex);
 				}
+        try {
+          window.hk.Windows.makeScrollable("HkShortcuts", {
+              'scroll': $("HkWindowContentHkShortcuts"),
+              'title': "HkShortcuts",
+              'autoScroll': true
+          }).start();
+        } catch(ex) {
+          window.console.log('[HkPublic][ERROR]Fehler bei der Finalisierung des Shortcuts-Fensters: ' + ex);
+        }
+        if("undefined" == typeof window.hkStylesGeneric) {
+          try {
+            window.hkStylesGeneric = new window.HkStylesGeneric();
+          } catch(ex) {
+            window.console.log('[HkPublic][ERROR]Fehler bei der Finalisierung des Shortcuts-Fensters: ' + ex);
+          }
+        }
+        window.hkStylesGeneric.applyStyles();
 				try {
 					window.hk.Shortcuts.updateDimensions();
 				}	catch(ex) {
 					window.console.log('[HkPublic][WARN]Update der Abmessungen des Shortcuts-Fensters fehlgeschlagen: ' + ex);
 				}
-				try {
-					window.hk.Windows.makeScrollable("HkShortcuts", {
-					    'scroll': $("HkWindowContentHkShortcuts"),
-					    'title': "HkShortcuts",
-					    'autoScroll': true
-					}).start();
-				} catch(ex) {
-					window.console.log('[HkPublic][ERROR]Fehler bei der Finalisierung des Shortcuts-Fensters: ' + ex);
-				}
-				if("undefined" == typeof window.hkStylesGeneric) {
-					try {
-						window.hkStylesGeneric = new window.HkStylesGeneric();
-					} catch(ex) {
-						window.console.log('[HkPublic][ERROR]Fehler bei der Finalisierung des Shortcuts-Fensters: ' + ex);
-					}
-				}
-				window.hkStylesGeneric.applyStyles();
+        try {
+          window.hk.Windows.makeResizeable("HkShortcuts", {
+              'reduce': $("HkWindowContentHkShortcuts"),
+              'title': "HkShortcuts"
+          });
+        } catch(ex) {
+          window.console.log('[HkPublic][ERROR]Fehler bei der Finalisierung des Shortcuts-Fensters: ' + ex);
+        }
 			};
 			return window.initHkToolkit;
 		};
