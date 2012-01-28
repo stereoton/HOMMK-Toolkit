@@ -207,8 +207,12 @@ if("undefined" == typeof window.HkStylesGeneric) {
 	            'styles': {
 		            'height': 'auto !important',
 		            'width': 'auto !important',
-                'min-height': '24px !important', 
+                'min-height': '32px !important', 
+                'min-height': '32px', 
+                'minHeight': '32px', 
 		            'min-width': '240px !important',
+		            'min-width': '240px',
+                'minWidth': '240px',
 	            }
 	        }, {
             'force': true,
