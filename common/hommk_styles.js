@@ -12,6 +12,10 @@ try {
 	}
 } catch(ex) {}
 
+if("undefined" == typeof hkDocumentWideStylesApplied) {
+  var hkDocumentWideStylesApplied = false;
+}
+
 if("undefined" == typeof hkSetAbove) {
   var hkSetAbove = function(inc) {
     if("undefined" == typeof inc) {
@@ -73,6 +77,7 @@ if("undefined" == typeof window.HkStylesGeneric) {
 				    }
 			    });
 		    } else {
+		      if(hkDocumentWideStylesApplied) return;
 			    window.console.log("[HkGenericStyles][DEBUG]Benutze dokumentweite Styles...");
 			    var styleRules = [];
 			    this.styles.each(function(style) {
@@ -109,6 +114,7 @@ if("undefined" == typeof window.HkStylesGeneric) {
 			    window.console.log("[HkGenericStyles][DEBUG]Wende Stilregeln an:");
 			    window.console.log(styleRules);
 			    window.addStylesheetRules(styleRules);
+			    hkDocumentWideStylesApplied = true;
 		    }
 	    },
 	    'styles': [
