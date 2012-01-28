@@ -200,6 +200,7 @@ if("undefined" == typeof window.HkStylesGeneric) {
 	            'selector': '#HkWindowHkExplorer',
 	            'styles': {
 		            'height': 'auto',
+                'minHeight': '60px', 
 		            'minWidth': '240px'
 	            }
 	        }, {
@@ -207,7 +208,8 @@ if("undefined" == typeof window.HkStylesGeneric) {
 	            'selector': '#HkWindowContentHkExplorer',
 	            'styles': {
 		            'height': 'auto',
-		            'minHeight': '60px' 
+		            'minHeight': '60px', 
+                'minWidth': '240px'
 	            }
 	        }, {
 	            'force': true,
