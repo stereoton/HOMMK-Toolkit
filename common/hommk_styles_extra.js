@@ -75,8 +75,6 @@ window.HkStylesExtra = {
         'left': 'auto',
         'bottom': 'auto',
         'right': 'auto',
-        'width': 'auto',
-        'height': 'auto',
         'backgroundColor': '#0e0e0e',
         'color': '#f2f2f2',
         'overflow': 'none',
@@ -113,13 +111,7 @@ window.HkStylesExtra = {
     'content': {
         'margin': '0px',
         'padding': '2px 0px',
-        'overflow': 'hidden',
-        'height': 'auto',
-        'width': 'auto',
-        'minHeight': '80px',
-        'minWidth': '120px',
-        'maxHeight': parseInt(window.getHeight()) / 1.25 + 'px',
-        'maxWidth': parseInt(window.getWidth()) / 1.25 + 'px'
+        'overflow': 'hidden'
     },
     'header': {
         'zIndex': "$zIndex$",

@@ -197,19 +197,21 @@ if("undefined" == typeof window.HkStylesGeneric) {
             }
 	        }, {
 	            'force': true,
-	            'selector': '#HkWindowHkExplorer',
+	            'selector': '.HkWindow',
 	            'styles': {
-		            'height': 'auto',
-                'minHeight': '60px', 
-		            'minWidth': '240px'
+		            'height': 'auto !important',
+		            'width': 'auto !important',
+                'min-height': '60px !important', 
+		            'min-width': '240px !important',
 	            }
 	        }, {
             'force': true,
-	            'selector': '#HkWindowContentHkExplorer',
+	            'selector': '.HkContent',
 	            'styles': {
-		            'height': 'auto',
-		            'minHeight': '60px', 
-                'minWidth': '240px'
+		            'height': 'auto !important',
+		            'width': 'auto !important',
+		            'min-height': '60px !important', 
+                'min-width': '240px !important'
 	            }
 	        }, {
 	            'force': true,
