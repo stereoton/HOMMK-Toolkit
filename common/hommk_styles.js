@@ -201,7 +201,7 @@ if("undefined" == typeof window.HkStylesGeneric) {
 	            'styles': {
 		            'height': 'auto !important',
 		            'width': 'auto !important',
-                'min-height': '60px !important', 
+                'min-height': '24px !important', 
 		            'min-width': '240px !important',
 	            }
 	        }, {
@@ -210,7 +210,7 @@ if("undefined" == typeof window.HkStylesGeneric) {
 	            'styles': {
 		            'height': 'auto !important',
 		            'width': 'auto !important',
-		            'min-height': '60px !important', 
+		            'min-height': '80px !important', 
                 'min-width': '240px !important'
 	            }
 	        }, {
