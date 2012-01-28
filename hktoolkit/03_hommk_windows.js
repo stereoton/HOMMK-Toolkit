@@ -151,6 +151,7 @@ if(!window.hasOwnProperty("HkWindowsCreateClasses")) {
                 var pos = win.getPosition();
                 window.console.log('[HkWindow][DEBUG]Abgerufene Fensterposition für  ' + win.id + ': '
                     + Json.toString(pos));
+                if(pos.top < 50) pos.top = 50;
                 return pos;
                 // return this.getWindowData(id, options, "getPosition");
               },
